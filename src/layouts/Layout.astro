@@ -1,0 +1,79 @@
+---
+import Navbar from "../components/common/Navbar.astro";
+import "../styles/style.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Serendipia - Agencia de Marketing Digital Ecuador",
+  description =
+    "Agencia de marketing digital enfocada en resultados, SEO, publicidad y diseño web.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Poppins:wght@300;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/webp" href="/sources/logo-4.webp" />
+    <title>{title}</title>
+  </head>
+  <body class="min-w-80 overflow-x-hidden bg-white font-sans text-white antialiased">
+    <Navbar />
+    <main class="bg-white">
+      <slot />
+    </main>
+
+    <script>
+      const initializeScrollBounce = () => {
+        const sections = Array.from(
+          document.querySelectorAll<HTMLElement>("main section, main footer"),
+        );
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        sections.forEach((section) => {
+          if (section.dataset.scrollBounceReady === "true") return;
+          section.dataset.scrollBounceReady = "true";
+
+          if (!reduceMotion) section.classList.add("scroll-bounce-pending");
+        });
+
+        if (reduceMotion || !("IntersectionObserver" in window)) {
+          sections.forEach((section) => section.classList.remove("scroll-bounce-pending"));
+          return;
+        }
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+
+              const section = entry.target as HTMLElement;
+              section.classList.remove("scroll-bounce-pending");
+              section.classList.add("scroll-bounce-in");
+              observer.unobserve(section);
+            });
+          },
+          { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
+        );
+
+        sections.forEach((section) => observer.observe(section));
+      };
+
+      initializeScrollBounce();
+      document.addEventListener("astro:page-load", initializeScrollBounce);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,24 @@
+---
+import Hero from "../components/home/Hero.astro";
+import Brands from "../components/home/brands.astro";
+import WhoWeAre from "../components/home/who-we-are.astro";
+import Services from "../components/home/services.astro";
+import EuQuality from "../components/home/eu-quality.astro";
+import Opinions from "../components/home/opinions.astro";
+import Faq from "../components/home/faq.astro";
+import Footer from "../components/home/footer.astro";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+  <div class="bg-white p-5">
+    <Hero />
+  </div>
+  <Brands />
+  <Services />
+  <EuQuality />
+  <Opinions />
+  <Faq />
+  <WhoWeAre />
+  <Footer />
+</Layout>

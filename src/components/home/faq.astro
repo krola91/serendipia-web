@@ -1,0 +1,153 @@
+---
+const faqs = [
+  {
+    question: "¿Qué diferencia a Serendipia de otras agencias de marketing?",
+    answer:
+      "Combinamos un equipo especializado en Ecuador con una metodología y estándar de trabajo de experiencia europea. Desarrollamos estrategias a la medida centradas en analítica de datos, retorno de inversión (ROI) sostenible y transparencia en los procesos.",
+  },
+  {
+    question: "¿En cuánto tiempo se ven los resultados del Posicionamiento SEO?",
+    answer:
+      "El SEO es una estrategia de crecimiento orgánico y constante que requiere trabajo continuo. Por lo general, los primeros resultados de visibilidad y posicionamiento en buscadores comienzan a consolidarse de forma sólida entre los 3 y 6 meses de trabajo técnico y de contenidos.",
+  },
+  {
+    question: "¿Trabajan con contrato o garantía de servicio?",
+    answer:
+      "Sí. Ofrecemos respaldo institucional y trabajamos bajo acuerdos formales con objetivos claros y Acuerdos de Nivel de Servicio (SLA) para asegurar el cumplimiento y la efectividad de cada proyecto.",
+  },
+  {
+    question: "¿Con qué tipo de empresas y sectores trabajan?",
+    answer:
+      "Tenemos experiencia colaborando con marcas de diversos sectores en Ecuador y LatAm: desde e-commerce, firmas corporativas e instituciones educativas, hasta startups de tecnología y empresas de servicios B2B/B2C.",
+  },
+  {
+    question: "¿Cuál es el proceso para empezar a trabajar juntos?",
+    answer:
+      "Comenzamos con una reunión de diagnóstico gratuita donde analizamos la presencia digital de tu empresa. A partir de ahí, diseñamos una propuesta estratégica adaptada a tus objetivos de negocio y presupuesto.",
+  },
+];
+---
+
+<section
+  class="overflow-hidden bg-white px-5 py-[clamp(70px,8vw,110px)] md:px-10 lg:px-20"
+  aria-labelledby="faq-title"
+>
+  <div
+    class="mx-auto grid max-w-[1440px] gap-12 lg:grid-cols-[0.78fr_1.22fr] lg:gap-16 xl:gap-24"
+  >
+    <div class="flex flex-col lg:min-h-[720px]">
+      <div>
+        <div
+          class="mb-6 inline-flex items-center gap-2 rounded-full border border-[#C4C4C4] bg-white px-4 py-2 font-sans text-xs font-medium tracking-[0.01em] text-[#111827] shadow-[0_8px_30px_rgba(107,114,128,0.18)] max-sm:px-3 max-sm:py-1.5 max-sm:text-[0.68rem]"
+        >
+          <span
+            class="size-2 shrink-0 animate-pulse rounded-full bg-[#b87cbd]"
+            aria-hidden="true"
+          ></span>
+          <span>RESOLVEMOS TUS DUDAS</span>
+        </div>
+
+        <h2
+          id="faq-title"
+          class="max-w-lg font-sans text-[clamp(2.5rem,5vw,5rem)] leading-[0.98] font-semibold tracking-[-0.055em] text-[#111827]"
+        >
+          Preguntas<br />frecuentes
+        </h2>
+      </div>
+
+      <div
+        class="mt-12 rounded-[24px] bg-gradient-to-br from-[#F7F1F8] via-[#F4F2F7] to-[#EEF0F5] p-6 text-[#111827] shadow-[0_18px_55px_rgba(17,24,39,0.07)] sm:p-8 lg:mt-auto"
+      >
+        <h2 class="text-[clamp(1.6rem,2.5vw,2.35rem)] leading-[1.1] font-semibold tracking-[-0.035em]">
+          ¿Todavía lo estás pensando?
+        </h2>
+        <h3 class="mt-4 text-lg font-semibold text-[#b87cbd] sm:text-xl">
+          Da el primer paso sin compromiso
+        </h3>
+        <p class="mt-4 max-w-xl text-[0.95rem] leading-[1.7] font-normal text-[#4B5563] sm:text-base">
+          Agenda una sesión estratégica gratuita de 30 minutos con nuestros especialistas.
+          Analizaremos tu presencia digital actual, resolveremos todas tus dudas y te mostraremos
+          la hoja de ruta exacta para escalar tus resultados estratégicamente.
+        </p>
+
+        <a
+          href="#contacto"
+          class="mt-7 inline-flex items-center gap-3 rounded-[8px] border border-white bg-[#b87cbd] px-7 py-4 text-sm font-semibold tracking-[0.06em] text-white shadow-[0_12px_35px_rgba(184,124,189,0.42)] transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_rgba(184,124,189,0.52)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#111827] active:translate-y-0"
+        >
+          AGENDA TU CITA AHORA
+          <svg
+            class="size-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M5 12h14M13 6l6 6-6 6"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="space-y-4" data-faq-list>
+      {
+        faqs.map((faq, index) => (
+          <details
+            class="group rounded-[20px] bg-[#F4F4F7] p-5 text-[#111827] shadow-[0_8px_28px_rgba(17,24,39,0.045)] transition-colors duration-300 open:bg-[#F2EDF4] sm:p-6"
+            open={index === 0}
+            data-faq-item
+          >
+            <summary class="flex cursor-pointer list-none items-start justify-between gap-5 font-sans text-[clamp(1rem,1.4vw,1.2rem)] leading-[1.35] font-semibold marker:content-none [&::-webkit-details-marker]:hidden">
+              <span class="max-w-[90%] pt-2">{faq.question}</span>
+              <span
+                class="grid size-10 shrink-0 place-items-center rounded-[10px] bg-white text-[#b87cbd] shadow-[0_5px_18px_rgba(17,24,39,0.06)]"
+                aria-hidden="true"
+              >
+                <svg
+                  class="size-4 transition-transform duration-300 group-open:rotate-180"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m6 9 6 6 6-6"></path>
+                </svg>
+              </span>
+            </summary>
+
+            <p class="max-w-2xl pr-12 pt-4 text-[0.95rem] leading-[1.75] font-normal text-[#5B6472] sm:text-base">
+              {faq.answer}
+            </p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  const initializeFaq = () => {
+    document.querySelectorAll<HTMLElement>("[data-faq-list]").forEach((list) => {
+      if (list.dataset.ready === "true") return;
+      list.dataset.ready = "true";
+
+      const items = Array.from(list.querySelectorAll<HTMLDetailsElement>("[data-faq-item]"));
+
+      items.forEach((item) => {
+        item.addEventListener("toggle", () => {
+          if (!item.open) return;
+          items.forEach((otherItem) => {
+            if (otherItem !== item) otherItem.open = false;
+          });
+        });
+      });
+    });
+  };
+
+  initializeFaq();
+  document.addEventListener("astro:page-load", initializeFaq);
+</script>

@@ -1,0 +1,115 @@
+---
+const navigation = [
+  { label: "SEO", href: "#seo" },
+  { label: "Publicidad digital", href: "#publicidad" },
+  { label: "Diseño web", href: "#diseno" },
+  { label: "+ Soluciones", href: "#soluciones" },
+  { label: "+ Información", href: "#informacion" },
+];
+---
+
+<nav
+  class="pointer-events-none absolute inset-x-0 top-[15px] z-20 flex w-full items-center justify-between px-[5%] py-6 max-md:px-[4%] max-md:py-4"
+  aria-label="Navegación principal"
+  data-navbar
+>
+  <a
+    href="/"
+    class="pointer-events-auto flex items-center transition-opacity duration-300 hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300"
+    aria-label="Serendipia, inicio"
+  >
+    <img
+      class="block h-11 w-auto max-md:h-9"
+      src="/sources/logo-4.webp"
+      alt="Serendipia"
+      width="148"
+      height="44"
+    />
+  </a>
+
+  <div
+    class="pointer-events-auto relative hidden items-center rounded-full border border-white/10 bg-white/[0.04] p-1.5 backdrop-blur-2xl backdrop-saturate-150 md:inline-flex"
+    data-menu-wrapper
+  >
+    <span
+      class="pointer-events-none absolute top-1.5 z-0 h-[calc(100%-12px)] rounded-full border border-white/[0.18] bg-white/10 shadow-[0_4px_20px_rgba(0,255,255,0.08),inset_0_1px_0_rgba(255,255,255,0.1)] transition-[left,width] duration-400 ease-[cubic-bezier(0.65,0,0.35,1)]"
+      aria-hidden="true"
+      data-menu-pill
+    ></span>
+
+    <ul class="relative z-10 flex list-none items-center" role="list">
+      {
+        navigation.map(({ label, href }, index) => (
+          <li>
+            <a
+              href={href}
+              class:list={[
+                "block whitespace-nowrap rounded-full px-4 py-2.5 font-display text-[0.85rem] font-medium text-white/75 transition-colors duration-300 hover:text-white focus-visible:outline-2 focus-visible:outline-cyan-300 lg:px-[1.4rem] lg:text-sm",
+                { "font-semibold text-white": index === 0 },
+              ]}
+              aria-current={index === 0 ? "page" : undefined}
+              data-menu-link
+            >
+              {label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</nav>
+
+<script>
+  const initializeNavbar = () => {
+    document.querySelectorAll<HTMLElement>("[data-navbar]").forEach((navbar) => {
+      if (navbar.dataset.ready === "true") return;
+      navbar.dataset.ready = "true";
+
+      const pill = navbar.querySelector<HTMLElement>("[data-menu-pill]");
+      const wrapper = navbar.querySelector<HTMLElement>("[data-menu-wrapper]");
+      const links = Array.from(
+        navbar.querySelectorAll<HTMLAnchorElement>("[data-menu-link]"),
+      );
+
+      const movePillTo = (link: HTMLAnchorElement | undefined) => {
+        if (!pill || !wrapper || !link) return;
+
+        const wrapperRect = wrapper.getBoundingClientRect();
+        const linkRect = link.getBoundingClientRect();
+        pill.style.left = `${linkRect.left - wrapperRect.left}px`;
+        pill.style.width = `${linkRect.width}px`;
+      };
+
+      const setActiveLink = (activeLink: HTMLAnchorElement) => {
+        links.forEach((link) => {
+          const isActive = link === activeLink;
+          link.classList.toggle("font-semibold", isActive);
+          link.classList.toggle("text-white", isActive);
+          link.classList.toggle("text-white/75", !isActive);
+          link.toggleAttribute("aria-current", isActive);
+        });
+        movePillTo(activeLink);
+      };
+
+      links.forEach((link) => {
+        link.addEventListener("click", () => setActiveLink(link));
+      });
+
+      let resizeTimer = 0;
+      window.addEventListener("resize", () => {
+        window.clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(() => {
+          movePillTo(links.find((link) => link.hasAttribute("aria-current")));
+        }, 100);
+      });
+
+      const initialLink =
+        links.find((link) => link.hash === window.location.hash) ?? links[0];
+      requestAnimationFrame(() => setActiveLink(initialLink));
+      document.fonts?.ready.then(() => movePillTo(initialLink));
+    });
+  };
+
+  initializeNavbar();
+  document.addEventListener("astro:page-load", initializeNavbar);
+</script>

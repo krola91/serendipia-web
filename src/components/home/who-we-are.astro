@@ -1,0 +1,292 @@
+---
+const testimonials = [
+  {
+    quote:
+      "De la mano de Serendipia en cinco meses conseguimos alrededor de 800 leads, una cifra que no esperábamos, y mes a mes siguen aumentando las cifras.",
+    name: "Fabian Sempértegui",
+    role: "Gerente General",
+    result: "Crecimiento constante",
+  },
+  {
+    quote:
+      "Una estrategia construida con datos, objetivos claros y acompañamiento cercano para tomar mejores decisiones en cada etapa.",
+    name: "Experiencia corporativa",
+    role: "Estrategia B2B",
+    result: "Decisiones con claridad",
+  },
+  {
+    quote:
+      "Un proceso transparente y ordenado que conecta posicionamiento, pauta y conversión con los objetivos comerciales del negocio.",
+    name: "Experiencia e-commerce",
+    role: "Estrategia de crecimiento",
+    result: "Enfoque en resultados",
+  },
+];
+---
+
+<section
+  class="relative isolate overflow-hidden px-5 py-[clamp(80px,10vw,140px)] md:px-10 lg:px-20"
+  aria-labelledby="who-we-are-title"
+  data-who-we-are
+>
+  <div
+    class="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(172deg,#ffffff_0%,#ffffff_48%,#eeeeec_48.2%,#eeeeec_100%)]"
+    aria-hidden="true"
+  ></div>
+
+  <div
+    class="mx-auto max-w-[1440px] overflow-hidden rounded-[28px] bg-[#d2ef28] p-6 shadow-[0_26px_80px_rgba(17,24,39,0.12)] sm:p-10 lg:p-14"
+  >
+    <div class="grid items-center gap-14 lg:grid-cols-[0.86fr_1.14fr] lg:gap-16 xl:gap-24">
+      <div class="text-[#111827]">
+        <div
+          class="mb-7 inline-flex items-center gap-2 rounded-full border border-[#C4C4C4] bg-white px-4 py-2 font-sans text-xs font-medium tracking-[0.01em] text-[#111827] shadow-[0_8px_30px_rgba(107,114,128,0.18)] max-sm:px-3 max-sm:py-1.5 max-sm:text-[0.68rem]"
+        >
+          <span
+            class="size-2 shrink-0 animate-pulse rounded-full bg-[#b87cbd]"
+            aria-hidden="true"
+          ></span>
+          <span>QUIÉNES SOMOS</span>
+        </div>
+
+        <h2
+          id="who-we-are-title"
+          class="max-w-lg font-sans text-sm leading-[1.35] font-semibold tracking-[0.12em] text-[#384313] sm:text-base"
+        >
+          AGENCIA DE MARKETING DIGITAL
+        </h2>
+
+        <p
+          class="mt-4 font-sans text-[clamp(3.2rem,7vw,7rem)] leading-[0.88] font-bold tracking-[-0.07em] text-[#111827]"
+        >
+          Serendipia
+        </p>
+
+        <p class="mt-8 max-w-xl text-[clamp(1rem,1.35vw,1.18rem)] leading-[1.75] font-normal text-[#27320F]">
+          Somos una agencia de publicidad digital, pero no cualquier tipo de agencia. Utilizamos
+          metodologías y técnicas innovadoras de países pioneros en el sector como España, Holanda
+          y Rumania, y las aplicamos en el mercado ecuatoriano.
+        </p>
+      </div>
+
+      <div class="min-w-0" data-who-slider data-testimonial-count={testimonials.length}>
+        <div class="flex items-center justify-between gap-6">
+          <h3 class="font-sans text-lg font-semibold tracking-[-0.025em] text-[#111827] sm:text-xl">
+            Nuestra Experiencia + Su Voz
+          </h3>
+
+          <div class="flex shrink-0 items-center gap-2">
+            <button
+              type="button"
+              class="grid size-11 place-items-center rounded-full border border-[#111827]/15 bg-white/55 text-[#111827] transition-[transform,background-color] duration-300 hover:-translate-x-0.5 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#111827]"
+              aria-label="Ver opinión anterior"
+              data-who-prev
+            >
+              <svg
+                class="size-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="m15 18-6-6 6-6"></path>
+              </svg>
+            </button>
+
+            <button
+              type="button"
+              class="grid size-11 place-items-center rounded-full bg-[#111827] text-white transition-transform duration-300 hover:translate-x-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#111827]"
+              aria-label="Ver siguiente opinión"
+              data-who-next
+            >
+              <svg
+                class="size-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="m9 18 6-6-6-6"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="testimonial-stack relative mt-8" aria-live="polite">
+          {
+            testimonials.map((testimonial, index) => (
+              <article
+                class="testimonial-stack-card flex flex-col justify-between rounded-[26px] bg-white p-6 text-[#111827] shadow-[0_22px_60px_rgba(17,24,39,0.14)] sm:p-8"
+                data-testimonial-card
+                data-position={String(index)}
+                aria-hidden={index === 0 ? "false" : "true"}
+              >
+                <svg
+                  class="size-9 text-[#b87cbd]"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path d="M7.2 6C4.33 6 2 8.33 2 11.2V18h7.2v-6H5.7v-.8A1.5 1.5 0 0 1 7.2 9.7H10V6H7.2Zm12 0C16.33 6 14 8.33 14 11.2V18h7.2v-6h-3.5v-.8a1.5 1.5 0 0 1 1.5-1.5H22V6h-2.8Z"></path>
+                </svg>
+
+                <p class="mt-5 text-[clamp(1.05rem,1.7vw,1.45rem)] leading-[1.5] font-normal tracking-[-0.025em]">
+                  {testimonial.quote}
+                </p>
+
+                <div class="mt-8 flex flex-wrap items-center gap-4">
+                  <span
+                    class="grid size-14 shrink-0 place-items-center rounded-full bg-[#111827] text-white"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      class="size-7"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.7"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle cx="12" cy="8" r="4"></circle>
+                      <path d="M4.5 21a7.5 7.5 0 0 1 15 0"></path>
+                    </svg>
+                  </span>
+
+                  <div class="min-w-0 flex-1">
+                    <p class="font-semibold leading-tight">{testimonial.name}</p>
+                    <p class="mt-1 text-sm font-normal text-[#6B7280]">{testimonial.role}</p>
+                  </div>
+
+                  <span
+                    class="rounded-full border border-[#111827]/20 px-4 py-2 text-xs font-medium text-[#374151] sm:text-sm"
+                  >
+                    {testimonial.result}
+                  </span>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+
+        <p class="sr-only" data-who-status>Opinión 1 de {testimonials.length}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const initializeWhoWeAre = () => {
+    document.querySelectorAll<HTMLElement>("[data-who-slider]").forEach((slider) => {
+      if (slider.dataset.ready === "true") return;
+      slider.dataset.ready = "true";
+
+      const cards = Array.from(
+        slider.querySelectorAll<HTMLElement>("[data-testimonial-card]"),
+      );
+      const previousButton = slider.querySelector<HTMLButtonElement>("[data-who-prev]");
+      const nextButton = slider.querySelector<HTMLButtonElement>("[data-who-next]");
+      const status = slider.querySelector<HTMLElement>("[data-who-status]");
+      const testimonialCount = Number(slider.dataset.testimonialCount ?? cards.length);
+      let activeIndex = 0;
+
+      const render = () => {
+        cards.forEach((card, index) => {
+          const position = (index - activeIndex + testimonialCount) % testimonialCount;
+          card.dataset.position = String(position);
+          card.setAttribute("aria-hidden", position === 0 ? "false" : "true");
+        });
+
+        if (status) status.textContent = `Opinión ${activeIndex + 1} de ${testimonialCount}`;
+      };
+
+      previousButton?.addEventListener("click", () => {
+        activeIndex = (activeIndex - 1 + testimonialCount) % testimonialCount;
+        render();
+      });
+
+      nextButton?.addEventListener("click", () => {
+        activeIndex = (activeIndex + 1) % testimonialCount;
+        render();
+      });
+
+      render();
+    });
+  };
+
+  initializeWhoWeAre();
+  document.addEventListener("astro:page-load", initializeWhoWeAre);
+</script>
+
+<style>
+  .testimonial-stack {
+    min-height: 410px;
+    perspective: 1200px;
+  }
+
+  .testimonial-stack-card {
+    position: absolute;
+    inset: 0;
+    min-height: 350px;
+    transform-origin: center bottom;
+    transition:
+      transform 520ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 360ms ease,
+      filter 360ms ease;
+  }
+
+  .testimonial-stack-card[data-position="0"] {
+    z-index: 3;
+    transform: translateY(34px) rotate(0deg) scale(1);
+    opacity: 1;
+    filter: none;
+  }
+
+  .testimonial-stack-card[data-position="1"] {
+    z-index: 2;
+    transform: translate(18px, 12px) rotate(2.2deg) scale(0.96);
+    opacity: 0.78;
+    filter: saturate(0.7);
+  }
+
+  .testimonial-stack-card[data-position="2"] {
+    z-index: 1;
+    transform: translate(-18px, -4px) rotate(-2.8deg) scale(0.92);
+    opacity: 0.5;
+    filter: saturate(0.45);
+  }
+
+  @media (max-width: 639px) {
+    .testimonial-stack {
+      min-height: 470px;
+    }
+
+    .testimonial-stack-card {
+      min-height: 410px;
+    }
+
+    .testimonial-stack-card[data-position="0"] {
+      transform: translateY(24px) rotate(0deg) scale(1);
+    }
+
+    .testimonial-stack-card[data-position="1"] {
+      transform: translate(8px, 8px) rotate(1.5deg) scale(0.97);
+    }
+
+    .testimonial-stack-card[data-position="2"] {
+      transform: translate(-8px, -2px) rotate(-1.8deg) scale(0.94);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .testimonial-stack-card {
+      transition: none;
+    }
+  }
+</style>
