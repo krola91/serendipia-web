@@ -7,17 +7,10 @@ const brands = Array.from({ length: 12 }, (_, index) => ({
 ---
 
 <section
-  class="my-10 overflow-hidden bg-[#111827] py-[60px]"
+  class="relative z-[1] my-10 h-auto overflow-hidden bg-[#111827] py-[40px]"
   aria-label="Marcas que confían en Serendipia"
+  data-brands
 >
-  <h2
-    class="mx-0 mb-8 max-w-none whitespace-nowrap px-8 text-left font-sans text-[clamp(1rem,2vw,1.75rem)] leading-none font-semibold tracking-[-0.02em]"
-  >
-    <span class="text-[#FFFFFF]">Empresas que escalan su </span>
-    <span class="text-[clamp(1.05rem,3.2vw,2.7rem)] text-[#b87cbd]">tráfico y ventas</span>
-    <span class="text-[#FFFFFF]"> con nosotros</span>
-  </h2>
-
   <svg class="absolute size-0" aria-hidden="true">
     <defs>
       <filter id="brand-gray" color-interpolation-filters="sRGB">

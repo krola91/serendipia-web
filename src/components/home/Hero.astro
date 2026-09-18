@@ -1,19 +1,24 @@
+<div
+  class="hero-scroll-track relative"
+  style="--hero-scroll-height: 300svh; --hero-content-hold: 100svh"
+  data-hero-scroll
+  data-content-visible="false"
+>
 <section
-  class="relative flex h-[calc(100dvh-40px)] min-h-[600px] w-full items-center overflow-hidden rounded-[20px]"
+  class="sticky top-0 z-0 flex h-[calc(100svh-40px)] min-h-[600px] w-full items-center overflow-hidden rounded-[20px]"
   aria-labelledby="hero-title"
   data-hero
 >
-  <div class="absolute inset-0 z-0">
+  <div class="absolute inset-0 z-0" data-hero-background>
     <video
-      class="h-full w-full object-cover object-center"
-      src="/sources/rubiks-cube-frosted.mp4"
-      autoplay
+      class="relative z-0 h-full w-full object-cover object-center"
+      src="/sources/chess-scroll-hd.mp4"
       muted
-      loop
       playsinline
-      preload="metadata"
+      preload="auto"
       aria-hidden="true"
       data-hero-video
+      data-scroll-video
     ></video>
     <div class="hero-overlay pointer-events-none absolute inset-0" aria-hidden="true"></div>
   </div>
@@ -21,6 +26,8 @@
   <div
     class="hero-glass absolute inset-y-0 left-0 z-10 flex w-1/2 items-center px-[5%] pt-20 max-md:w-[70%] max-md:px-[8%] max-md:pt-[70px] max-sm:w-[85%] max-sm:px-[6%] max-sm:pt-[65px]"
     data-hero-glass
+    aria-hidden="true"
+    inert
   >
     <div class="relative z-10 max-w-[520px]">
       <div
@@ -83,6 +90,20 @@
   </div>
 
   <div
+    class="hero-scroll-hint pointer-events-none absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2 rounded-full border border-white/80 px-3 py-2 text-[0.625rem] font-medium tracking-[0.16em] text-white max-sm:bottom-6 max-sm:text-[0.55rem]"
+    data-hero-scroll-hint
+    aria-hidden="true"
+  >
+    <span class="flex h-5 w-3.5 items-start justify-center rounded-full border border-white pt-1">
+      <span class="hero-scroll-hint__dot block size-1 rounded-full bg-white"></span>
+    </span>
+    <span>DESLIZA PARA EXPLORAR</span>
+    <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m6 9 6 6 6-6"></path>
+    </svg>
+  </div>
+
+  <div
     class="animate-socials-in absolute right-10 bottom-10 z-20 flex items-center gap-3 max-md:right-7 max-md:bottom-7 max-md:gap-2.5 max-sm:right-6 max-sm:bottom-6 max-sm:gap-2"
     aria-label="Redes sociales"
   >
@@ -135,26 +156,132 @@
     </a>
   </div>
 </section>
+<div class="pointer-events-none absolute invisible" style="height: var(--hero-content-hold)" data-hero-content-hold aria-hidden="true"></div>
+</div>
 
 <script>
-  const initializeHero = () => {
-    document.querySelectorAll<HTMLElement>("[data-hero]").forEach((hero) => {
-      if (hero.dataset.ready === "true") return;
-      hero.dataset.ready = "true";
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+  gsap.registerPlugin(ScrollTrigger);
+  const instances = new Map<HTMLElement, () => void>();
+
+  const initializeHero = () => {
+    document.querySelectorAll<HTMLElement>("[data-hero-scroll]").forEach((track) => {
+      if (instances.has(track)) return;
+      const hero = track.querySelector<HTMLElement>("[data-hero]");
+      const video = track.querySelector<HTMLVideoElement>("[data-scroll-video]");
+      if (!hero || !video) return;
       const glass = hero.querySelector<HTMLElement>("[data-hero-glass]");
       const glows = hero.querySelectorAll<HTMLElement>("[data-hero-glow]");
-      const video = hero.querySelector<HTMLVideoElement>("[data-hero-video]");
+      const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const events = new AbortController();
+      const signal = events.signal;
+      const playhead = { time: 0 };
+      let animation: gsap.core.Tween | undefined;
+      let trigger: ScrollTrigger | undefined;
+      let refreshFrame = 0;
+      let destroyed = false;
+      let unlocked = false;
 
-      video?.play().catch(() => {
-        // El fondo permanece visible si el navegador bloquea la reproducción automática.
-      });
+      const pause = () => video.pause();
+      video.addEventListener("play", pause, { signal });
+      pause();
 
-      if (!window.matchMedia("(pointer: fine) and (prefers-reduced-motion: no-preference)").matches) {
-        return;
-      }
+      const setContentVisible = (visible: boolean) => {
+        track.dataset.contentVisible = String(visible);
+        if (glass) {
+          glass.inert = !visible;
+          glass.setAttribute("aria-hidden", String(!visible));
+        }
+      };
 
-      hero.addEventListener("mousemove", (event) => {
+      const updateContent = () => {
+        const lastFrame = Math.max(0, video.duration - 0.01);
+        const finished = Number.isFinite(lastFrame)
+          && playhead.time >= lastFrame - 0.001
+          && !video.seeking
+          && video.currentTime >= lastFrame - 0.02;
+        setContentVisible(motion.matches || finished);
+      };
+
+      const seek = () => {
+        if (destroyed || video.readyState < 1 || !Number.isFinite(video.duration)) return;
+        const time = Math.min(Math.max(0, playhead.time), Math.max(0, video.duration - 0.01));
+        // Coalesce seeks while decoding: seeked applies the latest scroll position.
+        if (!video.seeking && Math.abs(video.currentTime - time) > 1 / 240) {
+          video.currentTime = time;
+        }
+        // Reveal only after the final requested frame has actually decoded.
+        updateContent();
+      };
+      video.addEventListener("seeked", seek, { signal });
+
+      const refresh = () => {
+        cancelAnimationFrame(refreshFrame);
+        refreshFrame = requestAnimationFrame(() => {
+          if (!destroyed && trigger) ScrollTrigger.refresh();
+        });
+      };
+
+      const setupVideo = () => {
+        if (destroyed || video.readyState < 1 || !Number.isFinite(video.duration) || video.duration <= 0) return;
+        trigger?.kill();
+        animation?.kill();
+        trigger = undefined;
+        animation = undefined;
+        pause();
+        track.classList.toggle("hero-scroll-static", motion.matches);
+        setContentVisible(motion.matches);
+
+        if (motion.matches) {
+          playhead.time = 0;
+          seek();
+          resetParallax();
+          return;
+        }
+
+        animation = gsap.fromTo(playhead, { time: 0 }, {
+          time: Math.max(0, video.duration - 0.01),
+          ease: "none",
+          onUpdate: seek,
+          scrollTrigger: {
+            id: "hero-scroll-video",
+            trigger: track,
+            start: "top top",
+            // Reserve the extra scroll distance for the fully revealed column.
+            end: () => {
+              const hold = track.querySelector<HTMLElement>("[data-hero-content-hold]");
+              return `+=${Math.max(1, track.offsetHeight - hero.offsetHeight - (hold?.offsetHeight ?? 0))}`;
+            },
+            scrub: true,
+            invalidateOnRefresh: true,
+            onRefresh: seek,
+          },
+        });
+        trigger = animation.scrollTrigger;
+        refresh();
+      };
+
+      const unlockVideo = () => {
+        if (unlocked || motion.matches) return;
+        unlocked = true;
+        // iOS needs a play/pause within the first user gesture to enable seeking.
+        const playback = video.play();
+        video.pause();
+        playback?.then(() => {
+          pause();
+          seek();
+        }).catch(() => {
+          if (!destroyed) pause();
+        });
+      };
+      window.addEventListener("pointerdown", unlockVideo, { signal, passive: true });
+      window.addEventListener("touchstart", unlockVideo, { signal, passive: true });
+      window.addEventListener("keydown", unlockVideo, { signal });
+
+      const moveParallax = (event: MouseEvent) => {
+        if (motion.matches || !window.matchMedia("(pointer: fine)").matches) return;
         const rect = hero.getBoundingClientRect();
         const x = (event.clientX - rect.left) / rect.width - 0.5;
         const y = (event.clientY - rect.top) / rect.height - 0.5;
@@ -164,15 +291,48 @@
           const factor = (index + 1) * 15;
           glow.style.transform = `translate(${-x * factor}px, ${-y * factor}px)`;
         });
-      });
-
-      hero.addEventListener("mouseleave", () => {
+      };
+      const resetParallax = () => {
         if (glass) glass.style.transform = "";
         glows.forEach((glow) => (glow.style.transform = ""));
+      };
+      hero.addEventListener("mousemove", moveParallax, { signal });
+      hero.addEventListener("mouseleave", resetParallax, { signal });
+      video.addEventListener("loadedmetadata", setupVideo, { signal });
+      motion.addEventListener("change", setupVideo, { signal });
+      window.addEventListener("resize", refresh, { signal });
+      window.addEventListener("orientationchange", refresh, { signal });
+      const resizeObserver = new ResizeObserver(refresh);
+      resizeObserver.observe(track);
+      resizeObserver.observe(hero);
+      document.fonts.ready.then(refresh);
+      window.addEventListener("load", refresh, { signal, once: true });
+
+      instances.set(track, () => {
+        destroyed = true;
+        events.abort();
+        resizeObserver.disconnect();
+        cancelAnimationFrame(refreshFrame);
+        trigger?.kill();
+        animation?.kill();
+        pause();
+        resetParallax();
+        setContentVisible(motion.matches);
       });
+      track.classList.toggle("hero-scroll-static", motion.matches);
+      setContentVisible(motion.matches);
+      if (video.readyState >= 1) setupVideo();
     });
+  };
+
+  const destroyHeroes = () => {
+    instances.forEach((cleanup) => cleanup());
+    instances.clear();
   };
 
   initializeHero();
   document.addEventListener("astro:page-load", initializeHero);
+  document.addEventListener("astro:before-swap", destroyHeroes);
+  window.addEventListener("pagehide", destroyHeroes);
+  window.addEventListener("pageshow", initializeHero);
 </script>

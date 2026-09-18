@@ -60,10 +60,21 @@ const navigation = [
 </nav>
 
 <script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+  const navbarInstances = new Map<HTMLElement, () => void>();
+
   const initializeNavbar = () => {
     document.querySelectorAll<HTMLElement>("[data-navbar]").forEach((navbar) => {
-      if (navbar.dataset.ready === "true") return;
-      navbar.dataset.ready = "true";
+      if (navbarInstances.has(navbar)) return;
+      const events = new AbortController();
+      const signal = events.signal;
+      let destroyed = false;
+      let initialFrame = 0;
+      let stickyTrigger: ScrollTrigger | undefined;
+      const layoutObserver = new ResizeObserver(() => stickyTrigger?.refresh());
 
       const pill = navbar.querySelector<HTMLElement>("[data-menu-pill]");
       const wrapper = navbar.querySelector<HTMLElement>("[data-menu-wrapper]");
@@ -92,8 +103,8 @@ const navigation = [
       };
 
       links.forEach((link) => {
-        link.addEventListener("click", () => setActiveLink(link));
-      });
+        link.addEventListener("click", () => setActiveLink(link), { signal });
+      }, { signal });
 
       let resizeTimer = 0;
       window.addEventListener("resize", () => {
@@ -105,11 +116,62 @@ const navigation = [
 
       const initialLink =
         links.find((link) => link.hash === window.location.hash) ?? links[0];
-      requestAnimationFrame(() => setActiveLink(initialLink));
-      document.fonts?.ready.then(() => movePillTo(initialLink));
+      initialFrame = requestAnimationFrame(() => setActiveLink(initialLink));
+
+      const brands = document.querySelector<HTMLElement>("[data-brands]");
+      if (brands) {
+        const updateSticky = (trigger: ScrollTrigger) => {
+          navbar.classList.toggle("navbar-sticky", trigger.scroll() >= trigger.start);
+        };
+
+        stickyTrigger = ScrollTrigger.create({
+          id: "navbar-from-brands",
+          trigger: brands,
+          start: () => {
+            // Layout offsets exclude Brands' bounce transform when measuring its entry.
+            let top = 0;
+            let element: HTMLElement | null = brands;
+            while (element) {
+              top += element.offsetTop;
+              element = element.offsetParent as HTMLElement | null;
+            }
+            return top - window.innerHeight + 1;
+          },
+          end: "max",
+          onUpdate: updateSticky,
+          onRefresh: updateSticky,
+        });
+        updateSticky(stickyTrigger);
+        const main = document.querySelector("main");
+        if (main) layoutObserver.observe(main);
+      }
+
+      document.fonts?.ready.then(() => {
+        if (destroyed) return;
+        movePillTo(links.find((link) => link.hasAttribute("aria-current")) ?? initialLink);
+        stickyTrigger?.refresh();
+      });
+
+      navbarInstances.set(navbar, () => {
+        destroyed = true;
+        events.abort();
+        window.clearTimeout(resizeTimer);
+        cancelAnimationFrame(initialFrame);
+        layoutObserver.disconnect();
+        stickyTrigger?.kill();
+        navbar.classList.remove("navbar-sticky");
+      });
     });
+  };
+
+  const destroyNavbars = () => {
+    navbarInstances.forEach((cleanup) => cleanup());
+    navbarInstances.clear();
   };
 
   initializeNavbar();
   document.addEventListener("astro:page-load", initializeNavbar);
+  document.addEventListener("astro:before-swap", destroyNavbars);
+  window.addEventListener("pagehide", destroyNavbars);
+  window.addEventListener("pageshow", initializeNavbar);
 </script>

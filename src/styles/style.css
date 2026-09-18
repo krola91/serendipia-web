@@ -10,13 +10,43 @@
     scroll-behavior: smooth;
   }
 
-  body {
-    min-height: 100vh;
+  body::before {
+    @apply fixed inset-0 -z-10 pointer-events-none opacity-[0.08] bg-[length:160px_160px] mix-blend-soft-light;
+    content: "";
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)'/%3E%3C/svg%3E");
   }
 
   a,
   button {
     -webkit-tap-highlight-color: transparent;
+  }
+}
+
+.hero-scroll-track {
+  height: calc(var(--hero-scroll-height, 300svh) + var(--hero-content-hold, 100svh));
+}
+
+[data-navbar].navbar-sticky {
+  position: fixed;
+  top: 0;
+  z-index: 50;
+  pointer-events: auto;
+  border-bottom: 1px solid rgb(255 255 255 / 15%);
+  background: linear-gradient(rgb(17 24 39 / 78%), rgb(17 24 39 / 78%)), rgb(255 255 255 / 5%);
+  box-shadow:
+    0 8px 40px rgb(0 0 0 / 20%),
+    inset 0 -1px 0 rgb(255 255 255 / 8%),
+    0 0 80px rgb(0 255 255 / 4%);
+  backdrop-filter: blur(24px) saturate(180%);
+}
+
+.hero-scroll-track.hero-scroll-static {
+  height: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-scroll-track {
+    height: auto;
   }
 }
 
@@ -39,6 +69,47 @@
   opacity: 0;
   transform: translateX(-60px);
   animation: glass-slide-in 1s cubic-bezier(0.22, 1, 0.36, 1) 300ms forwards;
+}
+
+[data-hero-scroll] [data-hero-glass] {
+  animation: none;
+  transform: none;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: none;
+}
+
+[data-hero-scroll][data-content-visible="true"] [data-hero-glass] {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 800ms ease, visibility 0s;
+}
+
+[data-hero-scroll] [data-hero-scroll-hint] {
+  opacity: 0.92;
+  visibility: visible;
+  animation: hero-scroll-hint-pulse 1.8s ease-in-out infinite;
+  transition: opacity 400ms ease, visibility 0s;
+}
+
+[data-hero-scroll][data-content-visible="true"] [data-hero-scroll-hint] {
+  opacity: 0;
+  visibility: hidden;
+  animation: none;
+  transition: opacity 400ms ease, visibility 0s linear 400ms;
+}
+
+.hero-scroll-hint__dot {
+  animation: hero-scroll-hint-dot 1.8s ease-in-out infinite;
+}
+
+[data-hero-scroll] [data-hero-glass] .animate-text-reveal,
+[data-hero-scroll] [data-hero-glass] .animate-button-in {
+  animation: none;
+  opacity: 1;
+  transform: none;
 }
 
 .animate-text-reveal {
@@ -146,10 +217,6 @@
   transform: scale(1.06);
 }
 
-.services-section {
-  background: #fff;
-}
-
 .services-deck-viewport {
   scrollbar-width: thin;
   scrollbar-color: rgb(17 24 39 / 30%) transparent;
@@ -176,6 +243,7 @@
   overflow: hidden;
   border: 1px solid rgb(255 255 255 / 54%);
   border-radius: 22px;
+  background-color: #fff;
   color: #111827;
   box-shadow: 0 24px 55px -18px rgb(17 24 39 / 34%);
   transform-origin: center bottom;
@@ -271,11 +339,8 @@
   height: 326px;
   overflow: hidden;
   padding: 26px 24px;
-  background: var(--card-glass);
-  backdrop-filter: blur(20px) saturate(145%);
-  transition:
-    background 350ms ease,
-    backdrop-filter 350ms ease;
+  background: var(--card-glass), #fff;
+  transition: background 350ms ease;
 }
 
 .service-card__texture {
@@ -337,7 +402,6 @@
 .service-card:focus-visible .service-card__visual,
 .service-card.is-active .service-card__visual {
   background: var(--card-solid);
-  backdrop-filter: none;
 }
 
 .service-card:focus-visible .service-card__texture,
@@ -437,6 +501,30 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes hero-scroll-hint-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes hero-scroll-hint-dot {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateY(6px);
   }
 }
 

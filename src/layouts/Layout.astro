@@ -1,5 +1,6 @@
 ---
 import Navbar from "../components/common/Navbar.astro";
+import Footer from "../components/common/footer.astro";
 import "../styles/style.css";
 
 interface Props {
@@ -30,16 +31,19 @@ const {
     <link rel="icon" type="image/webp" href="/sources/logo-4.webp" />
     <title>{title}</title>
   </head>
-  <body class="min-w-80 overflow-x-hidden bg-white font-sans text-white antialiased">
+  <body
+    class="isolate min-h-screen overflow-x-hidden bg-[#f8f9f7] bg-fixed bg-cover bg-center bg-no-repeat [background-image:radial-gradient(ellipse_35%_30%_at_35%_18%,rgba(224,151,244,0.70)_0%,rgba(234,190,239,0.44)_38%,transparent_75%),radial-gradient(ellipse_45%_40%_at_68%_55%,rgba(177,178,255,0.52)_0%,rgba(205,204,255,0.28)_45%,transparent_78%),radial-gradient(ellipse_34%_34%_at_68%_82%,rgba(81,68,242,0.90)_0%,rgba(105,91,247,0.68)_32%,rgba(151,143,250,0.38)_55%,transparent_78%)] font-sans text-white antialiased"
+  >
     <Navbar />
-    <main class="bg-white">
+    <main class="bg-transparent">
       <slot />
     </main>
+    <Footer />
 
     <script>
       const initializeScrollBounce = () => {
         const sections = Array.from(
-          document.querySelectorAll<HTMLElement>("main section, main footer"),
+          document.querySelectorAll<HTMLElement>("main section:not([data-hero]), footer[data-main-footer]"),
         );
         const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
