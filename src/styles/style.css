@@ -258,7 +258,7 @@
   width: 100%;
   min-width: 900px;
   max-width: 1280px;
-  height: 535px;
+  height: 485px;
   margin-inline: auto;
 }
 
@@ -269,8 +269,8 @@
   --card-footer-text: #111827;
   position: absolute;
   top: 24px;
-  width: clamp(220px, 22vw, 300px);
-  height: 438px;
+  width: clamp(220px, 20vw, 280px);
+  height: 404px;
   overflow: hidden;
   border: 1px solid rgb(255 255 255 / 54%);
   border-radius: 22px;
@@ -367,9 +367,9 @@
 
 .service-card__visual {
   position: relative;
-  height: 326px;
+  height: 300px;
   overflow: hidden;
-  padding: 26px 24px;
+  padding: 22px;
   background: var(--card-glass), #fff;
   transition: background 350ms ease;
 }
@@ -388,15 +388,15 @@
 .service-card__icon {
   position: relative;
   z-index: 1;
-  width: 54px;
-  height: 54px;
+  width: 48px;
+  height: 48px;
   color: #111827;
 }
 
 .service-card__eyebrow {
   position: relative;
   z-index: 1;
-  margin-top: 126px;
+  margin-top: 112px;
   font-size: 0.9rem;
   font-weight: 600;
   letter-spacing: -0.015em;
@@ -405,11 +405,11 @@
 .service-card__description {
   position: absolute;
   z-index: 2;
-  top: 105px;
-  right: 24px;
-  left: 24px;
+  top: 88px;
+  right: 22px;
+  left: 22px;
   color: #111827;
-  font-size: 0.88rem;
+  font-size: 0.84rem;
   line-height: 1.55;
   opacity: 0;
   transform: translateY(12px);
@@ -424,8 +424,8 @@
 
 .service-card__description ul {
   display: grid;
-  gap: 0.28rem;
-  margin: 0.85rem 0 0;
+  gap: 0.22rem;
+  margin: 0.7rem 0 0;
   padding-left: 1rem;
   list-style: disc;
 }
@@ -459,16 +459,16 @@
 .service-card__footer {
   position: relative;
   display: flex;
-  height: 112px;
+  height: 104px;
   align-items: flex-start;
-  padding: 22px 22px;
+  padding: 20px;
   background: var(--card-footer);
   color: var(--card-footer-text);
 }
 
 .service-card__footer h3 {
   max-width: calc(100% - 42px);
-  font-size: clamp(1rem, 1.55vw, 1.35rem);
+  font-size: clamp(1rem, 1.35vw, 1.2rem);
   line-height: 1.08;
   font-weight: 600;
   letter-spacing: -0.025em;
@@ -476,11 +476,11 @@
 
 .service-card__next {
   position: absolute;
-  right: 17px;
-  bottom: 17px;
+  right: 15px;
+  bottom: 15px;
   display: grid;
-  width: 38px;
-  height: 38px;
+  width: 34px;
+  height: 34px;
   place-items: center;
   border: 1px solid currentColor;
   border-radius: 9999px;
@@ -503,8 +503,8 @@
 }
 
 .service-card__next svg {
-  width: 19px;
-  height: 19px;
+  width: 17px;
+  height: 17px;
 }
 
 @keyframes glass-slide-in {
