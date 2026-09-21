@@ -6,17 +6,25 @@ const navigation = [
   { label: "+ Soluciones", href: "#soluciones" },
   { label: "+ Información", href: "#informacion" },
 ];
+
+interface Props {
+  heroControlled?: boolean;
+}
+
+const { heroControlled = false } = Astro.props;
 ---
 
 <nav
   class="pointer-events-none absolute inset-x-0 top-[15px] z-20 flex w-full items-center justify-between px-[5%] py-6 max-md:px-[4%] max-md:py-4"
   aria-label="Navegación principal"
   data-navbar
+  data-hero-content-visible={heroControlled ? "false" : undefined}
 >
   <a
     href="/"
     class="pointer-events-auto flex items-center transition-opacity duration-300 hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300"
     aria-label="Serendipia, inicio"
+    data-navbar-logo
   >
     <img
       class="block h-11 w-auto max-md:h-9"
@@ -30,6 +38,8 @@ const navigation = [
   <div
     class="pointer-events-auto relative hidden items-center rounded-full border border-white/10 bg-white/[0.04] p-1.5 backdrop-blur-2xl backdrop-saturate-150 md:inline-flex"
     data-menu-wrapper
+    aria-hidden={heroControlled ? "true" : undefined}
+    inert={heroControlled}
   >
     <span
       class="pointer-events-none absolute top-1.5 z-0 h-[calc(100%-12px)] rounded-full border border-white/[0.18] bg-white/10 shadow-[0_4px_20px_rgba(0,255,255,0.08),inset_0_1px_0_rgba(255,255,255,0.1)] transition-[left,width] duration-400 ease-[cubic-bezier(0.65,0,0.35,1)]"
@@ -60,10 +70,6 @@ const navigation = [
 </nav>
 
 <script>
-  import { gsap } from "gsap";
-  import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-  gsap.registerPlugin(ScrollTrigger);
   const navbarInstances = new Map<HTMLElement, () => void>();
 
   const initializeNavbar = () => {
@@ -73,8 +79,6 @@ const navigation = [
       const signal = events.signal;
       let destroyed = false;
       let initialFrame = 0;
-      let stickyTrigger: ScrollTrigger | undefined;
-      const layoutObserver = new ResizeObserver(() => stickyTrigger?.refresh());
 
       const pill = navbar.querySelector<HTMLElement>("[data-menu-pill]");
       const wrapper = navbar.querySelector<HTMLElement>("[data-menu-wrapper]");
@@ -112,44 +116,15 @@ const navigation = [
         resizeTimer = window.setTimeout(() => {
           movePillTo(links.find((link) => link.hasAttribute("aria-current")));
         }, 100);
-      });
+      }, { signal });
 
       const initialLink =
         links.find((link) => link.hash === window.location.hash) ?? links[0];
       initialFrame = requestAnimationFrame(() => setActiveLink(initialLink));
 
-      const brands = document.querySelector<HTMLElement>("[data-brands]");
-      if (brands) {
-        const updateSticky = (trigger: ScrollTrigger) => {
-          navbar.classList.toggle("navbar-sticky", trigger.scroll() >= trigger.start);
-        };
-
-        stickyTrigger = ScrollTrigger.create({
-          id: "navbar-from-brands",
-          trigger: brands,
-          start: () => {
-            // Layout offsets exclude Brands' bounce transform when measuring its entry.
-            let top = 0;
-            let element: HTMLElement | null = brands;
-            while (element) {
-              top += element.offsetTop;
-              element = element.offsetParent as HTMLElement | null;
-            }
-            return top - window.innerHeight + 1;
-          },
-          end: "max",
-          onUpdate: updateSticky,
-          onRefresh: updateSticky,
-        });
-        updateSticky(stickyTrigger);
-        const main = document.querySelector("main");
-        if (main) layoutObserver.observe(main);
-      }
-
       document.fonts?.ready.then(() => {
         if (destroyed) return;
         movePillTo(links.find((link) => link.hasAttribute("aria-current")) ?? initialLink);
-        stickyTrigger?.refresh();
       });
 
       navbarInstances.set(navbar, () => {
@@ -157,9 +132,6 @@ const navigation = [
         events.abort();
         window.clearTimeout(resizeTimer);
         cancelAnimationFrame(initialFrame);
-        layoutObserver.disconnect();
-        stickyTrigger?.kill();
-        navbar.classList.remove("navbar-sticky");
       });
     });
   };
