@@ -1,3 +1,7 @@
+---
+import Navbar from "../common/Navbar.astro";
+---
+
 <div
   class="hero-scroll-track relative"
   style="--hero-scroll-height: 300svh; --hero-content-hold: 100svh"
@@ -9,6 +13,8 @@
   aria-labelledby="hero-title"
   data-hero
 >
+  <Navbar heroControlled />
+
   <div class="absolute inset-0 z-0" data-hero-background>
     <video
       class="relative z-0 h-full w-full object-cover object-center"
@@ -186,7 +192,6 @@
       const playhead = { time: 0 };
       let animation: gsap.core.Tween | undefined;
       let trigger: ScrollTrigger | undefined;
-      let navbarTrigger: ScrollTrigger | undefined;
       let refreshFrame = 0;
       let destroyed = false;
       let unlocked = false;
@@ -209,20 +214,6 @@
         if (navbarMenu) {
           navbarMenu.inert = !visible;
           navbarMenu.setAttribute("aria-hidden", String(!visible));
-        }
-      };
-
-      const setNavbarActive = (active: boolean) => {
-        if (!navbar) return;
-        navbar.classList.toggle("navbar-hero-active", active);
-        if (!active) {
-          navbar.removeAttribute("data-hero-content-visible");
-          if (navbarMenu) {
-            navbarMenu.inert = false;
-            navbarMenu.setAttribute("aria-hidden", "false");
-          }
-        } else {
-          navbar.dataset.heroContentVisible = track.dataset.contentVisible ?? "false";
         }
       };
 
@@ -257,12 +248,9 @@
       const setupVideo = () => {
         if (destroyed || video.readyState < 1 || !Number.isFinite(video.duration) || video.duration <= 0) return;
         trigger?.kill();
-        navbarTrigger?.kill();
         animation?.kill();
         trigger = undefined;
-        navbarTrigger = undefined;
         animation = undefined;
-        setNavbarActive(false);
         pause();
         track.classList.toggle("hero-scroll-static", motion.matches);
         setContentVisible(motion.matches);
@@ -293,15 +281,6 @@
           },
         });
         trigger = animation.scrollTrigger;
-        navbarTrigger = ScrollTrigger.create({
-          id: "navbar-during-hero",
-          trigger: track,
-          start: "top top",
-          end: "bottom top",
-          onToggle: ({ isActive }) => setNavbarActive(isActive),
-          onRefresh: ({ isActive }) => setNavbarActive(isActive),
-        });
-        setNavbarActive(navbarTrigger.isActive);
         refresh();
       };
 
@@ -356,12 +335,17 @@
         resizeObserver.disconnect();
         cancelAnimationFrame(refreshFrame);
         trigger?.kill();
-        navbarTrigger?.kill();
         animation?.kill();
         pause();
         resetParallax();
         setContentVisible(motion.matches);
-        setNavbarActive(false);
+        if (navbar) {
+          navbar.removeAttribute("data-hero-content-visible");
+        }
+        if (navbarMenu) {
+          navbarMenu.inert = false;
+          navbarMenu.setAttribute("aria-hidden", "false");
+        }
       });
       track.classList.toggle("hero-scroll-static", motion.matches);
       setContentVisible(motion.matches);
