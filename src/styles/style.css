@@ -319,7 +319,7 @@
 .service-card[data-tone="neon"] {
   --card-glass: linear-gradient(145deg, rgb(252 255 238 / 76%), rgb(211 255 49 / 36%));
   --card-solid: #edffad;
-  --card-footer: #d2ef28;
+  --card-footer: #f5b93f;
 }
 
 .service-card[data-slot="0"] {

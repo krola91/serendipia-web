@@ -1,0 +1,165 @@
+---
+const featuredPost = {
+  title: "SEO en 2026: cómo liderar los resultados de búsqueda",
+  category: "POSICIONAMIENTO SEO",
+  image: "/sources/ChatGPT Image 22 sept 2026, 19_08_42 (1).png",
+};
+
+const centerPosts = [
+  {
+    title: "Publicidad digital que convierte inversión en crecimiento",
+    category: "PAUTA DIGITAL",
+    image: "/sources/ChatGPT Image 22 sept 2026, 19_08_43 (2).png",
+  },
+  {
+    title: "Redes sociales: contenido que conecta y vende",
+    category: "SOCIAL MEDIA",
+    image: "/sources/ChatGPT Image 22 sept 2026, 19_08_43 (3).png",
+  },
+  {
+    title: "Automatización de email marketing para nutrir tus leads",
+    category: "AUTOMATIZACIÓN",
+    image: "/sources/ChatGPT Image 22 sept 2026, 19_08_43 (4).png",
+  },
+];
+
+const rightPosts = [
+  {
+    title: "Analítica digital: decisiones basadas en datos",
+    category: "ANALÍTICA",
+    image: "/sources/ChatGPT Image 22 sept 2026, 19_08_44 (5).png",
+  },
+  {
+    title: "Estrategias de contenido para construir autoridad",
+    category: "CRECIMIENTO DIGITAL",
+    image: "/sources/ChatGPT Image 22 sept 2026, 19_08_44 (6).png",
+  },
+];
+---
+
+<section
+  class="relative overflow-hidden bg-transparent px-5 py-[clamp(56px,7vw,80px)] md:px-10 lg:px-20"
+  aria-labelledby="blog-title"
+>
+  <div class="mx-auto max-w-[1440px]">
+    <div class="mb-8 flex flex-wrap items-end justify-between gap-5 md:mb-10">
+      <h2
+        id="blog-title"
+        class="font-sans text-[clamp(2.25rem,4vw,3.75rem)] leading-[1.05] font-semibold tracking-[-0.05em] text-[#111827]"
+      >
+        Noticias Digitales
+      </h2>
+
+      <a
+        href="/blog"
+        class="group inline-flex items-center gap-2 border-b border-[#402776]/35 pb-1 text-sm font-semibold tracking-[0.03em] text-[#402776] transition-colors duration-300 hover:border-[#402776] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#402776]"
+      >
+        visitar el blog
+        <svg
+          class="size-4 transition-transform duration-300 group-hover:translate-x-1"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M5 12h14M13 6l6 6-6 6"></path>
+        </svg>
+      </a>
+    </div>
+
+    <div id="blog-grid" class="grid gap-5 md:grid-cols-2 lg:h-[620px] lg:grid-cols-[1.08fr_1fr_1.12fr]">
+      <a
+        href="/blog"
+        class="group relative min-h-[440px] overflow-hidden rounded-[24px] bg-[#111827] shadow-[0_18px_50px_rgba(17,24,39,0.14)] md:min-h-[520px] lg:min-h-0"
+        aria-label={featuredPost.title}
+      >
+        <img
+          class="absolute inset-0 size-full object-cover object-[72%_center] transition-transform duration-700 ease-out group-hover:scale-[1.045]"
+          src={featuredPost.image}
+          alt="Visual sobre posicionamiento SEO y crecimiento en buscadores"
+          width="2172"
+          height="724"
+          loading="lazy"
+          decoding="async"
+        />
+        <span class="absolute inset-0 bg-gradient-to-t from-[#09041a]/95 via-[#160536]/25 to-transparent" aria-hidden="true"></span>
+        <div class="absolute inset-x-0 bottom-0 z-10 p-6 sm:p-7">
+          <span class="inline-flex rounded-full bg-white/15 px-3 py-1.5 text-[0.65rem] font-semibold tracking-[0.1em] text-white backdrop-blur-md">
+            {featuredPost.category}
+          </span>
+          <h3 class="mt-4 max-w-lg text-[clamp(1.5rem,2.2vw,2.1rem)] leading-[1.12] font-semibold tracking-[-0.035em] text-white">
+            {featuredPost.title}
+          </h3>
+          <span class="mt-5 inline-flex items-center gap-2 text-sm font-medium text-white/80">
+            Leer artículo
+            <span class="transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">→</span>
+          </span>
+        </div>
+      </a>
+
+      <div class="grid gap-5 lg:grid-rows-3">
+        {
+          centerPosts.map((post) => (
+            <a
+              href="/blog"
+              class="group relative min-h-[230px] overflow-hidden rounded-[22px] bg-[#111827] shadow-[0_14px_40px_rgba(17,24,39,0.12)] lg:min-h-0"
+              aria-label={post.title}
+            >
+              <img
+                class="absolute inset-0 size-full object-cover object-[72%_center] transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+                src={post.image}
+                alt=""
+                width="2172"
+                height="724"
+                loading="lazy"
+                decoding="async"
+              />
+              <span class="absolute inset-0 bg-gradient-to-r from-[#09041a]/95 via-[#13052f]/65 to-transparent" aria-hidden="true" />
+              <div class="absolute inset-y-0 left-0 z-10 flex w-[72%] flex-col justify-end p-5">
+                <span class="text-[0.62rem] font-semibold tracking-[0.1em] text-[#f5b93f]">{post.category}</span>
+                <h3 class="mt-2 text-[clamp(1rem,1.35vw,1.2rem)] leading-[1.25] font-semibold tracking-[-0.025em] text-white">
+                  {post.title}
+                </h3>
+                <span class="mt-3 text-xs font-medium text-white/70">
+                  Leer artículo <span class="transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">→</span>
+                </span>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+
+      <div class="grid gap-5 md:col-span-2 md:grid-cols-2 lg:col-span-1 lg:grid-cols-1 lg:grid-rows-2">
+        {
+          rightPosts.map((post) => (
+            <a
+              href="/blog"
+              class="group relative min-h-[280px] overflow-hidden rounded-[22px] bg-[#111827] shadow-[0_16px_44px_rgba(17,24,39,0.13)] lg:min-h-0"
+              aria-label={post.title}
+            >
+              <img
+                class="absolute inset-0 size-full object-cover object-[70%_center] transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+                src={post.image}
+                alt=""
+                width="2172"
+                height="724"
+                loading="lazy"
+                decoding="async"
+              />
+              <span class="absolute inset-0 bg-gradient-to-t from-[#09041a]/95 via-[#100429]/25 to-transparent" aria-hidden="true" />
+              <div class="absolute inset-x-0 bottom-0 z-10 p-5 sm:p-6">
+                <span class="text-[0.62rem] font-semibold tracking-[0.1em] text-[#f5b93f]">{post.category}</span>
+                <h3 class="mt-2 max-w-md text-[clamp(1.1rem,1.6vw,1.45rem)] leading-[1.2] font-semibold tracking-[-0.03em] text-white">
+                  {post.title}
+                </h3>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
