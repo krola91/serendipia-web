@@ -40,6 +40,7 @@ const rightPosts = [
 <section
   class="relative overflow-hidden bg-transparent px-5 py-[clamp(56px,7vw,80px)] md:px-10 lg:px-20"
   aria-labelledby="blog-title"
+  data-blog-section
 >
   <div class="mx-auto max-w-[1440px]">
     <div class="mb-8 flex flex-wrap items-end justify-between gap-5 md:mb-10">
@@ -70,11 +71,16 @@ const rightPosts = [
       </a>
     </div>
 
-    <div id="blog-grid" class="grid gap-5 md:grid-cols-2 lg:h-[620px] lg:grid-cols-[1.08fr_1fr_1.12fr]">
+    <div
+      id="blog-grid"
+      class="grid gap-5 md:grid-cols-2 lg:h-[620px] lg:grid-cols-[1.08fr_1fr_1.12fr]"
+      data-blog-grid
+    >
       <a
         href="/blog"
         class="group relative min-h-[440px] overflow-hidden rounded-[24px] bg-[#111827] shadow-[0_18px_50px_rgba(17,24,39,0.14)] md:min-h-[520px] lg:min-h-0"
         aria-label={featuredPost.title}
+        data-blog-piece
       >
         <img
           class="absolute inset-0 size-full object-cover object-[72%_center] transition-transform duration-700 ease-out group-hover:scale-[1.045]"
@@ -107,6 +113,7 @@ const rightPosts = [
               href="/blog"
               class="group relative min-h-[230px] overflow-hidden rounded-[22px] bg-[#111827] shadow-[0_14px_40px_rgba(17,24,39,0.12)] lg:min-h-0"
               aria-label={post.title}
+              data-blog-piece
             >
               <img
                 class="absolute inset-0 size-full object-cover object-[72%_center] transition-transform duration-700 ease-out group-hover:scale-[1.05]"
@@ -139,6 +146,7 @@ const rightPosts = [
               href="/blog"
               class="group relative min-h-[280px] overflow-hidden rounded-[22px] bg-[#111827] shadow-[0_16px_44px_rgba(17,24,39,0.13)] lg:min-h-0"
               aria-label={post.title}
+              data-blog-piece
             >
               <img
                 class="absolute inset-0 size-full object-cover object-[70%_center] transition-transform duration-700 ease-out group-hover:scale-[1.05]"
@@ -163,3 +171,58 @@ const rightPosts = [
     </div>
   </div>
 </section>
+
+<script>
+  const initializeBlogEntrance = () => {
+    const routes = [
+      ["-180px", "70px", "-5deg", "10px", "-4px"],
+      ["0px", "-150px", "4deg", "0px", "8px"],
+      ["180px", "-50px", "-4deg", "-10px", "4px"],
+      ["-90px", "150px", "3deg", "6px", "-8px"],
+      ["180px", "130px", "-3deg", "-10px", "-7px"],
+      ["0px", "170px", "4deg", "0px", "-8px"],
+    ];
+
+    document.querySelectorAll<HTMLElement>("[data-blog-section]").forEach((section) => {
+      if (section.dataset.entranceReady === "true") return;
+      section.dataset.entranceReady = "true";
+
+      const grid = section.querySelector<HTMLElement>("[data-blog-grid]");
+      const pieces = Array.from(section.querySelectorAll<HTMLElement>("[data-blog-piece]"));
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      if (!grid || reduceMotion || !("IntersectionObserver" in window)) return;
+
+      pieces.forEach((piece, index) => {
+        const [x, y, rotation, snapX, snapY] = routes[index] ?? routes[0];
+        piece.style.setProperty("--piece-x", x);
+        piece.style.setProperty("--piece-y", y);
+        piece.style.setProperty("--piece-rotate", rotation);
+        piece.style.setProperty("--piece-snap-x", snapX);
+        piece.style.setProperty("--piece-snap-y", snapY);
+        piece.style.setProperty("--piece-delay", `${index * 100}ms`);
+        piece.classList.add("eu-quality-piece-pending");
+      });
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+
+            pieces.forEach((piece) => {
+              piece.classList.remove("eu-quality-piece-pending");
+              piece.classList.add("eu-quality-piece-in");
+            });
+            observer.disconnect();
+          });
+        },
+        { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },
+      );
+
+      observer.observe(grid);
+    });
+  };
+
+  initializeBlogEntrance();
+  document.addEventListener("astro:page-load", initializeBlogEntrance);
+</script>

@@ -162,6 +162,35 @@ const services = [
       );
       let startIndex = 0;
 
+      const initializeCardEntrance = () => {
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const entranceCards = cards.filter((card) => card.dataset.visible === "true");
+
+        if (reduceMotion || !("IntersectionObserver" in window)) return;
+
+        entranceCards.forEach((card, index) => {
+          card.classList.add("service-card-drop-pending");
+          card.style.setProperty("--service-drop-delay", `${index * 160}ms`);
+        });
+
+        const entranceObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+
+              entranceCards.forEach((card) => {
+                card.classList.remove("service-card-drop-pending");
+                card.classList.add("service-card-drop-in");
+              });
+              entranceObserver.disconnect();
+            });
+          },
+          { threshold: 0.18, rootMargin: "0px 0px -8% 0px" },
+        );
+
+        entranceObserver.observe(section);
+      };
+
       const activateCard = (activeCard: HTMLElement) => {
         cards.forEach((card) => card.classList.toggle("is-active", card === activeCard));
       };
@@ -208,6 +237,7 @@ const services = [
       });
 
       renderWindow();
+      initializeCardEntrance();
     });
   };
 

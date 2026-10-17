@@ -1,11 +1,12 @@
 <section
   class="overflow-hidden bg-transparent px-5 py-[clamp(48px,6vw,72px)] md:px-10 lg:px-20"
   aria-labelledby="opinions-title"
+  data-opinions-section
 >
   <div
     class="mx-auto grid max-w-[1440px] items-center gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-12 xl:gap-16"
   >
-    <div class="max-w-xl text-[#111827]">
+    <div class="max-w-xl text-[#111827]" data-opinions-column="left">
       <h2
         id="opinions-title"
         class="text-[clamp(2rem,3.2vw,2.75rem)] leading-[1.06] font-semibold tracking-[-0.045em]"
@@ -51,7 +52,10 @@
       </div>
     </div>
 
-    <div class="relative ml-auto w-full max-w-[720px] lg:pb-20">
+    <div
+      class="relative ml-auto w-full max-w-[720px] lg:pb-20"
+      data-opinions-column="right"
+    >
       <img
         class="block h-auto w-full rounded-[20px] object-cover shadow-[0_18px_55px_rgba(17,24,39,0.1)]"
         src="/sources/estadisticas.png"
@@ -115,3 +119,41 @@
     </div>
   </div>
 </section>
+
+<script>
+  const initializeOpinionsEntrance = () => {
+    document.querySelectorAll<HTMLElement>("[data-opinions-section]").forEach((section) => {
+      if (section.dataset.entranceReady === "true") return;
+      section.dataset.entranceReady = "true";
+
+      const columns = Array.from(
+        section.querySelectorAll<HTMLElement>("[data-opinions-column]"),
+      );
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      if (reduceMotion || !("IntersectionObserver" in window)) return;
+
+      columns.forEach((column) => column.classList.add("opinions-column-pending"));
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+
+            columns.forEach((column) => {
+              column.classList.remove("opinions-column-pending");
+              column.classList.add("opinions-column-in");
+            });
+            observer.disconnect();
+          });
+        },
+        { threshold: 0.2, rootMargin: "0px 0px -8% 0px" },
+      );
+
+      observer.observe(section);
+    });
+  };
+
+  initializeOpinionsEntrance();
+  document.addEventListener("astro:page-load", initializeOpinionsEntrance);
+</script>

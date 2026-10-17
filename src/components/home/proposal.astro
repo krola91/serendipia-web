@@ -1,6 +1,7 @@
 <section
   class="relative px-5 py-[clamp(72px,8vw,110px)] md:px-10 lg:px-20"
   aria-labelledby="proposal-title"
+  data-proposal-section
 >
   <div
     class="relative mx-auto min-h-[600px] max-w-[1440px] rounded-[28px] bg-[#402776] px-6 pt-10 pb-[280px] text-white shadow-[0_24px_70px_rgba(64,39,118,0.2)] sm:min-h-[620px] sm:px-9 sm:pt-12 sm:pb-[310px] md:min-h-[340px] md:px-10 md:py-12 md:pr-[42%] lg:px-14 lg:py-14 lg:pr-[40%]"
@@ -46,6 +47,41 @@
       height="1456"
       loading="lazy"
       decoding="async"
+      data-proposal-rocket
     />
   </div>
 </section>
+
+<script>
+  const initializeProposalRocket = () => {
+    document.querySelectorAll<HTMLElement>("[data-proposal-section]").forEach((section) => {
+      if (section.dataset.rocketReady === "true") return;
+      section.dataset.rocketReady = "true";
+
+      const rocket = section.querySelector<HTMLElement>("[data-proposal-rocket]");
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      if (!rocket || reduceMotion || !("IntersectionObserver" in window)) return;
+
+      rocket.classList.add("proposal-rocket-pending");
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+
+            rocket.classList.remove("proposal-rocket-pending");
+            rocket.classList.add("proposal-rocket-landing");
+            observer.disconnect();
+          });
+        },
+        { threshold: 0.2, rootMargin: "0px 0px -8% 0px" },
+      );
+
+      observer.observe(section);
+    });
+  };
+
+  initializeProposalRocket();
+  document.addEventListener("astro:page-load", initializeProposalRocket);
+</script>

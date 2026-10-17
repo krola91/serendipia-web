@@ -41,45 +41,5 @@ const {
       <slot />
     </main>
     <Footer />
-
-    <script>
-      const initializeScrollBounce = () => {
-        const sections = Array.from(
-          document.querySelectorAll<HTMLElement>("main section:not([data-hero]), footer[data-main-footer]"),
-        );
-        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-        sections.forEach((section) => {
-          if (section.dataset.scrollBounceReady === "true") return;
-          section.dataset.scrollBounceReady = "true";
-
-          if (!reduceMotion) section.classList.add("scroll-bounce-pending");
-        });
-
-        if (reduceMotion || !("IntersectionObserver" in window)) {
-          sections.forEach((section) => section.classList.remove("scroll-bounce-pending"));
-          return;
-        }
-
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (!entry.isIntersecting) return;
-
-              const section = entry.target as HTMLElement;
-              section.classList.remove("scroll-bounce-pending");
-              section.classList.add("scroll-bounce-in");
-              observer.unobserve(section);
-            });
-          },
-          { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
-        );
-
-        sections.forEach((section) => observer.observe(section));
-      };
-
-      initializeScrollBounce();
-      document.addEventListener("astro:page-load", initializeScrollBounce);
-    </script>
   </body>
 </html>

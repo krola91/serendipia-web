@@ -189,7 +189,42 @@ const testimonials = [
       const nextButton = slider.querySelector<HTMLButtonElement>("[data-who-next]");
       const status = slider.querySelector<HTMLElement>("[data-who-status]");
       const testimonialCount = Number(slider.dataset.testimonialCount ?? cards.length);
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       let activeIndex = 0;
+
+      const initializeCardEntrance = () => {
+        if (reduceMotion || !("IntersectionObserver" in window)) return;
+
+        cards.forEach((card, index) => {
+          card.classList.add("testimonial-drop-pending");
+          card.style.setProperty(
+            "--testimonial-drop-delay",
+            `${(cards.length - 1 - index) * 220}ms`,
+          );
+          card.addEventListener(
+            "animationend",
+            () => card.classList.remove("testimonial-drop-in"),
+            { once: true },
+          );
+        });
+
+        const entranceObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+
+              cards.forEach((card) => {
+                card.classList.remove("testimonial-drop-pending");
+                card.classList.add("testimonial-drop-in");
+              });
+              entranceObserver.disconnect();
+            });
+          },
+          { threshold: 0.2, rootMargin: "0px 0px -8% 0px" },
+        );
+
+        entranceObserver.observe(slider);
+      };
 
       const render = () => {
         cards.forEach((card, index) => {
@@ -212,6 +247,7 @@ const testimonials = [
       });
 
       render();
+      initializeCardEntrance();
     });
   };
 
@@ -257,6 +293,50 @@ const testimonials = [
     filter: saturate(0.45);
   }
 
+  .testimonial-drop-pending {
+    visibility: hidden;
+    translate: 0 -110vh;
+    will-change: translate;
+  }
+
+  .testimonial-drop-in {
+    animation: testimonial-drop-in 1400ms linear var(--testimonial-drop-delay, 0ms) both;
+    will-change: translate;
+  }
+
+  @keyframes testimonial-drop-in {
+    0% {
+      visibility: visible;
+      translate: 0 -110vh;
+      animation-timing-function: cubic-bezier(0.5, 0, 0.72, 0.48);
+    }
+
+    68% {
+      translate: 0 14px;
+      animation-timing-function: ease-out;
+    }
+
+    79% {
+      translate: 0 -18px;
+      animation-timing-function: ease-in;
+    }
+
+    88% {
+      translate: 0 6px;
+      animation-timing-function: ease-out;
+    }
+
+    95% {
+      translate: 0 -3px;
+      animation-timing-function: ease-in;
+    }
+
+    100% {
+      visibility: visible;
+      translate: 0 0;
+    }
+  }
+
   @media (max-width: 639px) {
     .testimonial-stack {
       min-height: 430px;
@@ -282,6 +362,13 @@ const testimonials = [
   @media (prefers-reduced-motion: reduce) {
     .testimonial-stack-card {
       transition: none;
+    }
+
+    .testimonial-drop-pending,
+    .testimonial-drop-in {
+      visibility: visible !important;
+      translate: none !important;
+      animation: none !important;
     }
   }
 </style>

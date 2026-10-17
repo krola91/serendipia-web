@@ -136,15 +136,40 @@ const faqs = [
       list.dataset.ready = "true";
 
       const items = Array.from(list.querySelectorAll<HTMLDetailsElement>("[data-faq-item]"));
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-      items.forEach((item) => {
+      items.forEach((item, index) => {
         item.addEventListener("toggle", () => {
           if (!item.open) return;
           items.forEach((otherItem) => {
             if (otherItem !== item) otherItem.open = false;
           });
         });
+
+        if (!reduceMotion && "IntersectionObserver" in window) {
+          item.classList.add("faq-item-pending");
+          item.style.setProperty("--faq-item-delay", `${index * 120}ms`);
+        }
       });
+
+      if (reduceMotion || !("IntersectionObserver" in window)) return;
+
+      const entranceObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+
+            items.forEach((item) => {
+              item.classList.remove("faq-item-pending");
+              item.classList.add("faq-item-bounce-in");
+            });
+            entranceObserver.disconnect();
+          });
+        },
+        { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },
+      );
+
+      entranceObserver.observe(list);
     });
   };
 

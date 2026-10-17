@@ -1,6 +1,7 @@
 <section
   class="relative my-6 overflow-hidden bg-transparent px-5 py-12 md:my-8 md:px-10 lg:px-20"
   aria-labelledby="eu-quality-title"
+  data-eu-quality-section
 >
   <img
     class="pointer-events-none absolute top-0 right-0 z-0 h-[360px] w-[520px] max-w-[70vw] object-contain object-right-top opacity-20 max-md:h-[220px] max-md:w-[75vw] max-md:opacity-15"
@@ -22,9 +23,13 @@
       <span class="bg-[#f5b93f] px-1">Ecuador</span>
     </h2>
 
-    <div class="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:grid-rows-2 lg:gap-5">
+    <div
+      class="eu-quality-grid grid grid-cols-1 gap-4 lg:grid-cols-3 lg:grid-rows-2 lg:gap-5"
+      data-eu-quality-grid
+    >
       <article
         class="group relative min-h-[440px] overflow-hidden rounded-[26px] shadow-[0_4px_20px_rgba(0,0,0,0.04)] lg:row-span-2 lg:min-h-[520px]"
+        data-eu-quality-piece
       >
         <img
           class="absolute inset-0 size-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.03]"
@@ -55,6 +60,7 @@
 
       <article
         class="flex min-h-[220px] flex-col justify-between rounded-[26px] bg-[#C5D9F1] p-6 text-[#111827] shadow-[0_4px_20px_rgba(0,0,0,0.04)] lg:p-7"
+        data-eu-quality-piece
       >
         <div class="flex items-center justify-between" aria-hidden="true">
           <span class="text-xs font-semibold tracking-[0.12em]">02</span>
@@ -71,6 +77,7 @@
 
       <article
         class="flex min-h-[220px] flex-col justify-between rounded-[26px] bg-white p-6 text-[#111827] shadow-[0_4px_20px_rgba(0,0,0,0.04)] lg:p-7"
+        data-eu-quality-piece
       >
         <div class="flex items-center justify-between" aria-hidden="true">
           <span class="text-xs font-semibold tracking-[0.12em]">03</span>
@@ -87,6 +94,7 @@
 
       <article
         class="flex min-h-[220px] flex-col justify-between rounded-[26px] bg-gradient-to-br from-[#E0F2FE] via-[#FBCFE8] to-[#b87cbd] p-6 text-[#111827] shadow-[0_4px_20px_rgba(0,0,0,0.04)] lg:p-7"
+        data-eu-quality-piece
       >
         <div class="flex items-center justify-between" aria-hidden="true">
           <span class="text-xs font-semibold tracking-[0.12em]">04</span>
@@ -103,6 +111,7 @@
 
       <article
         class="flex min-h-[220px] flex-col justify-between rounded-[26px] bg-[#E0F2F1] p-6 text-[#111827] shadow-[0_4px_20px_rgba(0,0,0,0.04)] lg:p-7"
+        data-eu-quality-piece
       >
         <div class="flex items-center justify-between" aria-hidden="true">
           <span class="text-xs font-semibold tracking-[0.12em]">05</span>
@@ -120,3 +129,42 @@
     </div>
   </div>
 </section>
+
+<script>
+  const initializeEuQualityEntrance = () => {
+    document.querySelectorAll<HTMLElement>("[data-eu-quality-section]").forEach((section) => {
+      if (section.dataset.entranceReady === "true") return;
+      section.dataset.entranceReady = "true";
+
+      const grid = section.querySelector<HTMLElement>("[data-eu-quality-grid]");
+      const pieces = Array.from(
+        section.querySelectorAll<HTMLElement>("[data-eu-quality-piece]"),
+      );
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      if (!grid || reduceMotion || !("IntersectionObserver" in window)) return;
+
+      pieces.forEach((piece) => piece.classList.add("eu-quality-piece-pending"));
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+
+            pieces.forEach((piece) => {
+              piece.classList.remove("eu-quality-piece-pending");
+              piece.classList.add("eu-quality-piece-in");
+            });
+            observer.disconnect();
+          });
+        },
+        { threshold: 0.18, rootMargin: "0px 0px -8% 0px" },
+      );
+
+      observer.observe(grid);
+    });
+  };
+
+  initializeEuQualityEntrance();
+  document.addEventListener("astro:page-load", initializeEuQualityEntrance);
+</script>
