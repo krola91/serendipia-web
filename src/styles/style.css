@@ -766,7 +766,7 @@
 }
 
 .opinions-column-in {
-  animation: opinions-column-in 950ms ease-in both;
+  animation: opinions-column-in 1500ms ease-in both;
   will-change: transform, opacity;
 }
 
