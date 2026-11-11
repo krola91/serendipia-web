@@ -1,6 +1,7 @@
 ---
 import Navbar from "../components/common/Navbar.astro";
 import Footer from "../components/common/footer.astro";
+import MobileTabMenu from "../components/common/MobileTabMenu.astro";
 import "../styles/style.css";
 
 interface Props {
@@ -41,6 +42,63 @@ const {
       <slot />
     </main>
     <Footer />
+    <MobileTabMenu />
+
+    <script>
+      const initializeTitleEntrances = () => {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) return;
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("site-title-visible");
+            observer.unobserve(entry.target);
+          });
+        }, { threshold: 0.2, rootMargin: "0px 0px -20% 0px" });
+
+        document.querySelectorAll<HTMLElement>("main h1#hero-title, main h2:not([data-no-title-animation]), footer h2:not([data-no-title-animation])").forEach((heading) => {
+          if (heading.matches("h2") && heading.closest("[data-hero-glass]")) return;
+          if (heading.dataset.lettersReady === "true") return;
+          const label = heading.textContent?.replace(/\s+/g, " ").trim();
+          if (!label) return;
+          heading.dataset.lettersReady = "true";
+          heading.setAttribute("aria-label", label);
+
+          const walker = document.createTreeWalker(heading, NodeFilter.SHOW_TEXT);
+          const nodes: Text[] = [];
+          while (walker.nextNode()) nodes.push(walker.currentNode as Text);
+          let index = 0;
+          nodes.forEach((node) => {
+            if (!node.textContent?.trim()) return;
+            const fragment = document.createDocumentFragment();
+            node.textContent.split(/(\s+)/).forEach((part) => {
+              if (!part) return;
+              if (/^\s+$/.test(part)) {
+                fragment.append(document.createTextNode(part));
+                return;
+              }
+              const word = document.createElement("span");
+              word.className = "site-title-word";
+              word.setAttribute("aria-hidden", "true");
+              Array.from(part).forEach((letter) => {
+                const span = document.createElement("span");
+                span.className = "site-title-letter";
+                span.style.setProperty("--letter-index", String(index));
+                index++;
+                span.textContent = letter;
+                word.append(span);
+              });
+              fragment.append(word);
+            });
+            node.replaceWith(fragment);
+          });
+          heading.classList.add("site-title-ready");
+          if (!heading.closest("[data-hero-glass]")) observer.observe(heading);
+        });
+      };
+      initializeTitleEntrances();
+      document.addEventListener("astro:page-load", initializeTitleEntrances);
+    </script>
 
     <script>
       const initializeMobileCarousels = () => {

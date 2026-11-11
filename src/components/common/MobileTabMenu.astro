@@ -1,0 +1,62 @@
+<nav class="mobile-tab-menu" aria-label="Navegación móvil" data-mobile-tabs>
+  <div class="mobile-tab-popup" id="mobile-solutions" hidden>
+    <a href="/#services-title">SEO <span aria-hidden="true">↗</span></a>
+    <a href="/#services-title">Publicidad Digital <span aria-hidden="true">↗</span></a>
+    <a href="/#services-title">Diseño Web <span aria-hidden="true">↗</span></a>
+  </div>
+  <div class="mobile-tab-bar">
+    <a href="/" class="mobile-tab is-active" data-mobile-tab aria-current="page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 21v-7h6v7"/></svg>
+      <span>Home</span>
+    </a>
+    <button type="button" class="mobile-tab" data-mobile-solutions aria-expanded="false" aria-controls="mobile-solutions">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="8" cy="6" r="2" fill="white"/><circle cx="16" cy="12" r="2" fill="white"/><circle cx="9" cy="18" r="2" fill="white"/></svg>
+      <span>Soluciones</span>
+    </button>
+    <a href="https://wa.me/?text=Hola%2C%20quisiera%20informaci%C3%B3n%20sobre%20sus%20servicios." target="_blank" rel="noopener noreferrer" class="mobile-tab" data-mobile-tab>
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a9.9 9.9 0 0 0-8.6 14.8L2 22l5.4-1.4A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3.2.8.9-3.1-.2-.3a8.2 8.2 0 1 1 7 3.9Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.5.1l-.7.8c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.2-2.8c-.2-.3.2-.3.6-1 .1-.1.1-.3 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-.9.9-.9 2.2s1 2.5 1.1 2.7c.1.2 1.9 2.9 4.7 4 1.8.8 2.5.8 3.4.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>
+      <span>WhatsApp</span>
+    </a>
+    <a href="/#contacto" class="mobile-tab" data-mobile-tab>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3zM9 3v15M15 6v15"/></svg>
+      <span>Contacto</span>
+    </a>
+  </div>
+</nav>
+
+<script>
+  const initializeMobileTabs = () => {
+    document.querySelectorAll<HTMLElement>("[data-mobile-tabs]").forEach((nav) => {
+      if (nav.dataset.ready) return;
+      nav.dataset.ready = "true";
+      const button = nav.querySelector<HTMLButtonElement>("[data-mobile-solutions]");
+      const popup = nav.querySelector<HTMLElement>("#mobile-solutions");
+      if (!button || !popup) return;
+      const close = () => { popup.hidden = true; button.setAttribute("aria-expanded", "false"); button.classList.remove("is-active"); };
+      button.addEventListener("click", () => {
+        const open = popup.hidden === true;
+        popup.hidden = !open;
+        button.setAttribute("aria-expanded", String(open));
+        button.classList.toggle("is-active", open);
+      });
+      nav.querySelectorAll<HTMLAnchorElement>("a").forEach((link) => link.addEventListener("click", () => {
+        close();
+        if (link.hasAttribute("data-mobile-tab") && !link.hasAttribute("target")) {
+          nav.querySelectorAll("[data-mobile-tab]").forEach((tab) => { tab.classList.remove("is-active"); tab.removeAttribute("aria-current"); });
+          link.classList.add("is-active");
+          link.setAttribute("aria-current", "location");
+        }
+      }));
+      document.addEventListener("click", (event) => { if (event.target instanceof Node && !nav.contains(event.target)) close(); });
+      document.addEventListener("keydown", (event) => { if (event.key === "Escape" && !popup.hidden) { close(); button.focus(); } });
+      const hero = document.querySelector<HTMLElement>("[data-hero-scroll]");
+      if (hero) {
+        const sync = () => nav.classList.toggle("is-hero-hidden", hero.dataset.contentVisible !== "true");
+        sync();
+        new MutationObserver(sync).observe(hero, { attributes: true, attributeFilter: ["data-content-visible"] });
+      }
+    });
+  };
+  initializeMobileTabs();
+  document.addEventListener("astro:page-load", initializeMobileTabs);
+</script>

@@ -6,7 +6,7 @@ const services = [
       "Analizamos y definimos una estrategia alineada con la de tu empresa, priorizando la obtención de resultados",
     points: ["Auditoría online", "ADN de marca", "Identificación de oportunidades", "Estudio de la competencia"],
     tone: "pink",
-    icon: '<circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m15.5 15.5 5 5M10.5 7.5v6M7.5 10.5h6"></path>',
+    icon: "/sources/market.png",
   },
   {
     title: "POSICIONAMIENTO SEO",
@@ -14,7 +14,7 @@ const services = [
       "Hacemos del SEO tu aliado para posicionarte como líder en Google, en las primeras posiciones.",
     points: ["Estudio de palabras clave", "Optimización de contenidos", "SEO On-page, Off-page y más", "Reporting y actualización estratégica"],
     tone: "violet",
-    icon: '<path d="m3 10.5 14-5v13l-14-5v-3Z"></path><path d="m7 15 1.5 5h3L10 16M17 9c2 1.2 2 4.8 0 6"></path>',
+    icon: "/sources/seo.png",
   },
   {
     title: "DISEÑO WEB",
@@ -22,7 +22,7 @@ const services = [
       "Creamos sitios web que trascienden y convierten a tus visitantes en clientes.",
     points: ["Análisis inicial", "Contenidos de la página web", "Optimización SEO incluido", "Diseño web personalizado"],
     tone: "lime",
-    icon: '<path d="M4 20V11M10 20V7M16 20v-5M22 20V4"></path><path d="m4 8 6-5 6 7 6-8"></path>',
+    icon: "/sources/web-designing.png",
   },
   {
     title: "TIENDA EN LÍNEA",
@@ -30,7 +30,7 @@ const services = [
       "Desarrollamos tu eCommerce para que comiences a vender tu producto o servicio por internet",
     points: ["Automatización de Ecommerce", "Usabilidad con orientación al cliente", "Integración de botones de pago", "Optimización SEO incluido"],
     tone: "aqua",
-    icon: '<rect x="3" y="4" width="18" height="15" rx="2"></rect><path d="M3 8h18M7 6h.01M10 6h.01M8 22h8"></path>',
+    icon: "/sources/purchase.png",
   },
   {
     title: "PUBLICIDAD DIGITAL",
@@ -38,7 +38,7 @@ const services = [
       "Hacemos crecer tu negocio con un enfoque dirigido a llegar a tu cliente ideal a través de pauta efectiva",
     points: ["Segmentación objetiva", "Remarketing avanzado", "Campañas multiplataforma", "Reportes mensuales"],
     tone: "silver",
-    icon: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path><circle cx="18" cy="7" r="3"></circle>',
+    icon: "/sources/advertisement.png",
   },
   {
     title: "MARKETING DE CONTENIDO",
@@ -46,7 +46,7 @@ const services = [
       "Desarrollamos estrategias para convertir tus redes en un motor de ventas",
     points: ["Creación de contenido", "Distribución del contenido", "Optimización y promoción del contenido", "Monitoreo"],
     tone: "neon",
-    icon: '<path d="m12 2 9 5-9 5-9-5 9-5Z"></path><path d="m3 12 9 5 9-5M3 17l9 5 9-5"></path>',
+    icon: "/sources/content-marketing.png",
   },
 ];
 ---
@@ -95,19 +95,27 @@ const services = [
               <div class="service-card__visual">
                 <div class="service-card__texture" aria-hidden="true"></div>
 
-                <svg
+                <button
+                  type="button"
+                  class="service-card__link"
+                  disabled
+                  aria-label={`Página de ${service.title}: próximamente`}
+                  title="Página del servicio próximamente"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14M13 6l6 6-6 6"></path>
+                  </svg>
+                </button>
+
+                <img
                   class="service-card__icon"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.65"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  src={service.icon}
+                  alt=""
+                  width="48"
+                  height="48"
                   aria-hidden="true"
-                  set:html={service.icon}
                 />
 
-                <p class="service-card__eyebrow">{service.title}</p>
                 <div class="service-card__description">
                   <p>{service.description}</p>
                   <ul>
@@ -161,6 +169,8 @@ const services = [
         section.querySelectorAll<HTMLButtonElement>("[data-services-next]"),
       );
       let startIndex = 0;
+      const tablet = window.matchMedia("(min-width: 768px) and (width < 1024px)");
+      const desktop = window.matchMedia("(min-width: 1024px)");
 
       const initializeCardEntrance = () => {
         const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -170,7 +180,7 @@ const services = [
 
         entranceCards.forEach((card, index) => {
           card.classList.add("service-card-drop-pending");
-          card.style.setProperty("--service-drop-delay", `${index * 160}ms`);
+          card.style.setProperty("--service-drop-delay", `${index * 110}ms`);
         });
 
         const entranceObserver = new IntersectionObserver(
@@ -196,16 +206,19 @@ const services = [
       };
 
       const renderWindow = () => {
+        const visibleCount = tablet.matches ? 4 : 5;
+        startIndex = Math.min(startIndex, cards.length - visibleCount);
+        deck?.setAttribute("data-visible-count", String(visibleCount));
         cards.forEach((card, index) => {
           const slot = index - startIndex;
-          const isVisible = slot >= 0 && slot < 5;
+          const isVisible = slot >= 0 && slot < visibleCount;
           card.dataset.slot = isVisible ? String(slot) : "hidden";
           card.dataset.visible = String(isVisible);
           card.setAttribute("aria-hidden", String(!isVisible));
           card.tabIndex = isVisible ? 0 : -1;
 
           const nextButton = card.querySelector<HTMLButtonElement>("[data-services-next]");
-          const isCurrentNext = isVisible && slot === 4;
+          const isCurrentNext = isVisible && slot === visibleCount - 1;
           if (nextButton) {
             nextButton.tabIndex = isCurrentNext ? 0 : -1;
             nextButton.setAttribute("aria-hidden", String(!isCurrentNext));
@@ -215,11 +228,11 @@ const services = [
         nextButtons.forEach((button) => {
           button.setAttribute(
             "aria-label",
-            startIndex === 0 ? "Mostrar el siguiente servicio" : "Volver a los servicios anteriores",
+            startIndex < cards.length - visibleCount ? "Mostrar el siguiente servicio" : "Volver a los servicios anteriores",
           );
         });
 
-        activateCard(cards[startIndex + 2]);
+        activateCard(cards[startIndex + Math.floor(visibleCount / 2)]);
         deck?.setAttribute("data-window", String(startIndex));
       };
 
@@ -231,10 +244,17 @@ const services = [
       nextButtons.forEach((button) => {
         button.addEventListener("click", (event) => {
           event.stopPropagation();
-          startIndex = startIndex === 0 ? 1 : 0;
+          const maxStart = cards.length - (tablet.matches ? 4 : 5);
+          startIndex = startIndex < maxStart ? startIndex + 1 : 0;
           renderWindow();
         });
       });
+
+      const syncDesktopOrTablet = () => {
+        if (tablet.matches || desktop.matches) renderWindow();
+      };
+      tablet.addEventListener("change", syncDesktopOrTablet);
+      desktop.addEventListener("change", syncDesktopOrTablet);
 
       renderWindow();
       initializeCardEntrance();
