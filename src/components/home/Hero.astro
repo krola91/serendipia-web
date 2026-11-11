@@ -307,14 +307,12 @@ import Navbar from "../common/Navbar.astro";
         const x = (event.clientX - rect.left) / rect.width - 0.5;
         const y = (event.clientY - rect.top) / rect.height - 0.5;
 
-        if (glass) glass.style.transform = `translate(${x * 8}px, ${y * 8}px)`;
         glows.forEach((glow, index) => {
           const factor = (index + 1) * 15;
           glow.style.transform = `translate(${-x * factor}px, ${-y * factor}px)`;
         });
       };
       const resetParallax = () => {
-        if (glass) glass.style.transform = "";
         glows.forEach((glow) => (glow.style.transform = ""));
       };
       hero.addEventListener("mousemove", moveParallax, { signal });

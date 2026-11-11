@@ -166,7 +166,7 @@ const services = [
         const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         const entranceCards = cards.filter((card) => card.dataset.visible === "true");
 
-        if (reduceMotion || !("IntersectionObserver" in window)) return;
+        if (reduceMotion || window.matchMedia("(max-width: 767px)").matches || !("IntersectionObserver" in window)) return;
 
         entranceCards.forEach((card, index) => {
           card.classList.add("service-card-drop-pending");

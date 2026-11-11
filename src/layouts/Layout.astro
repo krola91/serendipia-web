@@ -41,5 +41,93 @@ const {
       <slot />
     </main>
     <Footer />
+
+    <script>
+      const initializeMobileCarousels = () => {
+        const mobile = window.matchMedia("(max-width: 767px)");
+        const configs = [
+          { container: "[data-services-deck]", cards: "[data-service-card]", label: "servicios" },
+          { container: "[data-eu-quality-grid]", cards: "[data-eu-quality-piece]", label: "estándar europeo" },
+          { container: "[data-blog-grid]", cards: "[data-blog-piece]", label: "noticias" },
+        ];
+
+        configs.forEach(({ container, cards: selector, label }) => {
+          document.querySelectorAll<HTMLElement>(container).forEach((deck) => {
+            if (deck.dataset.mobileCarouselReady === "true") return;
+            deck.dataset.mobileCarouselReady = "true";
+            const cards = Array.from(deck.querySelectorAll<HTMLElement>(selector));
+            if (!cards.length) return;
+            const controls = document.createElement("div");
+            controls.className = "mobile-carousel-controls";
+            controls.setAttribute("aria-label", `Navegación de ${label}`);
+            const previous = document.createElement("button");
+            const next = document.createElement("button");
+            const status = document.createElement("span");
+            previous.type = next.type = "button";
+            previous.textContent = "←";
+            next.textContent = "→";
+            previous.setAttribute("aria-label", `Anterior: ${label}`);
+            next.setAttribute("aria-label", `Siguiente: ${label}`);
+            status.setAttribute("aria-live", "polite");
+            controls.append(previous, status, next);
+            deck.after(controls);
+            let index = 0;
+            let carouselVisible = false;
+
+            const render = () => {
+              cards.forEach((card, cardIndex) => {
+                const active = cardIndex === index;
+                card.classList.toggle("mobile-slide-active", mobile.matches && active);
+                card.classList.toggle("mobile-slide-enter", mobile.matches && active && carouselVisible);
+                if (mobile.matches) {
+                  card.setAttribute("aria-hidden", String(!active));
+                  card.inert = !active;
+                  if (card.matches("[data-service-card]")) card.tabIndex = active ? 0 : -1;
+                } else {
+                  card.inert = false;
+                  if (card.matches("[data-service-card]")) {
+                    const visible = card.dataset.visible === "true";
+                    card.setAttribute("aria-hidden", String(!visible));
+                    card.tabIndex = visible ? 0 : -1;
+                  } else {
+                    card.removeAttribute("aria-hidden");
+                  }
+                }
+              });
+              status.textContent = `${index + 1} / ${cards.length}`;
+            };
+            const move = (direction: number) => {
+              index = (index + direction + cards.length) % cards.length;
+              render();
+            };
+            previous.addEventListener("click", () => move(-1));
+            next.addEventListener("click", () => move(1));
+            let startX = 0;
+            deck.addEventListener("touchstart", (event) => { startX = event.changedTouches[0].clientX; }, { passive: true });
+            deck.addEventListener("touchend", (event) => {
+              if (!mobile.matches) return;
+              const distance = event.changedTouches[0].clientX - startX;
+              if (Math.abs(distance) > 45) move(distance < 0 ? 1 : -1);
+            }, { passive: true });
+            mobile.addEventListener("change", render);
+            render();
+            requestAnimationFrame(render);
+            if ("IntersectionObserver" in window) {
+              const observer = new IntersectionObserver((entries) => {
+                if (!entries.some((entry) => entry.isIntersecting)) return;
+                carouselVisible = true;
+                render();
+                observer.disconnect();
+              }, { threshold: 0.15 });
+              observer.observe(deck);
+            } else {
+              carouselVisible = true;
+            }
+          });
+        });
+      };
+      initializeMobileCarousels();
+      document.addEventListener("astro:page-load", initializeMobileCarousels);
+    </script>
   </body>
 </html>

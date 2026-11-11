@@ -142,7 +142,7 @@
       );
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-      if (!grid || reduceMotion || !("IntersectionObserver" in window)) return;
+      if (!grid || reduceMotion || window.matchMedia("(max-width: 767px)").matches || !("IntersectionObserver" in window)) return;
 
       pieces.forEach((piece) => piece.classList.add("eu-quality-piece-pending"));
 
