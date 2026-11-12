@@ -5,7 +5,7 @@
     <a href="/#services-title">Diseño Web <span aria-hidden="true">↗</span></a>
   </div>
   <div class="mobile-tab-bar">
-    <a href="/" class="mobile-tab is-active" data-mobile-tab aria-current="page">
+    <a href="/#hero-title" class="mobile-tab is-active" data-mobile-tab data-mobile-home aria-current="page">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 21v-7h6v7"/></svg>
       <span>Home</span>
     </a>
@@ -32,19 +32,32 @@
       const button = nav.querySelector<HTMLButtonElement>("[data-mobile-solutions]");
       const popup = nav.querySelector<HTMLElement>("#mobile-solutions");
       if (!button || !popup) return;
-      const close = () => { popup.hidden = true; button.setAttribute("aria-expanded", "false"); button.classList.remove("is-active"); };
+      const tabs = Array.from(nav.querySelectorAll<HTMLElement>(".mobile-tab"));
+      const setActive = (selected: HTMLElement) => {
+        tabs.forEach((tab) => {
+          tab.classList.toggle("is-active", tab === selected);
+          tab.removeAttribute("aria-current");
+        });
+        if (selected instanceof HTMLAnchorElement && !selected.hasAttribute("target")) {
+          selected.setAttribute("aria-current", "location");
+        }
+      };
+      const close = () => { popup.hidden = true; button.setAttribute("aria-expanded", "false"); };
       button.addEventListener("click", () => {
         const open = popup.hidden === true;
         popup.hidden = !open;
         button.setAttribute("aria-expanded", String(open));
-        button.classList.toggle("is-active", open);
+        setActive(button);
       });
-      nav.querySelectorAll<HTMLAnchorElement>("a").forEach((link) => link.addEventListener("click", () => {
+      nav.querySelectorAll<HTMLAnchorElement>("a").forEach((link) => link.addEventListener("click", (event) => {
         close();
-        if (link.hasAttribute("data-mobile-tab") && !link.hasAttribute("target")) {
-          nav.querySelectorAll("[data-mobile-tab]").forEach((tab) => { tab.classList.remove("is-active"); tab.removeAttribute("aria-current"); });
-          link.classList.add("is-active");
-          link.setAttribute("aria-current", "location");
+        if (link.hasAttribute("data-mobile-tab")) setActive(link);
+        if (link.hasAttribute("data-mobile-home") && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey && event.button === 0) {
+          const hero = document.querySelector<HTMLElement>("[data-hero-scroll]");
+          if (hero) {
+            event.preventDefault();
+            hero.dispatchEvent(new Event("hero:show-content"));
+          }
         }
       }));
       document.addEventListener("click", (event) => { if (event.target instanceof Node && !nav.contains(event.target)) close(); });

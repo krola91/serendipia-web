@@ -156,6 +156,8 @@ const services = [
 </section>
 
 <script>
+  import { gsap } from "gsap";
+
   const initializeServices = () => {
     document.querySelectorAll<HTMLElement>("[data-services-section]").forEach((section) => {
       if (section.dataset.ready === "true") return;
@@ -171,6 +173,14 @@ const services = [
       let startIndex = 0;
       const tablet = window.matchMedia("(min-width: 768px) and (width < 1024px)");
       const desktop = window.matchMedia("(min-width: 1024px)");
+      const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const firstCard = cards[0];
+      let introObserver: IntersectionObserver | undefined;
+      let introTimeline: gsap.core.Timeline | undefined;
+      let introFrame = 0;
+      let introWaiting = false;
+      let introDone = false;
+      let disposed = false;
 
       const initializeCardEntrance = () => {
         const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -205,6 +215,115 @@ const services = [
         cards.forEach((card) => card.classList.toggle("is-active", card === activeCard));
       };
 
+      const clearFlipStyles = () => {
+        ["transform", "transform-origin", "translate", "rotate", "scale"].forEach((property) =>
+          firstCard?.style.removeProperty(property),
+        );
+      };
+
+      const stopCardIntro = () => {
+        introDone = true;
+        introObserver?.disconnect();
+        cancelAnimationFrame(introFrame);
+        if (introTimeline) {
+          introTimeline.kill();
+          introTimeline = undefined;
+        }
+        if (firstCard?.classList.contains("is-auto-flipping")) clearFlipStyles();
+        firstCard?.classList.remove("is-auto-flipping");
+      };
+
+      const initializeFirstCardIntro = () => {
+        if (!firstCard) return;
+        if (motion.matches || !("IntersectionObserver" in window)) {
+          introDone = true;
+          activateCard(firstCard);
+          return;
+        }
+
+        const firstCardIsVisible = () => {
+          const bounds = firstCard.getBoundingClientRect();
+          const visibleHeight = Math.max(0, Math.min(bounds.bottom, window.innerHeight) - Math.max(bounds.top, 0));
+          return firstCard.isConnected && getComputedStyle(firstCard).display !== "none"
+            && bounds.width > 0 && bounds.height > 0
+            && visibleHeight >= bounds.height * 0.55
+            && bounds.right > 0 && bounds.left < window.innerWidth;
+        };
+
+        const playIntro = () => {
+          if (disposed || introDone || motion.matches || !firstCardIsVisible()) return;
+          introObserver?.disconnect();
+          firstCard.classList.add("is-auto-flipping");
+          firstCard.classList.remove("is-active");
+
+          introTimeline = gsap.timeline({
+            delay: 0.3,
+            defaults: { duration: 0.4 },
+            onComplete: () => {
+              activateCard(firstCard);
+              introDone = true;
+              introTimeline = undefined;
+              // Wait until GSAP has finished its current frame before restoring the deck's transform.
+              introFrame = requestAnimationFrame(() => {
+                clearFlipStyles();
+                firstCard.classList.remove("is-auto-flipping");
+              });
+            },
+          });
+          introTimeline
+            .set(firstCard, { transformPerspective: 1200, transformOrigin: "center center" })
+            .to(firstCard, { rotationY: 90, ease: "power2.in" })
+            .call(() => activateCard(firstCard))
+            .set(firstCard, { rotationY: -90 })
+            .to(firstCard, { rotationY: 0, ease: "power2.out" })
+            .to(firstCard, { rotationY: 90, ease: "power2.in" }, "+=0.6")
+            .call(() => firstCard.classList.remove("is-active"))
+            .set(firstCard, { rotationY: -90 })
+            .to(firstCard, { rotationY: 0, ease: "power2.out" })
+            .to(firstCard, { rotationY: 90, ease: "power2.in" }, "+=0.45")
+            .call(() => activateCard(firstCard))
+            .set(firstCard, { rotationY: -90 })
+            .to(firstCard, { rotationY: 0, ease: "power2.out" });
+        };
+
+        const waitForEntrance = () => {
+          if (introWaiting || introDone || disposed) return;
+          introWaiting = true;
+          // Allow the existing desktop or mobile entrance observer to start its animations.
+          introFrame = requestAnimationFrame(() => {
+            introFrame = requestAnimationFrame(async () => {
+              const visibleCards = cards.filter((card) =>
+                card.dataset.visible === "true" && getComputedStyle(card).display !== "none",
+              );
+              const animatedElements: Element[] = [
+                ...visibleCards,
+                ...section.querySelectorAll("#services-title .site-title-letter"),
+              ];
+              const entranceAnimations = animatedElements.flatMap((element) =>
+                element.getAnimations().filter((animation) =>
+                  "animationName" in animation && typeof animation.animationName === "string"
+                    && ["service-card-sky-drop", "mobile-card-bounce-in", "hero-letter-fall"].includes(animation.animationName),
+                ),
+              );
+              const images = visibleCards.flatMap((card) =>
+                Array.from(card.querySelectorAll<HTMLImageElement>(".service-card__icon")),
+              );
+              await Promise.allSettled([
+                ...entranceAnimations.map((animation) => animation.finished),
+                ...images.map((image) => image.decode()),
+              ]);
+              introWaiting = false;
+              if (!disposed && !introDone && firstCardIsVisible()) playIntro();
+            });
+          });
+        };
+
+        introObserver = new IntersectionObserver((entries) => {
+          if (entries.some((entry) => entry.isIntersecting && entry.intersectionRatio >= 0.55)) waitForEntrance();
+        }, { threshold: 0.55 });
+        introObserver.observe(firstCard);
+      };
+
       const renderWindow = () => {
         const visibleCount = tablet.matches ? 4 : 5;
         startIndex = Math.min(startIndex, cards.length - visibleCount);
@@ -237,8 +356,28 @@ const services = [
       };
 
       cards.forEach((card) => {
-        card.addEventListener("mouseenter", () => activateCard(card));
-        card.addEventListener("focusin", () => activateCard(card));
+        card.addEventListener("mouseenter", () => {
+          if (introTimeline && card === firstCard) return;
+          if (introTimeline) stopCardIntro();
+          activateCard(card);
+        });
+        card.addEventListener("focusin", () => {
+          if (!introDone) stopCardIntro();
+          activateCard(card);
+        });
+      });
+
+      section.addEventListener("pointerdown", (event) => {
+        if (event.target instanceof Element && event.target.closest("[data-service-card], .mobile-carousel-controls button")) {
+          if (!introDone) stopCardIntro();
+        }
+      });
+
+      motion.addEventListener("change", (event) => {
+        if (event.matches && !introDone) {
+          stopCardIntro();
+          activateCard(firstCard);
+        }
       });
 
       nextButtons.forEach((button) => {
@@ -251,6 +390,7 @@ const services = [
       });
 
       const syncDesktopOrTablet = () => {
+        if (introTimeline) stopCardIntro();
         if (tablet.matches || desktop.matches) renderWindow();
       };
       tablet.addEventListener("change", syncDesktopOrTablet);
@@ -258,6 +398,12 @@ const services = [
 
       renderWindow();
       initializeCardEntrance();
+      initializeFirstCardIntro();
+
+      document.addEventListener("astro:before-swap", () => {
+        disposed = true;
+        stopCardIntro();
+      }, { once: true });
     });
   };
 
