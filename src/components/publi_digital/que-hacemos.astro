@@ -27,7 +27,7 @@ const cards = [
 <section class="work-section" aria-labelledby="work-title" data-work-section>
   <div class="work-section__inner">
     <h2 id="work-title">Maximizamos el Impacto de tu Marca con <span class="home-highlight">Campañas que Convierten</span></h2>
-    <div class="work-section__grid">
+    <div class="work-section__grid" data-work-carousel>
       {cards.map((card, index) => (
         <article class:list={["work-card", { "work-card--featured": index === 1 }]}>
           <div class="work-card__heading">
@@ -49,7 +49,7 @@ const cards = [
 
 <script>
   const initializeWorkCards = () => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce), (max-width: 767px)").matches || !("IntersectionObserver" in window)) return;
     document.querySelectorAll<HTMLElement>("[data-work-section]").forEach((section) => {
       if (section.dataset.entranceReady) return;
       section.dataset.entranceReady = "true";

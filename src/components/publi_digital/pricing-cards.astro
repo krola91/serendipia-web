@@ -30,7 +30,7 @@ const plans = [
 <section class="pricing-section" aria-labelledby="pricing-title" data-pricing-section>
   <div class="pricing-section__inner">
     <h2 id="pricing-title">Elige tu Plan de Publicidad Digital y <span class="home-highlight">Escala tus Ventas</span></h2>
-    <div class="pricing-section__grid">
+    <div class="pricing-section__grid" data-pricing-carousel>
       {plans.map((plan, index) => (
         <article class:list={["pricing-card", { "pricing-card--featured": index === 1 }]}>
           <div class="pricing-card__top">
@@ -53,7 +53,7 @@ const plans = [
 
 <script>
   const initializePricingCards = () => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce), (max-width: 767px)").matches || !("IntersectionObserver" in window)) return;
     document.querySelectorAll<HTMLElement>("[data-pricing-section]").forEach((section) => {
       if (section.dataset.entranceReady) return;
       section.dataset.entranceReady = "true";

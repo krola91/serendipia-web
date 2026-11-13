@@ -921,9 +921,32 @@ section .services-deck .service-card.is-auto-flipping {
     animation: none;
   }
 
+  [data-work-carousel][data-mobile-carousel-ready="true"],
+  [data-pricing-carousel][data-mobile-carousel-ready="true"] {
+    display: block;
+    max-width: 500px;
+    margin-inline: auto;
+  }
+
+  [data-work-carousel][data-mobile-carousel-ready="true"] .work-card,
+  [data-pricing-carousel][data-mobile-carousel-ready="true"] .pricing-card {
+    display: none;
+  }
+
+  [data-work-carousel][data-mobile-carousel-ready="true"] .work-card.mobile-slide-active,
+  [data-pricing-carousel][data-mobile-carousel-ready="true"] .pricing-card.mobile-slide-active {
+    display: flex;
+    opacity: 1;
+  }
+
   .services-deck .service-card.mobile-slide-enter,
   [data-eu-quality-piece].mobile-slide-enter,
   [data-blog-piece].mobile-slide-enter {
+    animation: mobile-card-bounce-in 650ms cubic-bezier(0.42, 0, 1, 1) both;
+  }
+
+  [data-work-carousel][data-mobile-carousel-ready="true"] .work-card.mobile-slide-enter,
+  [data-pricing-carousel][data-mobile-carousel-ready="true"] .pricing-card.mobile-slide-enter {
     animation: mobile-card-bounce-in 650ms cubic-bezier(0.42, 0, 1, 1) both;
   }
 
