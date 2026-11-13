@@ -1,0 +1,201 @@
+<section class="service-hero" aria-labelledby="service-page-title">
+  <div class="service-hero__layout">
+    <div class="service-hero__art service-hero__art--mobile" aria-hidden="true">
+      <span class="service-hero__spark service-hero__spark--left">✦</span>
+      <img
+        src="/sources/service-visual-mobile.webp"
+        alt=""
+        width="1024"
+        height="683"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </div>
+
+    <div class="service-hero__content">
+      <p class="service-hero__intro">Empieza a vender desde el día 1</p>
+      <h1 id="service-page-title" class="service-hero__title" aria-label="Publicidad digital efectiva y analítica">
+        <span class="service-hero__line">Publicidad</span>{" "}
+        <span class="service-hero__line">digital <span class="service-hero__highlight">efectiva</span></span>{" "}
+        <span class="service-hero__line">y analítica</span>
+      </h1>
+      <p class="service-hero__description">
+        Ventas en línea, clientes potenciales o notoriedad de marca. No importa cuál sea tu objetivo, nosotros te damos los resultados.
+      </p>
+    </div>
+
+    <div class="service-hero__art service-hero__art--analytics" aria-hidden="true">
+      <span class="service-hero__spark service-hero__spark--right">✦</span>
+      <img
+        src="/sources/service-visual-analytics.webp"
+        alt=""
+        width="1024"
+        height="683"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </div>
+  </div>
+</section>
+
+<style is:inline>
+  .service-hero {
+    position: relative;
+    overflow: clip;
+    padding: clamp(4rem, 7vw, 7rem) clamp(1.25rem, 4vw, 4rem) clamp(6rem, 9vw, 8.5rem);
+    background:
+      radial-gradient(ellipse 35% 30% at 35% 18%, rgba(224, 151, 244, 0.70) 0%, rgba(234, 190, 239, 0.44) 38%, transparent 75%),
+      radial-gradient(ellipse 45% 40% at 68% 55%, rgba(177, 178, 255, 0.52) 0%, rgba(205, 204, 255, 0.28) 45%, transparent 78%),
+      radial-gradient(ellipse 34% 34% at 68% 82%, rgba(81, 68, 242, 0.90) 0%, rgba(105, 91, 247, 0.68) 32%, rgba(151, 143, 250, 0.38) 55%, transparent 78%),
+      #f8f9f7;
+    color: #111827;
+  }
+
+  .service-hero__layout {
+    display: grid;
+    grid-template-areas: "mobile content analytics";
+    grid-template-columns: minmax(135px, 1fr) minmax(0, 3.65fr) minmax(135px, 1fr);
+    gap: clamp(0.875rem, 2vw, 2rem);
+    align-items: center;
+    min-height: clamp(31rem, 56vh, 42rem);
+    max-width: 1400px;
+    margin-inline: auto;
+  }
+
+  .service-hero__content {
+    grid-area: content;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+  }
+
+  .service-hero__intro {
+    margin: 0 0 clamp(1.2rem, 2.2vw, 2rem);
+    color: #595667;
+    font-family: var(--font-display);
+    font-size: clamp(0.9rem, 1.25vw, 1.1rem);
+    font-weight: 500;
+  }
+
+  .service-hero__title {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: clamp(3.1rem, 6.05vw, 6.1rem);
+    font-weight: 700;
+    line-height: 1.04;
+    letter-spacing: -0.065em;
+  }
+
+  .service-hero__line {
+    display: block;
+    white-space: nowrap;
+  }
+
+  .service-hero__highlight {
+    display: inline-block;
+    padding: 0.015em 0.11em 0.07em;
+    border-radius: 0.1em;
+    background: #f5b93f;
+    transform: rotate(-2deg);
+  }
+
+  .service-hero__description {
+    max-width: 36rem;
+    margin: clamp(1.5rem, 2.8vw, 2.5rem) auto 0;
+    color: #3f4050;
+    font-family: var(--font-display);
+    font-size: clamp(0.95rem, 1.25vw, 1.075rem);
+    line-height: 1.75;
+  }
+
+  .service-hero__art {
+    position: relative;
+    width: 100%;
+    max-width: 260px;
+    border-radius: 22px;
+  }
+
+  .service-hero__art img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid rgb(255 255 255 / 75%);
+    border-radius: inherit;
+    box-shadow: 0 22px 55px rgb(64 39 118 / 22%);
+  }
+
+  .service-hero__art--mobile {
+    grid-area: mobile;
+    align-self: start;
+    margin-top: 2rem;
+    transform: rotate(-7deg);
+    animation: service-float-mobile 7.5s ease-in-out infinite;
+  }
+
+  .service-hero__art--analytics {
+    grid-area: analytics;
+    align-self: end;
+    margin-bottom: 2.25rem;
+    transform: rotate(7deg);
+    animation: service-float-analytics 9s ease-in-out -3s infinite;
+  }
+
+  .service-hero__spark {
+    position: absolute;
+    z-index: 1;
+    color: #402776;
+    font-size: clamp(1.4rem, 2.5vw, 2.3rem);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .service-hero__spark--left { top: -0.55em; left: 0.1em; }
+  .service-hero__spark--right { right: -0.25em; bottom: -0.35em; color: #f5b93f; }
+
+  @keyframes service-float-mobile {
+    0%, 100% { transform: translateY(0) rotate(-7deg); }
+    50% { transform: translateY(-12px) rotate(-4deg); }
+  }
+
+  @keyframes service-float-analytics {
+    0%, 100% { transform: translateY(0) rotate(7deg); }
+    50% { transform: translateY(-15px) rotate(4deg); }
+  }
+
+  @media (max-width: 1023px) {
+    .service-hero__layout {
+      grid-template-columns: minmax(108px, 0.9fr) minmax(0, 3.5fr) minmax(108px, 0.9fr);
+      min-height: 31rem;
+    }
+
+    .service-hero__title { font-size: clamp(2.8rem, 6vw, 4.25rem); }
+    .service-hero__description { font-size: 0.95rem; }
+  }
+
+  @media (max-width: 700px) {
+    .service-hero { padding: 4.5rem 1.4rem 6rem; }
+
+    .service-hero__layout {
+      grid-template-areas: "content content" "mobile analytics";
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 3.5rem 1.5rem;
+      min-height: 0;
+    }
+
+    .service-hero__title { font-size: clamp(2.5rem, 10vw, 4rem); }
+    .service-hero__intro { margin-bottom: 1.4rem; font-size: 0.88rem; }
+    .service-hero__description { margin-top: 1.75rem; line-height: 1.65; }
+    .service-hero__art { width: 90%; border-radius: 16px; }
+    .service-hero__art--mobile { justify-self: start; margin: 0 0 1rem; }
+    .service-hero__art--analytics { justify-self: end; margin: 1rem 0 0; }
+  }
+
+  @media (max-width: 360px) {
+    .service-hero__title { font-size: 9.5vw; }
+    .service-hero__layout { gap: 3rem 1.2rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .service-hero__art { animation: none; }
+  }
+</style>

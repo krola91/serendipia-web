@@ -1,15 +1,25 @@
+---
+interface Props {
+  currentPage?: "home" | "publicidad-digital" | "internal";
+}
+
+const { currentPage = "home" } = Astro.props;
+const isAdvertisingPage = currentPage === "publicidad-digital";
+const isHomePage = currentPage === "home";
+---
+
 <nav class="mobile-tab-menu" aria-label="Navegación móvil" data-mobile-tabs>
   <div class="mobile-tab-popup" id="mobile-solutions" hidden>
     <a href="/#services-title">SEO <span aria-hidden="true">↗</span></a>
-    <a href="/#services-title">Publicidad Digital <span aria-hidden="true">↗</span></a>
+    <a href="/publicidad-digital">Publicidad Digital <span aria-hidden="true">↗</span></a>
     <a href="/#services-title">Diseño Web <span aria-hidden="true">↗</span></a>
   </div>
   <div class="mobile-tab-bar">
-    <a href="/#hero-title" class="mobile-tab is-active" data-mobile-tab data-mobile-home aria-current="page">
+    <a href="/#hero-title" class:list={["mobile-tab", { "is-active": isHomePage }]} data-mobile-tab data-mobile-home aria-current={isHomePage ? "page" : undefined}>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 21v-7h6v7"/></svg>
       <span>Home</span>
     </a>
-    <button type="button" class="mobile-tab" data-mobile-solutions aria-expanded="false" aria-controls="mobile-solutions">
+    <button type="button" class:list={["mobile-tab", { "is-active": isAdvertisingPage }]} data-mobile-solutions aria-expanded="false" aria-controls="mobile-solutions">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="8" cy="6" r="2" fill="white"/><circle cx="16" cy="12" r="2" fill="white"/><circle cx="9" cy="18" r="2" fill="white"/></svg>
       <span>Soluciones</span>
     </button>
@@ -17,7 +27,7 @@
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a9.9 9.9 0 0 0-8.6 14.8L2 22l5.4-1.4A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3.2.8.9-3.1-.2-.3a8.2 8.2 0 1 1 7 3.9Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.5.1l-.7.8c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.2-2.8c-.2-.3.2-.3.6-1 .1-.1.1-.3 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-.9.9-.9 2.2s1 2.5 1.1 2.7c.1.2 1.9 2.9 4.7 4 1.8.8 2.5.8 3.4.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>
       <span>WhatsApp</span>
     </a>
-    <a href="/#contacto" class="mobile-tab" data-mobile-tab>
+    <a href={isHomePage ? "/#contacto" : "#contacto"} class="mobile-tab" data-mobile-tab>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3zM9 3v15M15 6v15"/></svg>
       <span>Contacto</span>
     </a>
@@ -57,6 +67,9 @@
           if (hero) {
             event.preventDefault();
             hero.dispatchEvent(new Event("hero:show-content"));
+          } else {
+            // Preserve the Home tab's revealed-hero behavior when coming from an internal page.
+            try { sessionStorage.setItem("serendipia:reveal-home", "1"); } catch { /* Navigation still works without storage. */ }
           }
         }
       }));
@@ -67,6 +80,33 @@
         const sync = () => nav.classList.toggle("is-hero-hidden", hero.dataset.contentVisible !== "true");
         sync();
         new MutationObserver(sync).observe(hero, { attributes: true, attributeFilter: ["data-content-visible"] });
+
+        try {
+          const afterHeroReady = (action: () => void) => {
+            const queue = () => requestAnimationFrame(() => requestAnimationFrame(action));
+            const video = hero.querySelector<HTMLVideoElement>("[data-scroll-video]");
+            if (video && video.readyState < 1) video.addEventListener("loadedmetadata", queue, { once: true });
+            else queue();
+          };
+          if (sessionStorage.getItem("serendipia:reveal-home") === "1") {
+            sessionStorage.removeItem("serendipia:reveal-home");
+            afterHeroReady(() => hero.dispatchEvent(new Event("hero:show-content")));
+          }
+          const anchor = sessionStorage.getItem("serendipia:home-anchor");
+          sessionStorage.removeItem("serendipia:home-anchor");
+          if (anchor && anchor === window.location.hash) {
+            const target = document.getElementById(decodeURIComponent(anchor.slice(1)));
+            if (target) afterHeroReady(() => target.scrollIntoView({ behavior: "instant", block: "start" }));
+          }
+        } catch { /* The default Home link remains available if storage is blocked. */ }
+      } else {
+        // The home video initializes its scroll position on load; restore requested home sections afterward.
+        document.addEventListener("click", (event) => {
+          if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+          const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>("a[href]") : null;
+          if (!link || link.hasAttribute("data-mobile-home") || link.target || link.origin !== window.location.origin || link.pathname !== "/" || !link.hash) return;
+          try { sessionStorage.setItem("serendipia:home-anchor", link.hash); } catch { /* Keep ordinary link navigation. */ }
+        });
       }
     });
   };

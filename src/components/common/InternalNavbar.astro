@@ -1,0 +1,420 @@
+---
+interface Props { hideLogo?: boolean; }
+const { hideLogo = false } = Astro.props;
+const servicesAnchor = "/#services-title";
+const groups = [
+  {
+    title: "Estrategia",
+    items: [
+      { title: "Estrategia de marca", description: "Una dirección clara para tu marca.", href: servicesAnchor, icon: "M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1M12 8l1.2 2.8L16 12l-2.8 1.2L12 16l-1.2-2.8L8 12l2.8-1.2z" },
+      { title: "Creación de contenido", description: "Historias con intención y personalidad.", href: servicesAnchor, icon: "M4 20h4l11-11-4-4L4 16v4zM13.5 6.5l4 4M4 12V5a1 1 0 0 1 1-1h7" },
+    ],
+  },
+  {
+    title: "Comunicación",
+    items: [
+      { title: "Producción audiovisual", description: "Ideas que toman forma en imagen y video.", href: servicesAnchor, icon: "M4 6h11a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zM17 10l5-3v10l-5-3z" },
+      { title: "Gestión de redes sociales", description: "Conversaciones que conectan.", href: servicesAnchor, icon: "M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-6l-4 3v-3H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zM7 10h10M7 13h7" },
+      { title: "Publicidad digital", description: "Campañas con objetivos claros.", href: "/publicidad-digital", icon: "M3 10v4h4l8 4V6l-8 4H3zM7 14l1 5h3l-1-4M19 9l2-1M19 15l2 1M20 12h2" },
+    ],
+  },
+  {
+    title: "Digital",
+    items: [
+      { title: "Diseño web", description: "Experiencias digitales intuitivas.", href: servicesAnchor, icon: "M4 5h16v14H4zM4 9h16M7 7h.01M10 7h.01M8 13h8M8 16h5" },
+      { title: "Desarrollo web", description: "Sitios preparados para crecer.", href: servicesAnchor, icon: "M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16" },
+      { title: "Analítica y dashboards", description: "Datos para decidir el siguiente paso.", href: servicesAnchor, icon: "M4 19h16M6 16v-4M11 16V7M16 16V4M21 16v-6" },
+    ],
+  },
+  {
+    title: "Conócenos",
+    items: [
+      { title: "Nuestro proceso", description: "Así conectamos las ideas.", href: "/#who-we-are-title", icon: "M5 7h14M5 12h14M5 17h14M3 7h.01M3 12h.01M3 17h.01" },
+      { title: "Resultados", description: "Una mirada al avance.", href: "/#opinions-title", icon: "M3 17l6-6 4 4 8-8M16 7h5v5" },
+      { title: "Casos", description: "Ideas que toman forma.", href: "/#opinions-title", icon: "M4 6h16v13H4zM8 6V4h8v2M4 11h16M10 11v2h4v-2" },
+      { title: "Ubicación", description: "Nuestro punto de encuentro.", href: "#contacto", icon: "M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0zM12 7a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" },
+    ],
+  },
+];
+
+const information = [
+  { title: "Quiénes somos", href: "/#who-we-are-title" },
+  { title: "Caso de éxito", href: "/#opinions-title" },
+  { title: "Preguntas frecuentes", href: "/#faq-title" },
+  { title: "Contacto", href: "#contacto" },
+];
+const isAdvertisingPage = Astro.url.pathname.replace(/\/$/, "") === "/publicidad-digital";
+---
+
+<header class:list={["internal-header", { "internal-header--embedded": hideLogo }]} data-internal-header>
+  <div class="internal-header__shell">
+    <div class="internal-header__bar">
+      {!hideLogo && <a class="internal-header__logo" href="/" aria-label="Serendipia, inicio">
+        <img src="/sources/logo-4.webp" alt="" width="148" height="44" />
+      </a>}
+
+      <nav class="internal-header__desktop" aria-label="Navegación principal">
+        <a href={servicesAnchor}>SEO</a>
+        <a href="/publicidad-digital" class:list={[{ "is-current": isAdvertisingPage }]} aria-current={isAdvertisingPage ? "page" : undefined}>Publicidad Digital</a>
+        <a href={servicesAnchor}>Diseño Web</a>
+        <button type="button" data-internal-toggle="solutions" aria-expanded="false" aria-controls="internal-solutions">
+          Soluciones <span class="internal-header__plus" aria-hidden="true">+</span>
+        </button>
+        <button type="button" data-internal-toggle="information" aria-expanded="false" aria-controls="internal-information">
+          Información <span class="internal-header__plus" aria-hidden="true">+</span>
+        </button>
+      </nav>
+
+      <a class="internal-header__talk" href="#contacto">Hablemos <span aria-hidden="true">↗</span></a>
+      <button class="internal-header__mobile-toggle" type="button" data-internal-toggle="mobile" aria-expanded="false" aria-controls="internal-mobile-menu" aria-label="Abrir menú de navegación">
+        <span class="internal-header__menu-icon" aria-hidden="true"><span></span><span></span></span>
+      </button>
+    </div>
+
+    <nav class="internal-mega" id="internal-solutions" aria-label="Soluciones" hidden>
+      <div class="internal-mega__grid">
+        {groups.map((group) => (
+          <div class="internal-mega__column">
+            <p class="internal-mega__heading">{group.title}</p>
+            <ul role="list">
+              {group.items.map((item) => (
+                <li>
+                  <a class="internal-mega__item" href={item.href}>
+                    <span class="internal-mega__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d={item.icon}></path></svg></span>
+                    <span><strong>{item.title}</strong><small>{item.description}</small></span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+        <div class="internal-feature">
+          <div class="internal-feature__art" aria-hidden="true"><span></span><span></span><span>✳</span></div>
+          <p class="internal-feature__eyebrow">DESTACADO</p>
+          <p class="internal-feature__title">Ideas que se encuentran. Marcas que avanzan.</p>
+          <p class="internal-feature__description">Estrategia, creatividad y tecnología conectadas.</p>
+          <a href="#contacto">Conversemos <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </nav>
+
+    <nav class="internal-info" id="internal-information" aria-label="Información" hidden>
+      {information.map((item) => <a href={item.href}>{item.title}<span aria-hidden="true">↗</span></a>)}
+    </nav>
+
+    <nav class="internal-mobile" id="internal-mobile-menu" aria-label="Navegación principal móvil" hidden>
+      <div class="internal-mobile__primary">
+        <a href={servicesAnchor}>SEO <span aria-hidden="true">↗</span></a>
+        <a href="/publicidad-digital" class:list={[{ "is-current": isAdvertisingPage }]} aria-current={isAdvertisingPage ? "page" : undefined}>Publicidad Digital <span aria-hidden="true">↗</span></a>
+        <a href={servicesAnchor}>Diseño Web <span aria-hidden="true">↗</span></a>
+        <button type="button" data-internal-toggle="mobile-solutions" aria-expanded="false" aria-controls="internal-mobile-solutions">Soluciones <span aria-hidden="true">+</span></button>
+        <div class="internal-mobile__groups" id="internal-mobile-solutions" hidden>
+          {groups.map((group) => (
+            <div class="internal-mobile__group">
+              <p class="internal-mega__heading">{group.title}</p>
+              {group.items.map((item) => (
+                <a class="internal-mega__item" href={item.href}>
+                  <span class="internal-mega__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d={item.icon}></path></svg></span>
+                  <span><strong>{item.title}</strong><small>{item.description}</small></span>
+                </a>
+              ))}
+            </div>
+          ))}
+          <div class="internal-mobile__feature">
+            <span>DESTACADO</span>
+            <strong>Ideas que se encuentran. Marcas que avanzan.</strong>
+            <p>Estrategia, creatividad y tecnología conectadas.</p>
+            <a href="#contacto">Conversemos <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+        <button type="button" data-internal-toggle="mobile-information" aria-expanded="false" aria-controls="internal-mobile-information">Información <span aria-hidden="true">+</span></button>
+        <div class="internal-mobile__info" id="internal-mobile-information" hidden>
+          {information.map((item) => <a href={item.href}>{item.title}<span aria-hidden="true">↗</span></a>)}
+        </div>
+        <a class="internal-mobile__talk" href="#contacto">Hablemos <span aria-hidden="true">↗</span></a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const instances = new Map<HTMLElement, () => void>();
+
+  const initializeInternalNav = () => {
+    document.querySelectorAll<HTMLElement>("[data-internal-header]").forEach((header) => {
+      if (instances.has(header)) return;
+      const controller = new AbortController();
+      const { signal } = controller;
+      const triggers = Array.from(header.querySelectorAll<HTMLButtonElement>("[data-internal-toggle]"));
+      const desktop = window.matchMedia("(min-width: 960px)");
+      const mobileTabs = window.matchMedia("(max-width: 767px)");
+
+      const setOpen = (trigger: HTMLButtonElement, open: boolean) => {
+        const id = trigger.getAttribute("aria-controls");
+        const panel = id ? document.getElementById(id) : null;
+        if (!panel) return;
+        panel.hidden = !open;
+        trigger.setAttribute("aria-expanded", String(open));
+        if (trigger.dataset.internalToggle === "mobile") {
+          trigger.setAttribute("aria-label", open ? "Cerrar menú de navegación" : "Abrir menú de navegación");
+        }
+      };
+
+      const closeAll = () => triggers.forEach((trigger) => setOpen(trigger, false));
+
+      triggers.forEach((trigger) => {
+        trigger.addEventListener("click", (event) => {
+          const open = trigger.getAttribute("aria-expanded") !== "true";
+          const isNested = trigger.dataset.internalToggle?.startsWith("mobile-");
+          if (isNested) {
+            triggers.filter((item) => item.dataset.internalToggle?.startsWith("mobile-"))
+              .forEach((item) => setOpen(item, false));
+          } else {
+            closeAll();
+          }
+          setOpen(trigger, open);
+          if (open && event.detail === 0) {
+            const panel = document.getElementById(trigger.getAttribute("aria-controls") ?? "");
+            panel?.querySelector<HTMLAnchorElement>("a")?.focus({ preventScroll: true });
+          }
+        }, { signal });
+      });
+
+      header.addEventListener("click", (event) => {
+        if (event.target instanceof Element && event.target.closest("a")) closeAll();
+      }, { signal });
+      document.addEventListener("pointerdown", (event) => {
+        if (event.target instanceof Node && !header.contains(event.target)) closeAll();
+      }, { signal });
+      document.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape") return;
+        const open = triggers.filter((trigger) => trigger.getAttribute("aria-expanded") === "true").pop();
+        if (!open) return;
+        setOpen(open, false);
+        open.focus();
+      }, { signal });
+      desktop.addEventListener("change", closeAll, { signal });
+      mobileTabs.addEventListener("change", closeAll, { signal });
+      instances.set(header, () => { controller.abort(); closeAll(); });
+    });
+  };
+
+  const destroyInternalNav = () => {
+    instances.forEach((cleanup) => cleanup());
+    instances.clear();
+  };
+
+  initializeInternalNav();
+  document.addEventListener("astro:page-load", initializeInternalNav);
+  document.addEventListener("astro:before-swap", destroyInternalNav);
+  window.addEventListener("pagehide", destroyInternalNav);
+  window.addEventListener("pageshow", initializeInternalNav);
+</script>
+
+<style>
+  .internal-header {
+    position: relative;
+    z-index: 60;
+    padding: 22px clamp(1rem, 4vw, 4rem) 0;
+    color: #111827;
+  }
+
+  .internal-header--embedded { padding: 0; }
+  .internal-header__shell { position: relative; max-width: 1400px; margin-inline: auto; }
+  .internal-header__bar {
+    display: flex;
+    min-height: 76px;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(0.6rem, 1.2vw, 1.4rem);
+    padding: 9px;
+    border: 1px solid rgb(255 255 255 / 90%);
+    border-radius: 23px;
+    background: rgb(255 255 255 / 83%);
+    box-shadow: 0 14px 45px rgb(64 39 118 / 9%), inset 0 1px 0 #fff;
+    backdrop-filter: blur(22px) saturate(150%);
+    -webkit-backdrop-filter: blur(22px) saturate(150%);
+  }
+
+  .internal-header__logo {
+    display: flex;
+    min-width: 145px;
+    min-height: 54px;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 14px;
+    border-radius: 15px;
+    background: #402776;
+  }
+  .internal-header__logo img { display: block; width: 125px; height: auto; }
+  .internal-header__desktop { display: flex; align-items: center; justify-content: center; gap: clamp(0px, 0.6vw, 8px); }
+  .internal-header__desktop a, .internal-header__desktop button {
+    display: inline-flex;
+    min-height: 42px;
+    align-items: center;
+    gap: 5px;
+    padding: 9px clamp(7px, 0.85vw, 13px);
+    border: 0;
+    border-radius: 12px;
+    color: #373247;
+    background: transparent;
+    font-family: var(--font-sans);
+    font-size: clamp(0.71rem, 0.85vw, 0.82rem);
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: color 180ms ease, background 180ms ease;
+  }
+  .internal-header__desktop a:hover, .internal-header__desktop button:hover,
+  .internal-header__desktop .is-current, .internal-header__desktop button[aria-expanded="true"] {
+    background: #eee9f8;
+    color: #402776;
+  }
+  .internal-header__desktop .is-current { font-weight: 650; }
+  .internal-header__plus { font-size: 1.1rem; line-height: 1; }
+  .internal-header__talk, .internal-mobile__talk {
+    display: inline-flex;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 12px 19px;
+    border-radius: 13px;
+    background: #402776;
+    color: #fff;
+    box-shadow: 0 8px 24px rgb(64 39 118 / 18%);
+    font-size: 0.82rem;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: background 180ms ease, transform 180ms ease;
+  }
+  .internal-header__talk:hover, .internal-mobile__talk:hover { background: #563687; transform: translateY(-2px); }
+  .internal-header__mobile-toggle { display: none; }
+
+  .internal-mega, .internal-info, .internal-mobile {
+    position: absolute;
+    top: calc(100% + 12px);
+    border: 1px solid rgb(255 255 255 / 95%);
+    border-radius: 24px;
+    background: rgb(255 255 255 / 97%);
+    box-shadow: 0 24px 75px rgb(27 18 52 / 18%);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+  }
+  .internal-mega[hidden], .internal-info[hidden], .internal-mobile[hidden],
+  .internal-mobile__groups[hidden], .internal-mobile__info[hidden] { display: none !important; }
+  .internal-mega { right: 0; left: 0; max-height: calc(100dvh - 130px); overflow: auto; padding: 24px; }
+  .internal-mega__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(175px, 1.1fr); gap: clamp(8px, 1.2vw, 20px); }
+  .internal-mega__column { min-width: 0; }
+  .internal-mega__column:not(:first-child) { border-left: 1px solid #edeaf2; padding-left: clamp(8px, 1.2vw, 20px); }
+  .internal-mega__heading { margin: 0 0 11px; color: #685b7e; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.02em; }
+  .internal-mega__column ul { display: grid; gap: 5px; margin: 0; padding: 0; }
+  .internal-mega__item { display: flex; align-items: flex-start; gap: 9px; padding: 8px 5px; border-radius: 10px; color: #242035; transition: background 180ms ease; }
+  .internal-mega__item:hover { background: #f4f0fa; }
+  .internal-mega__icon { display: grid; width: 30px; height: 30px; flex: 0 0 30px; place-items: center; border-radius: 9px; background: #f0eaf8; color: #543783; }
+  .internal-mega__icon svg { width: 17px; height: 17px; }
+  .internal-mega__item strong, .internal-mega__item small { display: block; }
+  .internal-mega__item strong { font-size: 0.72rem; font-weight: 600; line-height: 1.35; }
+  .internal-mega__item small { margin-top: 4px; color: #666172; font-family: var(--font-display); font-size: 0.64rem; font-weight: 400; line-height: 1.45; }
+
+  .internal-feature { position: relative; overflow: hidden; min-height: 100%; padding: 130px 17px 18px; border-radius: 18px; background: #402776; color: #fff; }
+  .internal-feature__art { position: absolute; top: 0; left: 0; width: 100%; height: 124px; overflow: hidden; background: radial-gradient(circle at 70% 35%, #916be3, transparent 42%), linear-gradient(135deg, #2c194d, #6842a0); }
+  .internal-feature__art span:nth-child(1), .internal-feature__art span:nth-child(2) { position: absolute; width: 110px; height: 110px; border: 1px solid rgb(255 255 255 / 50%); border-radius: 50%; transform: rotate(-35deg) scaleY(0.5); }
+  .internal-feature__art span:nth-child(1) { top: 2px; left: 20%; }
+  .internal-feature__art span:nth-child(2) { top: 15px; left: 34%; border-color: #f5b93f; }
+  .internal-feature__art span:nth-child(3) { position: absolute; top: 22px; right: 18%; color: #f5b93f; font-size: 35px; }
+  .internal-feature__eyebrow { color: #f5b93f; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; }
+  .internal-feature__title { margin-top: 8px; font-size: 0.91rem; font-weight: 650; line-height: 1.3; }
+  .internal-feature__description { margin-top: 8px; color: rgb(255 255 255 / 80%); font-family: var(--font-display); font-size: 0.7rem; line-height: 1.5; }
+  .internal-feature a, .internal-mobile__feature > a { display: inline-flex; align-items: center; justify-content: center; gap: 12px; margin-top: 15px; padding: 9px 11px; border-radius: 9px; background: #f5b93f; color: #231b30; font-size: 0.7rem; font-weight: 650; }
+  .internal-feature a:hover, .internal-mobile__feature > a:hover { background: #ffca60; }
+  .internal-info { right: 130px; display: grid; width: 260px; gap: 3px; padding: 10px; }
+  .internal-info a, .internal-mobile__info a { display: flex; justify-content: space-between; gap: 12px; padding: 12px; border-radius: 10px; color: #373247; font-size: 0.8rem; }
+  .internal-info a:hover, .internal-mobile__info a:hover { background: #f4f0fa; color: #402776; }
+  .internal-header :is(a, button):focus-visible { outline: 3px solid #a481d5; outline-offset: 3px; }
+  .internal-mobile { display: none; }
+
+  @media (min-width: 960px) and (max-width: 1150px) {
+    .internal-mega__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .internal-feature { grid-column: 1 / -1; min-height: 0; padding: 16px 180px 16px 18px; }
+    .internal-feature__art { inset: 0 0 0 auto; width: 160px; height: 100%; }
+    .internal-feature__description { margin-top: 4px; }
+    .internal-feature a { margin-top: 8px; }
+  }
+
+  @media (max-width: 959px) {
+    .internal-header { padding-top: 16px; }
+    .internal-header__bar { min-height: 68px; border-radius: 20px; }
+    .internal-header__logo { min-width: 128px; min-height: 48px; }
+    .internal-header__logo img { width: 112px; }
+    .internal-header__desktop, .internal-header__talk, .internal-mega, .internal-info { display: none; }
+    .internal-header__mobile-toggle { display: grid; width: 48px; height: 48px; place-items: center; border: 0; border-radius: 14px; background: #f0eaf8; color: #402776; cursor: pointer; }
+    .internal-header__menu-icon { position: relative; display: block; width: 21px; height: 18px; }
+    .internal-header__menu-icon span { position: absolute; left: 0; width: 21px; height: 2px; border-radius: 2px; background: currentColor; transition: transform 180ms ease, top 180ms ease; }
+    .internal-header__menu-icon span:first-child { top: 5px; }
+    .internal-header__menu-icon span:last-child { top: 12px; }
+    .internal-header__mobile-toggle[aria-expanded="true"] .internal-header__menu-icon span:first-child { top: 8px; transform: rotate(45deg); }
+    .internal-header__mobile-toggle[aria-expanded="true"] .internal-header__menu-icon span:last-child { top: 8px; transform: rotate(-45deg); }
+    .internal-mobile { right: 0; left: 0; display: block; max-height: calc(100dvh - 165px - env(safe-area-inset-bottom)); overflow-y: auto; overscroll-behavior: contain; padding: 12px; }
+    .internal-mobile__primary { display: grid; gap: 3px; }
+    .internal-mobile__primary > a:not(.internal-mobile__talk), .internal-mobile__primary > button {
+      display: flex; min-height: 46px; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 13px; border: 0; border-radius: 11px; background: transparent; color: #373247; font-size: 0.88rem; font-weight: 500; text-align: left; cursor: pointer;
+    }
+    .internal-mobile__primary > a.is-current, .internal-mobile__primary > button[aria-expanded="true"] { background: #eee9f8; color: #402776; font-weight: 650; }
+    .internal-mobile__groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; padding: 16px 10px; }
+    .internal-mobile__group { min-width: 0; }
+    .internal-mobile__feature { grid-column: 1 / -1; padding: 18px; border-radius: 16px; background: #402776; color: #fff; }
+    .internal-mobile__feature > span { display: block; color: #f5b93f; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; }
+    .internal-mobile__feature strong { display: block; margin-top: 8px; font-size: 0.95rem; line-height: 1.35; }
+    .internal-mobile__feature p { margin-top: 6px; color: rgb(255 255 255 / 80%); font-family: var(--font-display); font-size: 0.73rem; }
+    .internal-mobile__info { display: grid; padding: 0 10px 10px; }
+    .internal-mobile__talk { margin-top: 8px; }
+  }
+
+  @media (max-width: 580px) {
+    .internal-mobile__groups { grid-template-columns: 1fr; gap: 14px; }
+    .internal-mobile__feature { grid-column: auto; }
+    .internal-mega__item strong { font-size: 0.79rem; }
+    .internal-mega__item small { font-size: 0.7rem; }
+  }
+
+  @media (max-width: 767px) {
+    .internal-header { display: none; }
+  }
+
+  @media (min-width: 960px) {
+    .internal-header--embedded .internal-header__bar { gap: 4px; padding: 6px; }
+    .internal-header--embedded .internal-header__desktop { flex: 1; justify-content: space-evenly; gap: 0; }
+    .internal-header--embedded .internal-header__desktop a,
+    .internal-header--embedded .internal-header__desktop button { padding-inline: clamp(3px, 0.4vw, 9px); font-size: clamp(0.72rem, 0.75vw, 0.9rem); }
+    .internal-header--embedded .internal-header__talk { flex-shrink: 0; gap: 0.4rem; padding-inline: 12px; }
+    .internal-header--embedded .internal-mega { left: auto; right: 0; width: min(1100px, 90vw); }
+    .internal-header--embedded .internal-mega__grid { grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(160px, 1.1fr); }
+    .internal-header--embedded .internal-mega__column:not(:first-child) { border: 0; padding-left: 0; }
+    .internal-header--embedded .internal-feature { grid-column: auto; min-height: 100%; padding: 130px 17px 18px; }
+    .internal-header--embedded .internal-feature__art { inset: 0 auto auto 0; width: 100%; height: 124px; }
+  }
+
+  @media (min-width: 960px) and (max-width: 1249px) {
+    .internal-header--embedded .internal-header__desktop,
+    .internal-header--embedded .internal-header__talk { display: none; }
+    .internal-header--embedded .internal-header__mobile-toggle { display: grid; width: 48px; height: 48px; place-items: center; border: 0; border-radius: 14px; background: #f0eaf8; color: #402776; cursor: pointer; }
+    .internal-header--embedded .internal-header__menu-icon { position: relative; display: block; width: 21px; height: 18px; }
+    .internal-header--embedded .internal-header__menu-icon span { position: absolute; left: 0; width: 21px; height: 2px; border-radius: 2px; background: currentColor; }
+    .internal-header--embedded .internal-header__menu-icon span:first-child { top: 5px; }
+    .internal-header--embedded .internal-header__menu-icon span:last-child { top: 12px; }
+    .internal-header--embedded .internal-mobile { right: 0; left: 0; display: block; max-height: calc(100dvh - 130px); overflow-y: auto; padding: 12px; }
+    .internal-header--embedded .internal-mobile__primary { display: grid; gap: 3px; }
+    .internal-header--embedded .internal-mobile__primary > a:not(.internal-mobile__talk),
+    .internal-header--embedded .internal-mobile__primary > button { display: flex; justify-content: space-between; padding: 11px 13px; border: 0; border-radius: 11px; background: transparent; color: #373247; font-size: 0.88rem; text-align: left; }
+    .internal-header--embedded .internal-mobile__groups { display: grid; gap: 14px; padding: 16px 10px; }
+    .internal-header--embedded .internal-mobile__feature { padding: 18px; border-radius: 16px; background: #402776; color: white; }
+    .internal-header--embedded .internal-mobile__feature > span { color: #f5b93f; }
+    .internal-header--embedded .internal-mobile__feature strong { display: block; }
+    .internal-header--embedded .internal-mobile__info { display: grid; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .internal-header :is(a, button, span) { transition: none; }
+  }
+</style>

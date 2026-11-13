@@ -1,0 +1,158 @@
+---
+const faqs = [
+  { question: "01 ¿Para qué sirve la publicidad digital?", answer: "Con la publicidad digital puedes llegar a tu cliente ideal, debido a que estas plataformas cuentan con avanzados algoritmos para llegar a la persona correcta en el momento correcto" },
+  { question: "02 ¿Cuál es la diferencia entre publicidad digital SEM y SEO?", answer: "El SEO son todos los esfuerzos para posicionar a tu página web en motores de búsqueda como Google o Bing, funciona a largo plazo y es gratis, mientras que la publicidad SEM se refiere a posicionar a tu web de forma inmediata y tiene un costo." },
+  { question: "03 ¿Cómo puedo saber cuánto debo invertir en publicidad?", answer: "El monto de inversión va a depender del tipo de empresa, la industria y el nivel de competencia en el sector. En Serendipia analizamos tu negocio y te generamos una propuesta acorde a tus objetivos" },
+  { question: "04 ¿Qué tipos de publicidad digital existen?", answer: "Desde social ads que son anuncios que se muestran en redes sociales como Facebook, Instagram o LinkedIn, hasta campañas de display que se muestran en los sitios web donde es más probable que tus clientes estén. La publicidad digital es muy variada y por eso importante hacer el análisis correcto para pautar en las plataformas adecuadas" },
+  { question: "05 ¿Cómo se diferencia la publicidad digital y la publicidad tradicional?", answer: "Con la publicidad digital vas a contar con poderosas herramientas de segmentación donde podrás llegar a tu público objetivo, además de obtener datos en tiempo real de cómo están rindiendo tus campañas." },
+];
+---
+
+<section
+  class="home-section-space overflow-hidden bg-[#f3f3f2]"
+  aria-labelledby="faq-publi-title"
+>
+  <div
+    class="mx-auto grid max-w-[1400px] gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:gap-12 xl:gap-16"
+  >
+    <div class="flex flex-col lg:min-h-[620px]">
+      <div>
+        <div
+          class="mb-5 inline-flex items-center gap-2 rounded-full border border-[#C4C4C4] bg-white px-4 py-2 font-sans text-xs font-medium tracking-[0.01em] text-[#111827] shadow-[0_8px_30px_rgba(107,114,128,0.18)] max-sm:px-3 max-sm:py-1.5 max-sm:text-[0.68rem]"
+        >
+          <span
+            class="size-2 shrink-0 animate-pulse rounded-full bg-[#b87cbd]"
+            aria-hidden="true"
+          ></span>
+          <span>RESOLVEMOS TUS DUDAS</span>
+        </div>
+
+        <h2
+          id="faq-publi-title"
+          class="home-section-title max-w-lg font-sans font-semibold tracking-[-0.05em] text-[#f5b93f]"
+        >
+          ¿Aún tienes dudas?
+        </h2>
+      </div>
+
+      <div
+        class="mt-8 rounded-[24px] bg-gradient-to-br from-[#F7F1F8] via-[#F4F2F7] to-[#EEF0F5] p-5 text-[#111827] shadow-[0_18px_55px_rgba(17,24,39,0.07)] sm:p-6 lg:mt-10"
+      >
+        <h2 class="text-[clamp(1.5rem,2.2vw,2rem)] leading-[1.1] font-semibold tracking-[-0.035em]" data-no-title-animation>
+          ¿Todavía lo estás pensando?
+        </h2>
+        <h3 class="mt-3 text-lg font-semibold text-[#b87cbd] sm:text-xl">
+          Da el primer paso sin compromiso
+        </h3>
+        <p class="mt-3 max-w-xl text-[0.95rem] leading-[1.65] font-normal text-[#4B5563] sm:text-base">
+          Agenda una sesión estratégica gratuita de 30 minutos con nuestros especialistas.
+          Analizaremos tu presencia digital actual, resolveremos todas tus dudas y te mostraremos
+          la hoja de ruta exacta para escalar tus resultados estratégicamente.
+        </p>
+
+        <a
+          href="#contacto"
+          class="mt-5 inline-flex items-center gap-3 rounded-[8px] border border-white bg-[#402776] px-6 py-3.5 text-sm font-semibold tracking-[0.06em] text-white shadow-[0_12px_35px_rgba(64,39,118,0.32)] transition-[transform,box-shadow,background-color] duration-300 hover:-translate-y-0.5 hover:bg-[#51328a] hover:shadow-[0_16px_40px_rgba(64,39,118,0.42)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#111827] active:translate-y-0"
+        >
+          AGENDA TU CITA AHORA
+          <svg
+            class="size-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M5 12h14M13 6l6 6-6 6"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="space-y-3.5 py-6" data-faq-list>
+      {
+        faqs.map((faq, index) => (
+          <details
+            class="group rounded-[20px] bg-[#F4F4F7] p-4 text-[#111827] shadow-[0_8px_28px_rgba(17,24,39,0.045)] transition-colors duration-300 open:bg-[#F2EDF4] sm:p-5"
+            open={index === 0}
+            data-faq-item
+          >
+            <summary class="flex cursor-pointer list-none items-start justify-between gap-5 font-sans text-[clamp(1rem,1.4vw,1.2rem)] leading-[1.35] font-semibold marker:content-none [&::-webkit-details-marker]:hidden">
+              <span class="max-w-[90%] pt-2">{faq.question}</span>
+              <span
+                class="grid size-9 shrink-0 place-items-center rounded-[10px] bg-white text-[#b87cbd] shadow-[0_5px_18px_rgba(17,24,39,0.06)]"
+                aria-hidden="true"
+              >
+                <svg
+                  class="size-4 transition-transform duration-300 group-open:rotate-180"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m6 9 6 6 6-6"></path>
+                </svg>
+              </span>
+            </summary>
+
+            <p class="max-w-2xl pr-10 pt-3 text-[0.95rem] leading-[1.7] font-normal text-[#5B6472] sm:text-base">
+              {faq.answer}
+            </p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  const initializeFaq = () => {
+    document.querySelectorAll<HTMLElement>("[data-faq-list]").forEach((list) => {
+      if (list.dataset.ready === "true") return;
+      list.dataset.ready = "true";
+
+      const items = Array.from(list.querySelectorAll<HTMLDetailsElement>("[data-faq-item]"));
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      items.forEach((item, index) => {
+        item.addEventListener("toggle", () => {
+          if (!item.open) return;
+          items.forEach((otherItem) => {
+            if (otherItem !== item) otherItem.open = false;
+          });
+        });
+
+        if (!reduceMotion && "IntersectionObserver" in window) {
+          item.classList.add("faq-item-pending");
+          item.style.setProperty("--faq-item-delay", `${index * 120}ms`);
+        }
+      });
+
+      if (reduceMotion || !("IntersectionObserver" in window)) return;
+
+      const entranceObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+
+            items.forEach((item) => {
+              item.classList.remove("faq-item-pending");
+              item.classList.add("faq-item-bounce-in");
+            });
+            entranceObserver.disconnect();
+          });
+        },
+        { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },
+      );
+
+      entranceObserver.observe(list);
+    });
+  };
+
+  initializeFaq();
+  document.addEventListener("astro:page-load", initializeFaq);
+</script>

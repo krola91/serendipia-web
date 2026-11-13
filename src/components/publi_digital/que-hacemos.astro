@@ -1,0 +1,132 @@
+---
+const cards = [
+  {
+    title: "Expertos y Estrategia",
+    description: "Nuestros expertos en publicidad digital, certificados en Google Ads, crean campañas altamente eficaces basadas en la investigación y el análisis profundo de datos.",
+    image: "/sources/service-strategy.webp",
+    alt: "Análisis de campañas en una plataforma de publicidad digital",
+    icon: "M4 19h16M6 16v-4M11 16V8M16 16V5M21 16v-6",
+  },
+  {
+    title: "Ejecución y Conversión",
+    description: "Nos encargamos de todo el proceso: desde la elección de la plataforma adecuada hasta el diseño de anuncios estratégicos que convierten a los lectores en clientes.",
+    image: "/sources/service-execution.webp",
+    alt: "Equipo creativo trabajando en una campaña digital",
+    icon: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10ZM12 12h.01",
+  },
+  {
+    title: "Alcance Integral",
+    description: "Te ayudamos a establecer tu marca, diseñar campañas con impacto en redes sociales y aumentar de forma constante el tráfico de tu sitio web.",
+    image: "/sources/service-reach.webp",
+    alt: "Teléfono con contenido e interacciones en redes sociales",
+    icon: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18ZM3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18",
+  },
+];
+---
+
+<section class="work-section" aria-labelledby="work-title" data-work-section>
+  <div class="work-section__inner">
+    <h2 id="work-title">Maximizamos el Impacto de tu Marca con <span class="home-highlight">Campañas que Convierten</span></h2>
+    <div class="work-section__grid">
+      {cards.map((card, index) => (
+        <article class:list={["work-card", { "work-card--featured": index === 1 }]}>
+          <div class="work-card__heading">
+            <h3>{card.title}</h3>
+            {index !== 1 && <span class="work-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d={card.icon}></path></svg>
+            </span>}
+          </div>
+          <p>{card.description}</p>
+          <img src={card.image} alt={card.alt} width="1000" height="750" loading="lazy" decoding="async" />
+          {index === 1 && <span class="work-card__icon work-card__icon--featured" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d={card.icon}></path></svg>
+          </span>}
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  const initializeWorkCards = () => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) return;
+    document.querySelectorAll<HTMLElement>("[data-work-section]").forEach((section) => {
+      if (section.dataset.entranceReady) return;
+      section.dataset.entranceReady = "true";
+      const cards = Array.from(section.querySelectorAll<HTMLElement>(".work-card"));
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const card = entry.target as HTMLElement;
+          card.classList.remove("work-card--pending");
+          card.classList.add("service-card-drop-in");
+          observer.unobserve(card);
+        });
+      }, { threshold: 0.18, rootMargin: "0px 0px -8% 0px" });
+      cards.forEach((card, index) => {
+        card.classList.add("work-card--pending");
+        card.style.setProperty("--service-drop-delay", `${index * 110}ms`);
+        observer.observe(card);
+      });
+    });
+  };
+  initializeWorkCards();
+  document.addEventListener("astro:page-load", initializeWorkCards);
+</script>
+
+<style is:inline>
+  .work-section {
+    padding: clamp(4rem, 7vw, 7rem) clamp(1.25rem, 4vw, 4rem);
+    background: #f3f3f2;
+    color: #111827;
+  }
+
+  .work-section__inner { max-width: 1400px; margin-inline: auto; }
+  .work-section h2 {
+    max-width: 920px;
+    margin: 0 0 clamp(3rem, 5vw, 4.5rem);
+    padding-bottom: clamp(2rem, 3vw, 2.75rem);
+    border-bottom: 1px solid #d9d9dc;
+    font-size: clamp(2rem, 3.4vw, 3.15rem);
+    font-weight: 650;
+    line-height: 1.3;
+    letter-spacing: -0.04em;
+  }
+
+  .work-section__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: stretch; }
+  .work-card { position: relative; display: flex; min-width: 0; flex-direction: column; padding: clamp(1.25rem, 2vw, 2rem); border-radius: 26px; background: #e6e6e7; }
+  .work-card--pending { opacity: 0; }
+  .work-card--featured { border-bottom-left-radius: 155px; background: #402776; color: #fff; }
+  .work-card__heading { display: flex; min-height: 5rem; align-items: flex-start; justify-content: space-between; gap: 0.75rem; padding-bottom: 1.25rem; border-bottom: 1px solid rgb(17 24 39 / 18%); }
+  .work-card--featured .work-card__heading { border-color: rgb(255 255 255 / 30%); }
+  .work-card h3 { max-width: 12ch; margin: 0; color: #b87cbd; font-size: clamp(1.45rem, 2vw, 2rem); font-weight: 650; line-height: 1.08; letter-spacing: -0.035em; }
+  .work-card--featured h3 { color: #fff; }
+  .work-card__icon { display: grid; width: 62px; height: 62px; flex: 0 0 62px; place-items: center; border-radius: 50%; background: #fff; color: #402776; }
+  .work-card__icon--featured { position: absolute; z-index: 1; bottom: -7px; left: -7px; width: 94px; height: 94px; border: 6px solid #f3f3f2; background: #f5b93f; color: #402776; }
+  .work-card__icon svg { width: 31px; height: 31px; }
+  .work-card__icon--featured svg { width: 40px; height: 40px; }
+  .work-card p { flex: 1; margin: 1.25rem 0 1.5rem; color: #474b58; font-family: var(--font-display); font-size: clamp(0.87rem, 1vw, 1rem); font-weight: 400; line-height: 1.7; }
+  .work-card--featured p { color: rgb(255 255 255 / 90%); }
+  .work-card img { display: block; width: 100%; aspect-ratio: 1.6; object-fit: cover; border-radius: 18px; }
+  .work-card--featured img { border-bottom-left-radius: 125px; }
+
+  @media (max-width: 900px) {
+    .work-section__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .work-card:last-child { grid-column: 1 / -1; }
+    .work-card:last-child img { max-height: 300px; }
+  }
+
+  @media (max-width: 600px) {
+    .work-section { padding-block: 4rem; }
+    .work-section h2 { margin-bottom: 2.5rem; }
+    .work-section__grid { grid-template-columns: 1fr; }
+    .work-card:last-child { grid-column: auto; }
+    .work-card--featured { border-bottom-left-radius: 125px; }
+    .work-card--featured img { border-bottom-left-radius: 100px; }
+    .work-card__heading { min-height: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .work-card--pending { opacity: 1; }
+  }
+</style>

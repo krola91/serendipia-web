@@ -1,0 +1,126 @@
+---
+const benefits = [
+  { title: "Resultados inmediatos", text: "Empieza a obtener resultados en un corto plazo con publicidad que llegará al cliente que buscas", color: "#ef4ba8" },
+  { title: "Genera clientes potenciales cada día", text: "Incrementa la calidad y cantidad de clientes potenciales con publicidad hipersegmentada", color: "#8174ef" },
+  { title: "Aumenta el tráfico web", text: "Tu página web merece ser vista por miles. Envía personas interesadas en tus servicios a tu web", color: "#a5dc45" },
+  { title: "Aumenta el tráfico web", text: "Tu página web merece ser vista por miles. Envía personas interesadas en tus servicios a tu web", color: "#4cc8b7" },
+  { title: "Reportes avanzados", text: "Nuestras campañas son 100% transparentes, ya que ya trabajamos con lo último en herramientas para realizar reportes automáticos", color: "#27303d" },
+  { title: "Remarketing avanzado", text: "Vuelve a interactuar con tus clientes potenciales para asegurar tus ventas", color: "#f5b93f" },
+];
+---
+
+<section class="sales-section" aria-labelledby="sales-title">
+  <div class="sales-section__panel">
+    <div class="sales-section__layout">
+      <div class="sales-section__intro">
+        <div class="sales-section__badge"><span aria-hidden="true"></span>Publicidad que trae clientes</div>
+        <h2 id="sales-title"><span class="sales-section__highlight">Vende lo que quieras,</span> de la forma que quieras.</h2>
+      </div>
+      <div class="sales-slider" data-sales-slider>
+        <div class="sales-slider__controls">
+          <button type="button" data-sales-prev aria-label="Ver beneficio anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button>
+          <button type="button" data-sales-next aria-label="Ver siguiente beneficio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></button>
+        </div>
+        <div class="sales-stack">
+          {benefits.map((benefit, index) => (
+            <article class="sales-card" data-sales-card data-position={String(index)} aria-hidden={index === 0 ? "false" : "true"}>
+              <span class="sales-card__color" style={`background-color: ${benefit.color}`} aria-hidden="true"></span>
+              <h3>{benefit.title}</h3>
+              <p>{benefit.text}</p>
+            </article>
+          ))}
+        </div>
+        <p class="sr-only" data-sales-status aria-live="polite">Beneficio 1 de {benefits.length}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const initializeSalesSliders = () => {
+    document.querySelectorAll<HTMLElement>("[data-sales-slider]").forEach((slider) => {
+      if (slider.dataset.ready) return;
+      slider.dataset.ready = "true";
+      const cards = Array.from(slider.querySelectorAll<HTMLElement>("[data-sales-card]"));
+      const status = slider.querySelector<HTMLElement>("[data-sales-status]");
+      let current = 0;
+
+      const render = () => {
+        cards.forEach((card, index) => {
+          const position = (index - current + cards.length) % cards.length;
+          card.dataset.position = String(position);
+          card.setAttribute("aria-hidden", String(position !== 0));
+        });
+        if (status) status.textContent = `Beneficio ${current + 1} de ${cards.length}`;
+      };
+      slider.querySelector<HTMLButtonElement>("[data-sales-prev]")?.addEventListener("click", () => {
+        current = (current - 1 + cards.length) % cards.length;
+        render();
+      });
+      slider.querySelector<HTMLButtonElement>("[data-sales-next]")?.addEventListener("click", () => {
+        current = (current + 1) % cards.length;
+        render();
+      });
+
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObserver" in window) {
+        const visibleCards = cards.slice(0, 3);
+        visibleCards.forEach((card, index) => {
+          card.classList.add("sales-card--pending");
+          card.style.setProperty("--sales-drop-delay", `${(visibleCards.length - 1 - index) * 220}ms`);
+          card.addEventListener("animationend", () => card.classList.remove("sales-card--enter"), { once: true });
+        });
+        const observer = new IntersectionObserver((entries) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return;
+          visibleCards.forEach((card) => {
+            card.classList.remove("sales-card--pending");
+            card.classList.add("sales-card--enter");
+          });
+          observer.disconnect();
+        }, { threshold: 0.2, rootMargin: "0px 0px -8% 0px" });
+        observer.observe(slider);
+      }
+      render();
+    });
+  };
+  initializeSalesSliders();
+  document.addEventListener("astro:page-load", initializeSalesSliders);
+</script>
+
+<style is:inline>
+  .sales-section { padding: clamp(4rem, 7vw, 7rem) clamp(1.25rem, 4vw, 4rem); background: #fff; }
+  .sales-section__panel { max-width: 1400px; margin-inline: auto; padding: clamp(1.5rem, 3vw, 2.5rem); padding-bottom: 4rem; overflow: hidden; border-radius: 28px; background: #f5b93f; box-shadow: 0 26px 80px rgb(17 24 39 / 12%); }
+  .sales-section__layout { display: grid; grid-template-columns: 0.86fr 1.14fr; align-items: center; gap: clamp(2.5rem, 4vw, 4rem); }
+  .sales-section__badge { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 1.25rem; padding: 8px 16px; border: 1px solid #c4c4c4; border-radius: 999px; background: #fff; color: #111827; box-shadow: 0 8px 30px rgb(107 114 128 / 18%); font-size: 0.75rem; font-weight: 500; }
+  .sales-section__badge span { width: 8px; height: 8px; flex: 0 0 8px; border-radius: 50%; background: #b87cbd; animation: sales-badge-pulse 2s ease-in-out infinite; }
+  @keyframes sales-badge-pulse { 50% { opacity: 0.45; } }
+  .sales-section h2 { max-width: 550px; margin: 0; color: #402776; font-size: clamp(2rem, 3.4vw, 3.15rem); font-weight: 700; line-height: 1.3; letter-spacing: -0.045em; }
+  .sales-section__highlight { display: inline-block; padding: 0.015em 0.11em 0.07em; border-radius: 0.1em; background: #f3f3f2; transform: rotate(-2deg); }
+  .sales-slider { min-width: 0; }
+  .sales-slider__controls { display: flex; justify-content: flex-end; gap: 8px; }
+  .sales-slider__controls button { display: grid; width: 40px; height: 40px; place-items: center; border: 0; border-radius: 50%; background: #402776; color: white; box-shadow: 0 8px 22px rgb(64 39 118 / 24%); cursor: pointer; transition: background-color 300ms ease, transform 300ms ease; }
+  .sales-slider__controls button:hover { background: #51328a; transform: translateY(-2px); }
+  .sales-slider__controls button:focus-visible { outline: 3px solid #402776; outline-offset: 3px; }
+  .sales-slider__controls svg { width: 18px; height: 18px; }
+  .sales-stack { position: relative; min-height: 350px; margin-top: 1.5rem; perspective: 1200px; }
+  .sales-card { position: absolute; inset: 0; display: flex; min-height: 305px; flex-direction: column; justify-content: center; gap: 1rem; padding: clamp(1.5rem, 3vw, 2.5rem); border-radius: 26px; background: #fff; color: #111827; box-shadow: 0 22px 60px rgb(17 24 39 / 14%); transform-origin: center bottom; transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1), opacity 360ms ease, visibility 360ms; }
+  .sales-card__color { position: absolute; top: 24px; right: 24px; width: 42px; height: 42px; border-radius: 50%; }
+  .sales-card h3 { max-width: calc(100% - 48px); margin: 0; color: #b87cbd; font-size: clamp(1.4rem, 2vw, 2rem); font-weight: 650; line-height: 1.2; }
+  .sales-card p { max-width: 560px; margin: 0; font-size: clamp(1rem, 1.4vw, 1.25rem); font-weight: 400; line-height: 1.5; }
+  .sales-card[data-position="0"] { z-index: 3; transform: translateY(34px) rotate(0) scale(1); opacity: 1; visibility: visible; }
+  .sales-card[data-position="1"] { z-index: 2; transform: translate(18px, 12px) rotate(2.2deg) scale(0.96); opacity: 0.78; visibility: visible; }
+  .sales-card[data-position="2"] { z-index: 1; transform: translate(-18px, -4px) rotate(-2.8deg) scale(0.92); opacity: 0.5; visibility: visible; }
+  .sales-card:not([data-position="0"]):not([data-position="1"]):not([data-position="2"]) { z-index: 0; opacity: 0; visibility: hidden; }
+  .sales-card--pending { visibility: hidden !important; translate: 0 -110vh; }
+  .sales-card--enter { animation: sales-card-drop 1400ms linear var(--sales-drop-delay, 0ms) both; }
+  @keyframes sales-card-drop {
+    0% { visibility: visible; translate: 0 -110vh; animation-timing-function: cubic-bezier(0.5, 0, 0.72, 0.48); }
+    68% { translate: 0 14px; animation-timing-function: ease-out; }
+    79% { translate: 0 -18px; animation-timing-function: ease-in; }
+    88% { translate: 0 6px; animation-timing-function: ease-out; }
+    95% { translate: 0 -3px; animation-timing-function: ease-in; }
+    100% { visibility: visible; translate: 0 0; }
+  }
+  @media (max-width: 1023px) { .sales-section__layout { grid-template-columns: 1fr; } }
+  @media (max-width: 639px) { .sales-stack { min-height: 340px; } .sales-card[data-position="0"] { transform: translateY(24px); } .sales-card[data-position="1"] { transform: translate(8px, 8px) rotate(1.5deg) scale(0.97); } .sales-card[data-position="2"] { transform: translate(-8px, -2px) rotate(-1.8deg) scale(0.94); } }
+  @media (prefers-reduced-motion: reduce) { .sales-section__badge span { animation: none; } .sales-card, .sales-slider__controls button { transition: none; } .sales-card--pending, .sales-card--enter { visibility: visible !important; translate: none !important; animation: none !important; } }
+</style>

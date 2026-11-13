@@ -1,15 +1,19 @@
+---
+const { lightBackground = false } = Astro.props;
+---
+
 <section
-  class="relative px-5 py-[clamp(72px,8vw,110px)] max-md:pb-[175px] md:px-10 lg:px-20"
+  class:list={["home-section-space home-section-space--proposal relative", { "bg-[#f3f3f2]": lightBackground }]}
   aria-labelledby="proposal-title"
   data-proposal-section
 >
   <div
-    class="relative mx-auto min-h-[600px] max-w-[1440px] rounded-[28px] bg-[#402776] px-6 pt-10 pb-[280px] text-white shadow-[0_24px_70px_rgba(64,39,118,0.2)] sm:min-h-[620px] sm:px-9 sm:pt-12 sm:pb-[310px] md:min-h-[340px] md:px-10 md:py-12 md:pr-[42%] lg:px-14 lg:py-14 lg:pr-[40%]"
+    class="relative mx-auto min-h-[600px] max-w-[1400px] rounded-[28px] bg-[#402776] px-6 pt-10 pb-[280px] text-white shadow-[0_24px_70px_rgba(64,39,118,0.2)] sm:min-h-[620px] sm:px-9 sm:pt-12 sm:pb-[310px] md:min-h-[340px] md:px-10 md:py-12 md:pr-[42%] lg:px-14 lg:py-14 lg:pr-[40%]"
   >
     <div class="relative z-20 max-w-3xl">
       <h2
         id="proposal-title"
-        class="text-[clamp(2rem,3.7vw,3.6rem)] leading-[1.06] font-semibold tracking-[-0.045em]"
+        class="home-section-title font-semibold tracking-[-0.045em]"
       >
         ¿Listo para convertirte en líder de tu industria?
       </h2>

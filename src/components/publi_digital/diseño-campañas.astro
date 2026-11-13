@@ -1,0 +1,363 @@
+---
+const services = [
+  { title: "01 Google ads", description: "Tu marca aparecerá en los resultados del motor de búsquedas más usado a nivel mundial", tone: "pink", icon: "/sources/ICON-GOOGLE-ADS.webp" },
+  { title: "02 Facebook ads", description: "Alcanza tus futuros clientes con la red social con más de 1.6 billones de usuarios a nivel mundial, además tus anuncios serán visibles en Instagram ads, Facebook Messenger y WhatsApp", tone: "violet", icon: "/sources/ICON-META-ADS.webp" },
+  { title: "03 YouTube ads", description: "Muestra tus anuncios con campañas de video marketing a tu público objetivo en YouTube", tone: "lime", icon: "/sources/ICON-YT-ADS.webp" },
+  { title: "04 Taboola ads", description: "Dale un impulso extra a tu estrategia de marketing de contenidos con una de las mejores plataformas en publicidad nativa", tone: "aqua", icon: "/sources/ICON-TABOOLA-ADS.webp" },
+  { title: "05 LinkedIn ads", description: "Genera clientes potenciales de alta calidad en la plataforma B2B por excelencia", tone: "silver", icon: "/sources/ICON-LINKEDIN-ADS.webp" },
+  { title: "06 Ad Roll", description: "Genera campañas multi plataformas con la avanzada Inteligencia artificial de Ad roll", tone: "neon", icon: "/sources/ICON-ADROLL-ADS.webp" },
+];
+---
+
+<section
+  class="campaigns-section services-section home-section-space home-section-space--full home-section-space--services relative overflow-hidden bg-white"
+  aria-labelledby="campaigns-title"
+  data-services-section
+>
+  <div class="relative z-10">
+    <h2
+      id="campaigns-title"
+      class="home-section-title text-center font-sans font-bold tracking-[-0.035em] text-[#111827]"
+    >
+      Diseñamos potentes campañas<br /> de <span class="home-highlight">publicidad digital</span>
+    </h2>
+
+    <p class="mt-4 text-center text-[#111827]">con la plataforma que se adecue a tu empresa</p>
+
+    <div
+      class="services-deck-viewport mt-8 overflow-x-auto overflow-y-hidden pb-8 md:mt-10"
+      aria-label="Carrusel de plataformas de publicidad"
+    >
+      <div class="services-deck" data-services-deck>
+        {
+          services.map((service, index) => (
+            <article
+              class:list={["service-card", { "is-active": index === 2 }]}
+              data-service-card
+              data-slot={index < 5 ? String(index) : "hidden"}
+              data-visible={index < 5 ? "true" : "false"}
+              data-tone={service.tone}
+              tabindex="0"
+              aria-label={service.title}
+            >
+              <div class="service-card__visual">
+                <div class="service-card__texture" aria-hidden="true"></div>
+
+                <button
+                  type="button"
+                  class="service-card__link"
+                  disabled
+                  aria-label={`Página de ${service.title}: próximamente`}
+                  title="Página del servicio próximamente"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14M13 6l6 6-6 6"></path>
+                  </svg>
+                </button>
+
+                <img
+                  class="service-card__icon"
+                  src={service.icon}
+                  alt=""
+                  width="48"
+                  height="48"
+                  aria-hidden="true"
+                />
+
+                <div class="service-card__description">
+                  <p>{service.description}</p>
+                </div>
+              </div>
+
+              <div class="service-card__footer">
+                <h3>{service.title}</h3>
+                <button
+                  type="button"
+                  class="service-card__next"
+                  data-services-next
+                  aria-label="Mostrar la siguiente plataforma"
+                  aria-hidden={index === 4 ? "false" : "true"}
+                  tabindex={index === 4 ? 0 : -1}
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="m9 18 6-6-6-6"></path>
+                  </svg>
+                </button>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from "gsap";
+
+  const initializeServices = () => {
+    document.querySelectorAll<HTMLElement>("[data-services-section]").forEach((section) => {
+      if (section.dataset.ready === "true") return;
+      section.dataset.ready = "true";
+
+      const deck = section.querySelector<HTMLElement>("[data-services-deck]");
+      const cards = Array.from(
+        section.querySelectorAll<HTMLElement>("[data-service-card]"),
+      );
+      const nextButtons = Array.from(
+        section.querySelectorAll<HTMLButtonElement>("[data-services-next]"),
+      );
+      let startIndex = 0;
+      const tablet = window.matchMedia("(min-width: 768px) and (width < 1024px)");
+      const desktop = window.matchMedia("(min-width: 1024px)");
+      const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const firstCard = cards[0];
+      let introObserver: IntersectionObserver | undefined;
+      let introTimeline: gsap.core.Timeline | undefined;
+      let introFrame = 0;
+      let introWaiting = false;
+      let introDone = false;
+      let disposed = false;
+
+      const initializeCardEntrance = () => {
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const entranceCards = cards.filter((card) => card.dataset.visible === "true");
+
+        if (reduceMotion || window.matchMedia("(max-width: 767px)").matches || !("IntersectionObserver" in window)) return;
+
+        entranceCards.forEach((card, index) => {
+          card.classList.add("service-card-drop-pending");
+          card.style.setProperty("--service-drop-delay", `${index * 110}ms`);
+        });
+
+        const entranceObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+
+              entranceCards.forEach((card) => {
+                card.classList.remove("service-card-drop-pending");
+                card.classList.add("service-card-drop-in");
+              });
+              entranceObserver.disconnect();
+            });
+          },
+          { threshold: 0.18, rootMargin: "0px 0px -8% 0px" },
+        );
+
+        entranceObserver.observe(section);
+      };
+
+      const activateCard = (activeCard: HTMLElement) => {
+        cards.forEach((card) => card.classList.toggle("is-active", card === activeCard));
+      };
+
+      const clearFlipStyles = () => {
+        ["transform", "transform-origin", "translate", "rotate", "scale"].forEach((property) =>
+          firstCard?.style.removeProperty(property),
+        );
+      };
+
+      const stopCardIntro = () => {
+        introDone = true;
+        introObserver?.disconnect();
+        cancelAnimationFrame(introFrame);
+        if (introTimeline) {
+          introTimeline.kill();
+          introTimeline = undefined;
+        }
+        if (firstCard?.classList.contains("is-auto-flipping")) clearFlipStyles();
+        firstCard?.classList.remove("is-auto-flipping");
+      };
+
+      const initializeFirstCardIntro = () => {
+        if (!firstCard) return;
+        if (motion.matches || !("IntersectionObserver" in window)) {
+          introDone = true;
+          activateCard(firstCard);
+          return;
+        }
+
+        const firstCardIsVisible = () => {
+          const bounds = firstCard.getBoundingClientRect();
+          const visibleHeight = Math.max(0, Math.min(bounds.bottom, window.innerHeight) - Math.max(bounds.top, 0));
+          return firstCard.isConnected && getComputedStyle(firstCard).display !== "none"
+            && bounds.width > 0 && bounds.height > 0
+            && visibleHeight >= bounds.height * 0.55
+            && bounds.right > 0 && bounds.left < window.innerWidth;
+        };
+
+        const playIntro = () => {
+          if (disposed || introDone || motion.matches || !firstCardIsVisible()) return;
+          introObserver?.disconnect();
+          firstCard.classList.add("is-auto-flipping");
+          firstCard.classList.remove("is-active");
+
+          introTimeline = gsap.timeline({
+            delay: 0.3,
+            defaults: { duration: 0.4 },
+            onComplete: () => {
+              activateCard(firstCard);
+              introDone = true;
+              introTimeline = undefined;
+              // Wait until GSAP has finished its current frame before restoring the deck's transform.
+              introFrame = requestAnimationFrame(() => {
+                clearFlipStyles();
+                firstCard.classList.remove("is-auto-flipping");
+              });
+            },
+          });
+          introTimeline
+            .set(firstCard, { transformPerspective: 1200, transformOrigin: "center center" })
+            .to(firstCard, { rotationY: 90, ease: "power2.in" })
+            .call(() => activateCard(firstCard))
+            .set(firstCard, { rotationY: -90 })
+            .to(firstCard, { rotationY: 0, ease: "power2.out" })
+            .to(firstCard, { rotationY: 90, ease: "power2.in" }, "+=0.6")
+            .call(() => firstCard.classList.remove("is-active"))
+            .set(firstCard, { rotationY: -90 })
+            .to(firstCard, { rotationY: 0, ease: "power2.out" })
+            .to(firstCard, { rotationY: 90, ease: "power2.in" }, "+=0.45")
+            .call(() => activateCard(firstCard))
+            .set(firstCard, { rotationY: -90 })
+            .to(firstCard, { rotationY: 0, ease: "power2.out" });
+        };
+
+        const waitForEntrance = () => {
+          if (introWaiting || introDone || disposed) return;
+          introWaiting = true;
+          // Allow the existing desktop or mobile entrance observer to start its animations.
+          introFrame = requestAnimationFrame(() => {
+            introFrame = requestAnimationFrame(async () => {
+              const visibleCards = cards.filter((card) =>
+                card.dataset.visible === "true" && getComputedStyle(card).display !== "none",
+              );
+              const animatedElements: Element[] = [
+                ...visibleCards,
+                ...section.querySelectorAll("#campaigns-title .site-title-letter"),
+              ];
+              const entranceAnimations = animatedElements.flatMap((element) =>
+                element.getAnimations().filter((animation) =>
+                  "animationName" in animation && typeof animation.animationName === "string"
+                    && ["service-card-sky-drop", "mobile-card-bounce-in", "hero-letter-fall"].includes(animation.animationName),
+                ),
+              );
+              const images = visibleCards.flatMap((card) =>
+                Array.from(card.querySelectorAll<HTMLImageElement>(".service-card__icon")),
+              );
+              await Promise.allSettled([
+                ...entranceAnimations.map((animation) => animation.finished),
+                ...images.map((image) => image.decode()),
+              ]);
+              introWaiting = false;
+              if (!disposed && !introDone && firstCardIsVisible()) playIntro();
+            });
+          });
+        };
+
+        introObserver = new IntersectionObserver((entries) => {
+          if (entries.some((entry) => entry.isIntersecting && entry.intersectionRatio >= 0.55)) waitForEntrance();
+        }, { threshold: 0.55 });
+        introObserver.observe(firstCard);
+      };
+
+      const renderWindow = () => {
+        const visibleCount = tablet.matches ? 4 : 5;
+        startIndex = Math.min(startIndex, cards.length - visibleCount);
+        deck?.setAttribute("data-visible-count", String(visibleCount));
+        cards.forEach((card, index) => {
+          const slot = index - startIndex;
+          const isVisible = slot >= 0 && slot < visibleCount;
+          card.dataset.slot = isVisible ? String(slot) : "hidden";
+          card.dataset.visible = String(isVisible);
+          card.setAttribute("aria-hidden", String(!isVisible));
+          card.tabIndex = isVisible ? 0 : -1;
+
+          const nextButton = card.querySelector<HTMLButtonElement>("[data-services-next]");
+          const isCurrentNext = isVisible && slot === visibleCount - 1;
+          if (nextButton) {
+            nextButton.tabIndex = isCurrentNext ? 0 : -1;
+            nextButton.setAttribute("aria-hidden", String(!isCurrentNext));
+          }
+        });
+
+        nextButtons.forEach((button) => {
+          button.setAttribute(
+            "aria-label",
+            startIndex < cards.length - visibleCount ? "Mostrar la siguiente plataforma" : "Volver a las plataformas anteriores",
+          );
+        });
+
+        activateCard(cards[startIndex + Math.floor(visibleCount / 2)]);
+        deck?.setAttribute("data-window", String(startIndex));
+      };
+
+      cards.forEach((card) => {
+        card.addEventListener("mouseenter", () => {
+          if (introTimeline && card === firstCard) return;
+          if (introTimeline) stopCardIntro();
+          activateCard(card);
+        });
+        card.addEventListener("focusin", () => {
+          if (!introDone) stopCardIntro();
+          activateCard(card);
+        });
+      });
+
+      section.addEventListener("pointerdown", (event) => {
+        if (event.target instanceof Element && event.target.closest("[data-service-card], .mobile-carousel-controls button")) {
+          if (!introDone) stopCardIntro();
+        }
+      });
+
+      motion.addEventListener("change", (event) => {
+        if (event.matches && !introDone) {
+          stopCardIntro();
+          activateCard(firstCard);
+        }
+      });
+
+      nextButtons.forEach((button) => {
+        button.addEventListener("click", (event) => {
+          event.stopPropagation();
+          const maxStart = cards.length - (tablet.matches ? 4 : 5);
+          startIndex = startIndex < maxStart ? startIndex + 1 : 0;
+          renderWindow();
+        });
+      });
+
+      const syncDesktopOrTablet = () => {
+        if (introTimeline) stopCardIntro();
+        if (tablet.matches || desktop.matches) renderWindow();
+      };
+      tablet.addEventListener("change", syncDesktopOrTablet);
+      desktop.addEventListener("change", syncDesktopOrTablet);
+
+      renderWindow();
+      initializeCardEntrance();
+      initializeFirstCardIntro();
+
+      document.addEventListener("astro:before-swap", () => {
+        disposed = true;
+        stopCardIntro();
+      }, { once: true });
+    });
+  };
+
+  initializeServices();
+  document.addEventListener("astro:page-load", initializeServices);
+</script>
+
+<style>
+  .campaigns-section { padding-top: clamp(5rem, 9vw, 9rem); }
+  .service-card__icon { width: 120px; height: 120px; object-fit: contain; }
+  @media (min-width: 768px) and (max-width: 1023px) { .services-deck .service-card__icon { width: 100px; height: 100px; } }
+</style>

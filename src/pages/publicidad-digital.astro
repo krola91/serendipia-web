@@ -1,0 +1,26 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PublicidadHero from "../components/publi_digital/PublicidadHero.astro";
+import ProcesoExitoso from "../components/publi_digital/proceso-exitoso.astro";
+import QueHacemos from "../components/publi_digital/que-hacemos.astro";
+import PricingCards from "../components/publi_digital/pricing-cards.astro";
+import VentasPubli from "../components/publi_digital/ventas-publi.astro";
+import Proposal from "../components/home/proposal.astro";
+import FaqPubli from "../components/publi_digital/faq-publi.astro";
+import DisenoCampanas from "../components/publi_digital/diseño-campañas.astro";
+---
+
+<Layout
+  navigation="internal"
+  title="Publicidad Digital | Serendipia"
+  description="Publicidad digital efectiva y analítica para conectar tu marca con clientes potenciales y alcanzar tus objetivos."
+>
+  <PublicidadHero />
+  <QueHacemos />
+  <ProcesoExitoso />
+  <PricingCards />
+  <VentasPubli />
+  <Proposal lightBackground={true} />
+  <DisenoCampanas />
+  <FaqPubli />
+</Layout>

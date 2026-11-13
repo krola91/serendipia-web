@@ -1,0 +1,104 @@
+---
+const plans = [
+  {
+    title: "Acelerador de Crecimiento",
+    price: "$790",
+    period: "/mes",
+    channels: "2 canales: (Meta Ads, Google Ads, TikTok Ads o LinkedIn Ads)",
+    objective: "Conseguir más clientes (leads o ventas) y/o conocimiento de marca, con campañas optimizadas y medición real",
+    button: "Elegir plan",
+  },
+  {
+    title: "Escalamiento 360°",
+    price: "$990",
+    period: "/mes",
+    channels: "2 canales + Retargeting (Meta/Google + remarketing + 1 canal adicional según estrategia)",
+    objective: "Estrategia de ventas digital integral (leads / clientes / ventas) con mejora continua + retargeting y conocimiento de marca",
+    button: "Elegir plan",
+  },
+  {
+    title: "Corporate Growth Squad (Equipo Dedicado)",
+    price: "A medida",
+    period: "(solicitar propuesto)",
+    channels: "Multicanal (Meta + Google + Retargeting + LinkedIn/TikTok según necesidad)",
+    objective: "Escalar ventas con un equipo dedicado, optimización continua y reporting ejecutivo",
+    button: "Solicitar propuesta",
+  },
+];
+---
+
+<section class="pricing-section" aria-labelledby="pricing-title" data-pricing-section>
+  <div class="pricing-section__inner">
+    <h2 id="pricing-title">Elige tu Plan de Publicidad Digital y <span class="home-highlight">Escala tus Ventas</span></h2>
+    <div class="pricing-section__grid">
+      {plans.map((plan, index) => (
+        <article class:list={["pricing-card", { "pricing-card--featured": index === 1 }]}>
+          <div class="pricing-card__top">
+            <div class="pricing-card__header">
+              <h3>{plan.title}</h3>
+              <p class="pricing-card__price"><span>{plan.price}</span><small>{plan.period}</small></p>
+            </div>
+            <p class="pricing-card__channels">{plan.channels}</p>
+            <button type="button" disabled title="Próximamente" aria-label={`${plan.button}: próximamente`}>{plan.button}</button>
+          </div>
+          <div class="pricing-card__details">
+            <span class="pricing-card__check" aria-hidden="true">✓</span>
+            <p><strong>Objetivo:</strong> {plan.objective}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  const initializePricingCards = () => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) return;
+    document.querySelectorAll<HTMLElement>("[data-pricing-section]").forEach((section) => {
+      if (section.dataset.entranceReady) return;
+      section.dataset.entranceReady = "true";
+      const cards = Array.from(section.querySelectorAll<HTMLElement>(".pricing-card"));
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const card = entry.target as HTMLElement;
+          card.classList.remove("pricing-card--pending");
+          card.classList.add("service-card-drop-in");
+          observer.unobserve(card);
+        });
+      }, { threshold: 0.18, rootMargin: "0px 0px -8% 0px" });
+      cards.forEach((card, index) => {
+        card.classList.add("pricing-card--pending");
+        card.style.setProperty("--service-drop-delay", `${index * 110}ms`);
+        observer.observe(card);
+      });
+    });
+  };
+  initializePricingCards();
+  document.addEventListener("astro:page-load", initializePricingCards);
+</script>
+
+<style is:inline>
+  .pricing-section { padding: clamp(4.5rem, 8vw, 7.5rem) clamp(1.25rem, 4vw, 4rem); background: #f3f3f2; color: #111827; }
+  .pricing-section__inner { max-width: 1400px; margin-inline: auto; }
+  .pricing-section h2 { max-width: 940px; margin: 0 auto clamp(3rem, 5vw, 4.5rem); text-align: center; font-size: clamp(2rem, 3.4vw, 3.15rem); font-weight: 650; line-height: 1.3; letter-spacing: -0.04em; }
+  .pricing-section__grid { display: grid; max-width: 1050px; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: 20px; align-items: stretch; margin-inline: auto; }
+  .pricing-card { display: flex; min-width: 0; min-height: 560px; flex-direction: column; overflow: hidden; border-radius: 28px; background: #fff; box-shadow: 0 16px 32px rgb(17 24 39 / 8%), 0 3px 9px rgb(17 24 39 / 5%); }
+  .pricing-card--pending { opacity: 0; }
+  .pricing-card__top { display: flex; flex-direction: column; flex: 1; padding: 12px; border-radius: 28px; background: #fff; box-shadow: 0 10px 20px rgb(17 24 39 / 9%); }
+  .pricing-card__header { display: flex; min-height: 174px; flex-direction: column; align-items: flex-start; justify-content: space-between; gap: 1.5rem; padding: 18px; border-radius: 20px; background: #ededed; }
+  .pricing-card--featured .pricing-card__header { background: linear-gradient(125deg, #e8ddf4, #d6e3f3); }
+  .pricing-card h3 { max-width: 100%; margin: 0; padding: 8px 12px; border-radius: 999px; background: rgb(255 255 255 / 90%); font-size: 0.75rem; font-weight: 650; line-height: 1.35; }
+  .pricing-card__price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.25rem; margin: 0; }
+  .pricing-card__price span { font-size: clamp(2rem, 3vw, 2.65rem); font-weight: 700; line-height: 1; letter-spacing: -0.05em; }
+  .pricing-card__price small { font-size: 0.8rem; font-weight: 500; }
+  .pricing-card__channels { flex: 1; min-height: 136px; margin: 0; padding: 22px 10px; font-size: 0.88rem; font-weight: 600; line-height: 1.55; }
+  .pricing-card button { width: 100%; min-height: 50px; padding: 12px 20px; border: 0; border-radius: 999px; background: #111827; color: #fff; font-family: var(--font-sans); font-size: 0.88rem; font-weight: 600; cursor: not-allowed; }
+  .pricing-card--featured button { background: #f5b93f; color: #111827; }
+  .pricing-card__details { display: flex; flex: 1; align-items: flex-start; gap: 12px; padding: 28px 22px 36px; }
+  .pricing-card__check { color: #8b72ad; font-size: 1rem; font-weight: 700; }
+  .pricing-card__details p { margin: 0; color: #374151; font-family: var(--font-display); font-size: 0.87rem; font-weight: 400; line-height: 1.7; }
+  .pricing-card__details strong { color: #111827; font-weight: 600; }
+  @media (max-width: 850px) { .pricing-section__grid { max-width: 500px; grid-template-columns: 1fr; margin-inline: auto; } }
+  @media (prefers-reduced-motion: reduce) { .pricing-card--pending { opacity: 1; } }
+</style>
