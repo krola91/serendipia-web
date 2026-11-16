@@ -44,6 +44,7 @@ const information = [
   { title: "Contacto", href: "#contacto" },
 ];
 const isAdvertisingPage = Astro.url.pathname.replace(/\/$/, "") === "/publicidad-digital";
+const isSeoPage = Astro.url.pathname.replace(/\/$/, "") === "/posicionamiento-seo";
 ---
 
 <header class:list={["internal-header", { "internal-header--embedded": hideLogo }]} data-internal-header>
@@ -54,7 +55,7 @@ const isAdvertisingPage = Astro.url.pathname.replace(/\/$/, "") === "/publicidad
       </a>}
 
       <nav class="internal-header__desktop" aria-label="Navegación principal">
-        <a href={servicesAnchor}>SEO</a>
+        <a href="/posicionamiento-seo" class:list={[{ "is-current": isSeoPage }]} aria-current={isSeoPage ? "page" : undefined}>SEO</a>
         <a href="/publicidad-digital" class:list={[{ "is-current": isAdvertisingPage }]} aria-current={isAdvertisingPage ? "page" : undefined}>Publicidad Digital</a>
         <a href={servicesAnchor}>Diseño Web</a>
         <button type="button" data-internal-toggle="solutions" aria-expanded="false" aria-controls="internal-solutions">
@@ -104,7 +105,7 @@ const isAdvertisingPage = Astro.url.pathname.replace(/\/$/, "") === "/publicidad
 
     <nav class="internal-mobile" id="internal-mobile-menu" aria-label="Navegación principal móvil" hidden>
       <div class="internal-mobile__primary">
-        <a href={servicesAnchor}>SEO <span aria-hidden="true">↗</span></a>
+        <a href="/posicionamiento-seo" class:list={[{ "is-current": isSeoPage }]} aria-current={isSeoPage ? "page" : undefined}>SEO <span aria-hidden="true">↗</span></a>
         <a href="/publicidad-digital" class:list={[{ "is-current": isAdvertisingPage }]} aria-current={isAdvertisingPage ? "page" : undefined}>Publicidad Digital <span aria-hidden="true">↗</span></a>
         <a href={servicesAnchor}>Diseño Web <span aria-hidden="true">↗</span></a>
         <button type="button" data-internal-toggle="mobile-solutions" aria-expanded="false" aria-controls="internal-mobile-solutions">Soluciones <span aria-hidden="true">+</span></button>
@@ -148,6 +149,11 @@ const isAdvertisingPage = Astro.url.pathname.replace(/\/$/, "") === "/publicidad
       const triggers = Array.from(header.querySelectorAll<HTMLButtonElement>("[data-internal-toggle]"));
       const desktop = window.matchMedia("(min-width: 960px)");
       const mobileTabs = window.matchMedia("(max-width: 767px)");
+
+      header.querySelector<HTMLAnchorElement>(".internal-header__logo")?.addEventListener("click", (event) => {
+        if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        try { sessionStorage.setItem("serendipia:reveal-home", "1"); } catch { /* El enlace sigue funcionando si el almacenamiento está bloqueado. */ }
+      }, { signal });
 
       const setOpen = (trigger: HTMLButtonElement, open: boolean) => {
         const id = trigger.getAttribute("aria-controls");
@@ -220,6 +226,7 @@ const isAdvertisingPage = Astro.url.pathname.replace(/\/$/, "") === "/publicidad
   }
 
   .internal-header--embedded { padding: 0; }
+  .internal-header:not(.internal-header--embedded) { position: absolute; top: 0; right: 0; left: 0; }
   .internal-header__shell { position: relative; max-width: 1400px; margin-inline: auto; }
   .internal-header__bar {
     display: flex;
@@ -234,6 +241,9 @@ const isAdvertisingPage = Astro.url.pathname.replace(/\/$/, "") === "/publicidad
     box-shadow: 0 14px 45px rgb(64 39 118 / 9%), inset 0 1px 0 #fff;
     backdrop-filter: blur(22px) saturate(150%);
     -webkit-backdrop-filter: blur(22px) saturate(150%);
+  }
+  .internal-header:not(.internal-header--embedded) .internal-header__bar {
+    box-shadow: 0 18px 45px rgb(40 24 75 / 18%), 0 4px 12px rgb(17 24 39 / 8%), inset 0 1px 0 #fff;
   }
 
   .internal-header__logo {

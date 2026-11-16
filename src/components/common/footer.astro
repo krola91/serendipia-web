@@ -1,16 +1,18 @@
 ---
 const importantLinks = [
-  { label: "Inicio", href: "/" },
-  { label: "Servicios", href: "/#services-title" },
-  { label: "Caso de éxito", href: "/#opinions-title" },
-  { label: "Preguntas frecuentes", href: "/#faq-title" },
-  { label: "Quiénes somos", href: "/#who-we-are-title" },
+  { label: "Publicidad Digital", href: "/publicidad-digital" },
+  { label: "Diseño web" },
+  { label: "Marketing de Contenidos" },
+  { label: "Estudio de mercado" },
+  { label: "Posicionamiento SEO", href: "/posicionamiento-seo" },
+  { label: "Tienda en línea" },
+  { label: "Política de Privacidad" },
 ];
 ---
 
 <footer
   id="contacto"
-  class="relative overflow-hidden bg-[#111827] p-[30px]"
+  class="relative overflow-hidden bg-[#222327] px-5 pt-12 pb-6 sm:px-[30px] sm:pt-16"
   aria-label="Pie de página principal"
   data-main-footer
 >
@@ -34,23 +36,27 @@ const importantLinks = [
             decoding="async"
           />
         </a>
-        <p class="mt-4 max-w-xs text-sm leading-[1.7] font-normal text-white/65">
+        <p class="mt-4 max-w-xs text-sm leading-[1.7] font-normal text-white">
           Estrategia, creatividad y tecnología para escalar el crecimiento de tu empresa.
         </p>
       </div>
 
       <nav aria-label="Links importantes del pie de página">
-        <h3 class="text-sm font-bold tracking-[0.02em] text-[#f5b93f]">Links importantes</h3>
+        <h3 class="text-sm font-bold tracking-[0.02em] text-white">Links importantes</h3>
         <ul class="mt-4 space-y-2.5" role="list">
           {
             importantLinks.map((link) => (
               <li>
-                <a
-                  href={link.href}
-                  class="text-sm font-normal text-white/80 transition-[color,transform] duration-300 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f5b93f]"
-                >
-                  {link.label}
-                </a>
+                {link.href ? (
+                  <a
+                    href={link.href}
+                    class="text-sm font-normal text-white transition-opacity duration-300 hover:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+                  >
+                    {link.label}
+                  </a>
+                ) : (
+                  <span class="text-sm font-normal text-white">{link.label}</span>
+                )}
               </li>
             ))
           }
@@ -58,11 +64,11 @@ const importantLinks = [
       </nav>
 
       <div>
-        <h3 class="text-sm font-bold tracking-[0.02em] text-[#f5b93f]">Contacto</h3>
-        <ul class="mt-4 space-y-3 text-sm font-normal text-white/80" role="list">
+        <h3 class="text-sm font-bold tracking-[0.02em] text-white">Contacto</h3>
+        <ul class="mt-4 space-y-3 text-sm font-normal text-white" role="list">
           <li class="flex items-start gap-3">
             <svg
-              class="mt-0.5 size-4 shrink-0 text-[#f5b93f]"
+              class="mt-0.5 size-4 shrink-0 text-white"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -78,7 +84,7 @@ const importantLinks = [
           </li>
           <li class="flex items-start gap-3">
             <svg
-              class="mt-0.5 size-4 shrink-0 text-[#f5b93f]"
+              class="mt-0.5 size-4 shrink-0 text-white"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -94,7 +100,7 @@ const importantLinks = [
           </li>
           <li class="flex items-start gap-3">
             <svg
-              class="mt-0.5 size-4 shrink-0 text-[#f5b93f]"
+              class="mt-0.5 size-4 shrink-0 text-white"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -112,7 +118,7 @@ const importantLinks = [
       </div>
 
       <div>
-        <h3 class="text-sm font-bold tracking-[0.02em] text-[#f5b93f]">Síguenos</h3>
+        <h3 class="text-sm font-bold tracking-[0.02em] text-white">Síguenos</h3>
         <div class="mt-4 flex flex-wrap items-center gap-2.5" aria-label="Redes sociales">
           <a
             href="https://tiktok.com/@serendipia"
@@ -165,11 +171,25 @@ const importantLinks = [
       </div>
     </div>
 
-    <p
-      class="mt-8 border-t border-white/15 pt-5 text-center text-xs leading-[1.6] font-semibold text-white/65 sm:text-left"
-    >
-      © 2026 Agencia de Marketing Digital Guayaquil, Ecuador Serendipia. Todos los derechos
-      reservados.
-    </p>
+    <div class="mt-12 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t border-white/15 pt-6 text-xs leading-[1.6] font-normal text-white sm:mt-16">
+      <p>Agencia de Marketing Digital Guayaquil, Ecuador</p>
+      <p class="ml-auto text-right">© 2026 Todos los derechos reservados.</p>
+    </div>
+    <div class="footer-wordmark" aria-hidden="true">SERENDIPIA</div>
   </div>
 </footer>
+
+<style>
+  .footer-wordmark {
+    margin-top: clamp(1.5rem, 4vw, 3rem);
+    color: #fff;
+    font-size: clamp(2.5rem, 12.2vw, 11.5rem);
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.065em;
+    text-align: center;
+    white-space: nowrap;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 20%, #000 80%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0%, #000 20%, #000 80%, transparent 100%);
+  }
+</style>

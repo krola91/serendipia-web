@@ -62,6 +62,10 @@
     margin-inline: auto;
   }
 
+  @media (min-width: 768px) {
+    .service-hero { padding-top: calc(clamp(4rem, 7vw, 7rem) + 100px); }
+  }
+
   .service-hero__content {
     grid-area: content;
     position: relative;
