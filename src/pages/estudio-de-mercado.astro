@@ -1,0 +1,20 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/estudio-mercado/hero-estudio-mercado.astro";
+import Investigacion from "../components/estudio-mercado/investigacion-mercado.astro";
+import Estrategia from "../components/estudio-mercado/estrategia-contenido.astro";
+import Decisiones from "../components/estudio-mercado/toma-decisiones.astro";
+import Llamado from "../components/estudio-mercado/llamado-contenido.astro";
+import QueHacemos from "../components/estudio-mercado/que-hacemos.astro";
+import Faq from "../components/estudio-mercado/faq-mercado.astro";
+---
+
+<Layout navigation="internal" title="Estudio de mercado | Serendipia" description="Investigación y análisis de mercado para identificar oportunidades y tomar decisiones estratégicas.">
+  <Hero />
+  <Investigacion />
+  <Estrategia />
+  <Decisiones />
+  <Llamado lightBackground={true} />
+  <QueHacemos />
+  <Faq />
+</Layout>

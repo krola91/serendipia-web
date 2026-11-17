@@ -1,50 +1,11 @@
 ---
 interface Props { hideLogo?: boolean; }
 const { hideLogo = false } = Astro.props;
-const servicesAnchor = "/#services-title";
-const groups = [
-  {
-    title: "Estrategia",
-    items: [
-      { title: "Estrategia de marca", description: "Una dirección clara para tu marca.", href: servicesAnchor, icon: "M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1M12 8l1.2 2.8L16 12l-2.8 1.2L12 16l-1.2-2.8L8 12l2.8-1.2z" },
-      { title: "Creación de contenido", description: "Historias con intención y personalidad.", href: servicesAnchor, icon: "M4 20h4l11-11-4-4L4 16v4zM13.5 6.5l4 4M4 12V5a1 1 0 0 1 1-1h7" },
-    ],
-  },
-  {
-    title: "Comunicación",
-    items: [
-      { title: "Producción audiovisual", description: "Ideas que toman forma en imagen y video.", href: servicesAnchor, icon: "M4 6h11a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zM17 10l5-3v10l-5-3z" },
-      { title: "Gestión de redes sociales", description: "Conversaciones que conectan.", href: servicesAnchor, icon: "M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-6l-4 3v-3H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zM7 10h10M7 13h7" },
-      { title: "Publicidad digital", description: "Campañas con objetivos claros.", href: "/publicidad-digital", icon: "M3 10v4h4l8 4V6l-8 4H3zM7 14l1 5h3l-1-4M19 9l2-1M19 15l2 1M20 12h2" },
-    ],
-  },
-  {
-    title: "Digital",
-    items: [
-      { title: "Diseño web", description: "Experiencias digitales intuitivas.", href: servicesAnchor, icon: "M4 5h16v14H4zM4 9h16M7 7h.01M10 7h.01M8 13h8M8 16h5" },
-      { title: "Desarrollo web", description: "Sitios preparados para crecer.", href: servicesAnchor, icon: "M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16" },
-      { title: "Analítica y dashboards", description: "Datos para decidir el siguiente paso.", href: servicesAnchor, icon: "M4 19h16M6 16v-4M11 16V7M16 16V4M21 16v-6" },
-    ],
-  },
-  {
-    title: "Conócenos",
-    items: [
-      { title: "Nuestro proceso", description: "Así conectamos las ideas.", href: "/#who-we-are-title", icon: "M5 7h14M5 12h14M5 17h14M3 7h.01M3 12h.01M3 17h.01" },
-      { title: "Resultados", description: "Una mirada al avance.", href: "/#opinions-title", icon: "M3 17l6-6 4 4 8-8M16 7h5v5" },
-      { title: "Casos", description: "Ideas que toman forma.", href: "/#opinions-title", icon: "M4 6h16v13H4zM8 6V4h8v2M4 11h16M10 11v2h4v-2" },
-      { title: "Ubicación", description: "Nuestro punto de encuentro.", href: "#contacto", icon: "M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0zM12 7a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" },
-    ],
-  },
-];
+import { solutionGroups as groups } from "./solutions";
 
-const information = [
-  { title: "Quiénes somos", href: "/#who-we-are-title" },
-  { title: "Caso de éxito", href: "/#opinions-title" },
-  { title: "Preguntas frecuentes", href: "/#faq-title" },
-  { title: "Contacto", href: "#contacto" },
-];
 const isAdvertisingPage = Astro.url.pathname.replace(/\/$/, "") === "/publicidad-digital";
 const isSeoPage = Astro.url.pathname.replace(/\/$/, "") === "/posicionamiento-seo";
+const isWebDesignPage = Astro.url.pathname.replace(/\/$/, "") === "/diseno-web";
 ---
 
 <header class:list={["internal-header", { "internal-header--embedded": hideLogo }]} data-internal-header>
@@ -57,13 +18,11 @@ const isSeoPage = Astro.url.pathname.replace(/\/$/, "") === "/posicionamiento-se
       <nav class="internal-header__desktop" aria-label="Navegación principal">
         <a href="/posicionamiento-seo" class:list={[{ "is-current": isSeoPage }]} aria-current={isSeoPage ? "page" : undefined}>SEO</a>
         <a href="/publicidad-digital" class:list={[{ "is-current": isAdvertisingPage }]} aria-current={isAdvertisingPage ? "page" : undefined}>Publicidad Digital</a>
-        <a href={servicesAnchor}>Diseño Web</a>
+        <a href="/diseno-web" class:list={[{ "is-current": isWebDesignPage }]} aria-current={isWebDesignPage ? "page" : undefined}>Diseño Web</a>
         <button type="button" data-internal-toggle="solutions" aria-expanded="false" aria-controls="internal-solutions">
           Soluciones <span class="internal-header__plus" aria-hidden="true">+</span>
         </button>
-        <button type="button" data-internal-toggle="information" aria-expanded="false" aria-controls="internal-information">
-          Información <span class="internal-header__plus" aria-hidden="true">+</span>
-        </button>
+        <a href="#contacto">Contacto</a>
       </nav>
 
       <a class="internal-header__talk" href="#contacto">Hablemos <span aria-hidden="true">↗</span></a>
@@ -99,15 +58,11 @@ const isSeoPage = Astro.url.pathname.replace(/\/$/, "") === "/posicionamiento-se
       </div>
     </nav>
 
-    <nav class="internal-info" id="internal-information" aria-label="Información" hidden>
-      {information.map((item) => <a href={item.href}>{item.title}<span aria-hidden="true">↗</span></a>)}
-    </nav>
-
     <nav class="internal-mobile" id="internal-mobile-menu" aria-label="Navegación principal móvil" hidden>
       <div class="internal-mobile__primary">
         <a href="/posicionamiento-seo" class:list={[{ "is-current": isSeoPage }]} aria-current={isSeoPage ? "page" : undefined}>SEO <span aria-hidden="true">↗</span></a>
         <a href="/publicidad-digital" class:list={[{ "is-current": isAdvertisingPage }]} aria-current={isAdvertisingPage ? "page" : undefined}>Publicidad Digital <span aria-hidden="true">↗</span></a>
-        <a href={servicesAnchor}>Diseño Web <span aria-hidden="true">↗</span></a>
+        <a href="/diseno-web" class:list={[{ "is-current": isWebDesignPage }]} aria-current={isWebDesignPage ? "page" : undefined}>Diseño Web <span aria-hidden="true">↗</span></a>
         <button type="button" data-internal-toggle="mobile-solutions" aria-expanded="false" aria-controls="internal-mobile-solutions">Soluciones <span aria-hidden="true">+</span></button>
         <div class="internal-mobile__groups" id="internal-mobile-solutions" hidden>
           {groups.map((group) => (
@@ -128,10 +83,7 @@ const isSeoPage = Astro.url.pathname.replace(/\/$/, "") === "/posicionamiento-se
             <a href="#contacto">Conversemos <span aria-hidden="true">↗</span></a>
           </div>
         </div>
-        <button type="button" data-internal-toggle="mobile-information" aria-expanded="false" aria-controls="internal-mobile-information">Información <span aria-hidden="true">+</span></button>
-        <div class="internal-mobile__info" id="internal-mobile-information" hidden>
-          {information.map((item) => <a href={item.href}>{item.title}<span aria-hidden="true">↗</span></a>)}
-        </div>
+        <a href="#contacto">Contacto <span aria-hidden="true">↗</span></a>
         <a class="internal-mobile__talk" href="#contacto">Hablemos <span aria-hidden="true">↗</span></a>
       </div>
     </nav>
@@ -269,8 +221,9 @@ const isSeoPage = Astro.url.pathname.replace(/\/$/, "") === "/posicionamiento-se
     color: #373247;
     background: transparent;
     font-family: var(--font-sans);
-    font-size: clamp(0.71rem, 0.85vw, 0.82rem);
+    font-size: clamp(0.82rem, 0.95vw, 0.95rem);
     font-weight: 500;
+    letter-spacing: 0.02em;
     white-space: nowrap;
     cursor: pointer;
     transition: color 180ms ease, background 180ms ease;
@@ -368,7 +321,7 @@ const isSeoPage = Astro.url.pathname.replace(/\/$/, "") === "/posicionamiento-se
     .internal-mobile { right: 0; left: 0; display: block; max-height: calc(100dvh - 165px - env(safe-area-inset-bottom)); overflow-y: auto; overscroll-behavior: contain; padding: 12px; }
     .internal-mobile__primary { display: grid; gap: 3px; }
     .internal-mobile__primary > a:not(.internal-mobile__talk), .internal-mobile__primary > button {
-      display: flex; min-height: 46px; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 13px; border: 0; border-radius: 11px; background: transparent; color: #373247; font-size: 0.88rem; font-weight: 500; text-align: left; cursor: pointer;
+      display: flex; min-height: 46px; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 13px; border: 0; border-radius: 11px; background: transparent; color: #373247; font-size: 0.95rem; font-weight: 500; letter-spacing: 0.02em; text-align: left; cursor: pointer;
     }
     .internal-mobile__primary > a.is-current, .internal-mobile__primary > button[aria-expanded="true"] { background: #eee9f8; color: #402776; font-weight: 650; }
     .internal-mobile__groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; padding: 16px 10px; }
@@ -396,7 +349,7 @@ const isSeoPage = Astro.url.pathname.replace(/\/$/, "") === "/posicionamiento-se
     .internal-header--embedded .internal-header__bar { gap: 4px; padding: 6px; }
     .internal-header--embedded .internal-header__desktop { flex: 1; justify-content: space-evenly; gap: 0; }
     .internal-header--embedded .internal-header__desktop a,
-    .internal-header--embedded .internal-header__desktop button { padding-inline: clamp(3px, 0.4vw, 9px); font-size: clamp(0.72rem, 0.75vw, 0.9rem); }
+    .internal-header--embedded .internal-header__desktop button { padding-inline: clamp(3px, 0.4vw, 9px); font-size: clamp(0.82rem, 0.9vw, 1rem); }
     .internal-header--embedded .internal-header__talk { flex-shrink: 0; gap: 0.4rem; padding-inline: 12px; }
     .internal-header--embedded .internal-mega { left: auto; right: 0; width: min(1100px, 90vw); }
     .internal-header--embedded .internal-mega__grid { grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(160px, 1.1fr); }
@@ -416,7 +369,7 @@ const isSeoPage = Astro.url.pathname.replace(/\/$/, "") === "/posicionamiento-se
     .internal-header--embedded .internal-mobile { right: 0; left: 0; display: block; max-height: calc(100dvh - 130px); overflow-y: auto; padding: 12px; }
     .internal-header--embedded .internal-mobile__primary { display: grid; gap: 3px; }
     .internal-header--embedded .internal-mobile__primary > a:not(.internal-mobile__talk),
-    .internal-header--embedded .internal-mobile__primary > button { display: flex; justify-content: space-between; padding: 11px 13px; border: 0; border-radius: 11px; background: transparent; color: #373247; font-size: 0.88rem; text-align: left; }
+    .internal-header--embedded .internal-mobile__primary > button { display: flex; justify-content: space-between; padding: 11px 13px; border: 0; border-radius: 11px; background: transparent; color: #373247; font-size: 0.95rem; letter-spacing: 0.02em; text-align: left; }
     .internal-header--embedded .internal-mobile__groups { display: grid; gap: 14px; padding: 16px 10px; }
     .internal-header--embedded .internal-mobile__feature { padding: 18px; border-radius: 16px; background: #402776; color: white; }
     .internal-header--embedded .internal-mobile__feature > span { color: #f5b93f; }
