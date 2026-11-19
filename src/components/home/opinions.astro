@@ -1,159 +1,184 @@
-<section
-  class="home-section-space overflow-hidden bg-white"
-  aria-labelledby="opinions-title"
-  data-opinions-section
->
-  <div
-    class="mx-auto grid max-w-[1400px] items-center gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-12 xl:gap-16"
-  >
-    <div class="max-w-xl text-[#111827]" data-opinions-column="left">
-      <h2
-        id="opinions-title"
-        class="home-section-title font-semibold tracking-[-0.045em]"
-      >
-        Último caso de <span class="home-highlight">éxito</span>
-      </h2>
+---
+// Sustituir los datos de demostración y añadir recursos verificados para cada empresa.
+interface CaseStudy {
+  name: string;
+  services: string;
+  query: string;
+  title: string;
+  ad: string;
+  description: string;
+  metrics: string[][];
+  campaignImage?: string;
+  mobileImage?: string;
+  logo?: string;
+}
+const cases: CaseStudy[] = [
+  { name: "Meneses", services: "Constructora · sitio web + Google Ads + Meta Ads", query: "departamentos en venta quito", title: "Departamentos nuevos en Quito | Constructora Meneses", ad: "Cinco proyectos en venta. Agenda tu visita a la obra y conoce los planes de financiamiento.", description: "Un sitio y una campaña por cada uno de sus cinco proyectos inmobiliarios, con los contactos entrando directo al equipo comercial de cada obra.", metrics: [["1.248", "contactos calificados"], ["$11,40", "costo por contacto"], ["37", "visitas a obra al mes"], ["5", "proyectos en campaña"]] },
+  { name: "ESET Ecuador", services: "Publicidad digital · B2B y B2C", query: "antivirus para empresas", title: "ESET Ecuador | Seguridad para empresas y hogar", ad: "Protege tus equipos con ESET. Licencias para empresas y para el hogar. Cotiza en línea.", description: "Campañas separadas para empresas y para hogar, cada una con su mensaje, su página y su medición.", metrics: [["+142 %", "ventas en línea"], ["$6,80", "costo por compra"], ["318", "oportunidades B2B"], ["7,4", "retorno por dólar"]] },
+  { name: "UDIMA", services: "Sitio web · SEO · publicidad digital", query: "maestrías en línea ecuador", title: "Maestrías en línea | UDIMA", ad: "Títulos europeos 100 % en línea. Solicita información y habla con un asesor.", description: "Sitio web, posicionamiento y campañas para captar aspirantes a maestrías en línea en Ecuador.", metrics: [["2.960", "aspirantes captados"], ["$9,20", "costo por aspirante"], ["+74 %", "matrículas"], ["41", "búsquedas en el top 3"]] },
+  { name: "AWT", services: "SEO · publicidad digital · agente de IA", query: "soluciones industriales ecuador", title: "AWT S. A. | Soluciones para la industria", ad: "Asesoría técnica y cotización en 24 horas. Atención inmediata por WhatsApp.", description: "Posicionamiento, pauta y un agente de IA que atiende y califica los contactos a cualquier hora.", metrics: [["+96 %", "tráfico orgánico"], ["214", "oportunidades"], ["68 %", "consultas resueltas por IA"], ["−31 %", "costo por oportunidad"]] },
+  { name: "ITECSA", services: "Publicidad digital · tienda en línea", query: "comprar insumos en línea", title: "ITECSA | Tienda en línea oficial", ad: "Compra en línea con entrega a todo el país. Catálogo completo y pago seguro.", description: "Tienda en línea para Ecuador y Latam con campañas de catálogo medidas por venta.", metrics: [["+185 %", "ventas en línea"], ["$7,60", "costo por compra"], ["$212.400", "ventas atribuidas"], ["6,1", "retorno por dólar"]] },
+  { name: "Logaritmo", services: "Publicidad digital B2B", query: "software empresarial ecuador", title: "Logaritmo | Soluciones para empresas", ad: "Agenda una demostración con un especialista. Implementación acompañada.", description: "Captación de oportunidades para una venta consultiva de ciclo largo, con seguimiento hasta la reunión comercial.", metrics: [["186", "oportunidades B2B"], ["$38", "costo por oportunidad"], ["22", "reuniones al mes"], ["+53 %", "propuestas enviadas"]] },
+  { name: "Grupo Transoceánica", services: "Sitio web · redes · publicidad digital", query: "grupo transoceanica", title: "Grupo Transoceánica | Servicios", ad: "Conoce las empresas del grupo y solicita una cotización en línea.", description: "Sitio web, redes sociales y publicidad digital coordinadas para las líneas de negocio del grupo.", metrics: [["1,2 M", "personas alcanzadas"], ["+58 %", "solicitudes de cotización"], ["$14,30", "costo por solicitud"], ["4", "líneas de negocio"]] },
+  { name: "Trivo", services: "Sitio web · Google Ads", query: "trivo ecuador", title: "Trivo Ecuador | Sitio oficial", ad: "Solicita información y recibe respuesta el mismo día.", description: "Sitio nuevo y campañas de búsqueda trabajando sobre la misma medición.", metrics: [["+120 %", "contactos desde la web"], ["$9,70", "costo por contacto"], ["3,8 %", "visitas que contactan"], ["1,9 s", "carga en celular"]] },
+];
+---
 
-      <p class="mt-6 text-[clamp(1rem,1.15vw,1.1rem)] leading-[1.7] font-normal text-[#4B5563]">
-        El convenio entre La Universidad Nacional Autónoma de México y el Colegio Cordillera de
-        Loja logra que todo hispanohablante pueda acceder al programa de B@UNAM.
-      </p>
-
-      <a
-        href="https://bachilleratoenlinea.ec/"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="mt-5 inline-block text-base font-bold text-[#111827] underline decoration-[#b87cbd] decoration-2 underline-offset-4 transition-colors hover:text-[#4B5563]"
-      >
-        Bachillerato en línea
-      </a>
-
-      <div class="mt-6">
-        <a
-          href="https://bachilleratoenlinea.ec/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-3 rounded-[8px] border border-white bg-[#402776] px-6 py-3.5 text-sm font-semibold tracking-[0.08em] text-white shadow-[0_12px_35px_rgba(64,39,118,0.32)] transition-[transform,box-shadow,background-color] duration-300 hover:-translate-y-0.5 hover:bg-[#51328a] hover:shadow-[0_16px_40px_rgba(64,39,118,0.42)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#111827] active:translate-y-0"
-        >
-          CONOCE MÁS
-          <svg
-            class="size-4"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M5 12h14M13 6l6 6-6 6"></path>
-          </svg>
-        </a>
-      </div>
+<section class="cases-section home-section-space" aria-labelledby="opinions-title" data-cases-section>
+  <div class="cases-inner">
+    <div class="cases-heading">
+      <span class="cases-badge"><span aria-hidden="true"></span>Casos reales</span>
+      <h2 id="opinions-title" class="home-section-title"><span class="home-highlight">Resultados medidos</span>, empresa por empresa</h2>
+      <p>Elige una empresa y mira qué hicimos y qué números cambiaron.</p>
     </div>
 
-    <div
-      class="relative ml-auto w-full max-w-[720px] lg:pb-20"
-      data-opinions-column="right"
-    >
-      <img
-        class="block h-auto w-full rounded-[20px] object-cover shadow-[0_18px_55px_rgba(17,24,39,0.1)]"
-        src="/sources/estadisticas.png"
-        alt="Dashboard del caso de éxito de Bachillerato en línea"
-        width="736"
-        height="520"
-        loading="lazy"
-        decoding="async"
-      />
+    <div class="cases-selector" role="group" aria-label="Seleccionar empresa">
+      {cases.map((item, index) => (
+        <button type="button" data-case-select={index} aria-pressed={index === 0 ? "true" : "false"} aria-controls={`case-panel-${index}`}>{item.name}</button>
+      ))}
+    </div>
 
-      <div
-        class="relative z-10 mx-3 -mt-10 rounded-[18px] bg-white p-5 text-[#111827] shadow-[0_20px_55px_rgba(17,24,39,0.16)] sm:mx-6 lg:absolute lg:bottom-0 lg:-left-10 lg:mx-0 lg:mt-0 lg:w-[min(86%,560px)] lg:p-6"
-      >
-        <div class="flex items-start gap-4">
-          <span
-            class="grid size-10 shrink-0 place-items-center rounded-full bg-[#111827] text-white"
-            aria-hidden="true"
-          >
-            <svg
-              class="size-5"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.7"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <circle cx="12" cy="8" r="4"></circle>
-              <path d="M4.5 21a7.5 7.5 0 0 1 15 0"></path>
-            </svg>
-          </span>
+    <p class="cases-disclaimer">Ejemplos de demostración: las cifras y piezas visuales están pendientes de verificación.</p>
 
-          <div class="min-w-0 flex-1">
-            <div class="flex items-start justify-between gap-4">
-              <div>
-                <p class="font-bold leading-tight">Fabian Sempértegui</p>
-                <p class="mt-1 text-sm font-normal text-[#6B7280]">Gerente General</p>
-              </div>
-
-              <div class="flex shrink-0 items-center gap-1 text-sm font-semibold" aria-label="Calificación 5 de 5">
-                <svg
-                  class="size-4 fill-[#b87cbd] text-[#b87cbd]"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  aria-hidden="true"
-                >
-                  <path d="m12 2.5 2.9 5.88 6.49.94-4.7 4.58 1.11 6.47L12 17.32l-5.8 3.05 1.11-6.47-4.7-4.58 6.49-.94L12 2.5Z"></path>
-                </svg>
-                <span>5/5</span>
+    <div class="cases-panels" aria-live="polite" aria-atomic="true">
+      {cases.map((item, index) => (
+        <article class="case-panel" id={`case-panel-${index}`} data-case-panel hidden={index !== 0}>
+          <div class="case-visual" aria-label={`Composición ilustrativa para ${item.name}`}>
+            <div class="case-search">
+              <div class="case-search__bar"><span aria-hidden="true">⌕</span><span>{item.query}</span></div>
+              <span class="case-search__caption">Resultado de búsqueda · ejemplo</span>
+              <span class="case-search__name">{item.name}</span>
+              <span class="case-search__title">{item.title}</span>
+              <p>{item.ad}</p>
+            </div>
+            <div class="case-campaign" aria-label={item.campaignImage ? `Creatividad de campaña de ${item.name}` : `Creatividad ilustrativa para ${item.name}`}>
+              {item.campaignImage ? (
+                <img class="case-campaign__image" src={item.campaignImage} alt={`Creatividad de campaña de ${item.name}`} loading="lazy" />
+              ) : (
+                <><span class="case-campaign__label">Creatividad de ejemplo</span>
+                <span class="case-campaign__symbol" aria-hidden="true">✳</span>
+                <strong>{item.name}</strong>
+                <span class="case-campaign__line" aria-hidden="true"></span>
+                <span class="case-campaign__detail">Una idea para conectar</span></>
+              )}
+            </div>
+            <div class="case-phone" aria-label={item.mobileImage ? `Vista móvil de ${item.name}` : `Vista móvil ilustrativa para ${item.name}`}>
+              <div class="case-phone__screen">
+                <span class="case-phone__notch" aria-hidden="true"></span>
+                <span class="case-phone__brand">{item.name}</span>
+                {item.mobileImage ? <img class="case-phone__image" src={item.mobileImage} alt={`Sitio de ${item.name} en celular`} loading="lazy" /> : <span class="case-phone__image" aria-hidden="true"><span>✳</span></span>}
+                <span class="case-phone__line" aria-hidden="true"></span>
+                <span class="case-phone__line case-phone__line--short" aria-hidden="true"></span>
+                <span class="case-phone__button" aria-hidden="true"></span>
+                <span class="case-phone__caption">{item.mobileImage ? "Vista del sitio en celular" : "Vista móvil de ejemplo"}</span>
               </div>
             </div>
           </div>
-        </div>
 
-        <p class="mt-4 text-[0.95rem] leading-[1.65] font-normal text-[#4B5563]">
-          De la mano de Serendipia en cinco meses conseguimos alrededor 800 leads, una cifra que no
-          esperábamos, y mes a mes siguen aumentando las cifras.
-        </p>
-      </div>
+          <div class="case-info">
+            <span class="case-info__eyebrow">Empresa seleccionada</span>
+            {item.logo && <img class="case-info__logo" src={item.logo} alt={`Logo de ${item.name}`} loading="lazy" />}
+            <h3>{item.name}</h3>
+            <p class="case-info__services">{item.services}</p>
+            <p class="case-info__description">{item.description}</p>
+            <div class="case-metrics" aria-label="Indicadores de demostración">
+              {item.metrics.map(([value, label]) => (
+                <div class="case-metric"><strong>{value}</strong><span>{label}</span></div>
+              ))}
+            </div>
+            <p class="case-info__note">Cifras de demostración · pendientes de confirmar con datos y periodo.</p>
+          </div>
+        </article>
+      ))}
     </div>
   </div>
 </section>
 
 <script>
-  const initializeOpinionsEntrance = () => {
-    document.querySelectorAll<HTMLElement>("[data-opinions-section]").forEach((section) => {
-      if (section.dataset.entranceReady === "true") return;
-      section.dataset.entranceReady = "true";
-
-      const columns = Array.from(
-        section.querySelectorAll<HTMLElement>("[data-opinions-column]"),
-      );
-      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-      if (reduceMotion || !("IntersectionObserver" in window)) return;
-
-      columns.forEach((column) => column.classList.add("opinions-column-pending"));
-
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-
-            columns.forEach((column) => {
-              column.classList.remove("opinions-column-pending");
-              column.classList.add("opinions-column-in");
-            });
-            observer.disconnect();
-          });
-        },
-        { threshold: 0.2, rootMargin: "0px 0px -8% 0px" },
-      );
-
-      observer.observe(section);
+  const initializeCases = () => {
+    document.querySelectorAll<HTMLElement>("[data-cases-section]").forEach((section) => {
+      if (section.dataset.casesReady === "true") return;
+      section.dataset.casesReady = "true";
+      const buttons = Array.from(section.querySelectorAll<HTMLButtonElement>("[data-case-select]"));
+      const panels = Array.from(section.querySelectorAll<HTMLElement>("[data-case-panel]"));
+      buttons.forEach((button, index) => {
+        button.addEventListener("click", () => {
+          buttons.forEach((item, itemIndex) => item.setAttribute("aria-pressed", String(itemIndex === index)));
+          panels.forEach((panel, panelIndex) => { panel.hidden = panelIndex !== index; });
+        });
+      });
     });
   };
-
-  initializeOpinionsEntrance();
-  document.addEventListener("astro:page-load", initializeOpinionsEntrance);
+  initializeCases();
+  document.addEventListener("astro:page-load", initializeCases);
 </script>
+
+<style>
+  .cases-section { background: #fff; color: #111827; }
+  .cases-inner { max-width: 1400px; margin-inline: auto; }
+  .cases-heading { max-width: 850px; }
+  .cases-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid #c4c4c4; border-radius: 999px; background: #fff; box-shadow: 0 8px 30px rgb(107 114 128 / 18%); font-size: 0.75rem; font-weight: 600; }
+  .cases-badge > span { width: 8px; height: 8px; border-radius: 50%; background: #b87cbd; }
+  .cases-heading h2 { margin: 20px 0 14px; font-weight: 650; letter-spacing: -0.045em; }
+  .cases-heading p { margin: 0; color: #4b5563; font-size: clamp(1rem, 1.4vw, 1.125rem); line-height: 1.65; }
+  .cases-selector { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 30px; }
+  .cases-selector button { min-height: 44px; padding: 9px 17px; border: 1px solid #d9d5df; border-radius: 999px; background: #fff; color: #402776; font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease; }
+  .cases-selector button:hover { border-color: #402776; }
+  .cases-selector button[aria-pressed="true"] { border-color: #402776; background: #402776; color: #fff; }
+  .cases-selector button:focus-visible { outline: 3px solid #b87cbd; outline-offset: 3px; }
+  .cases-disclaimer { margin: 20px 0 26px; color: #4b5563; font-size: 0.85rem; line-height: 1.5; }
+  .case-panel[hidden] { display: none; }
+  .case-panel { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); align-items: center; gap: clamp(2.5rem, 5vw, 5rem); }
+  .case-visual { position: relative; display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.8fr); align-items: start; gap: 16px; min-width: 0; padding: 24px; border-radius: 26px; background: #f3f3f2; }
+  .case-search { position: relative; z-index: 2; grid-column: 1 / -1; width: 100%; padding: 20px; border: 1px solid #e4e2e9; border-radius: 18px; background: #fff; box-shadow: 0 16px 45px rgb(17 24 39 / 10%); }
+  .case-search__bar { display: flex; align-items: center; gap: 10px; min-width: 0; padding: 8px 12px; border: 1px solid #e4e2e9; border-radius: 999px; color: #4b5563; font-size: 0.75rem; overflow-wrap: anywhere; }
+  .case-search__bar > span:first-child { color: #402776; font-size: 1.2rem; line-height: 1; }
+  .case-search__caption, .case-search__name, .case-search__title { display: block; }
+  .case-search__caption { margin-top: 14px; color: #6b7280; font-size: 0.68rem; font-weight: 600; }
+  .case-search__name { margin-top: 5px; color: #4b5563; font-size: 0.75rem; }
+  .case-search__title { margin-top: 5px; color: #402776; font-size: 1rem; font-weight: 650; line-height: 1.3; }
+  .case-search p { margin: 7px 0 0; color: #4b5563; font-size: 0.76rem; line-height: 1.5; }
+  .case-campaign { position: relative; display: flex; width: 100%; min-width: 0; min-height: 210px; flex-direction: column; justify-content: flex-end; align-items: flex-start; gap: 9px; padding: 20px; border-radius: 18px; background: #402776; color: #fff; box-shadow: 0 20px 45px rgb(64 39 118 / 22%); }
+  .case-campaign__label { position: absolute; top: 14px; left: 14px; right: 14px; color: #fff; font-size: 0.67rem; }
+  .case-campaign__symbol { position: absolute; top: 42px; right: 20px; color: #f5b93f; font-size: clamp(2rem, 5vw, 4rem); line-height: 1; }
+  .case-campaign strong { max-width: 100%; overflow-wrap: anywhere; font-size: clamp(1rem, 2vw, 1.5rem); line-height: 1.15; }
+  .case-campaign__line { width: 45%; height: 5px; border-radius: 5px; background: #f5b93f; }
+  .case-campaign__detail { font-size: 0.7rem; }
+  .case-campaign__image { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: inherit; object-fit: cover; }
+  .case-phone { position: relative; z-index: 3; justify-self: center; width: 100%; max-width: 170px; padding: 6px; border-radius: 24px; background: #222327; box-shadow: 0 20px 45px rgb(17 24 39 / 20%); }
+  .case-phone__screen { display: flex; min-height: 265px; flex-direction: column; align-items: center; gap: 12px; padding: 10px 12px 14px; border-radius: 19px; background: #fff; }
+  .case-phone__notch { width: 40%; height: 5px; border-radius: 5px; background: #222327; }
+  .case-phone__brand { align-self: flex-start; max-width: 100%; color: #402776; font-size: 0.62rem; font-weight: 700; overflow-wrap: anywhere; }
+  .case-phone__image { display: grid; width: 100%; min-height: 92px; place-items: center; border-radius: 10px; background: #e8ddf4; color: #402776; font-size: 2.5rem; }
+  img.case-phone__image { aspect-ratio: 9 / 12; object-fit: cover; }
+  .case-phone__line { align-self: flex-start; width: 90%; height: 6px; border-radius: 4px; background: #e4e2e9; }
+  .case-phone__line--short { width: 60%; }
+  .case-phone__button { align-self: flex-start; width: 55%; height: 12px; border-radius: 6px; background: #f5b93f; }
+  .case-phone__caption { margin-top: auto; color: #4b5563; font-size: 0.58rem; line-height: 1.3; text-align: center; }
+  .case-info { min-width: 0; }
+  .case-info__eyebrow { color: #6b7280; font-size: 0.75rem; font-weight: 600; }
+  .case-info__logo { display: block; max-width: 150px; max-height: 70px; margin-top: 12px; object-fit: contain; object-position: left center; }
+  .case-info h3 { margin: 6px 0 8px; color: #f5b93f; font-size: clamp(1.8rem, 3vw, 2.75rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.04em; overflow-wrap: anywhere; }
+  .case-info__services { margin: 0; color: #402776; font-size: 0.95rem; font-weight: 650; line-height: 1.5; }
+  .case-info__description { margin: 18px 0 0; color: #4b5563; font-size: 1rem; line-height: 1.7; }
+  .case-metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 28px; }
+  .case-metric { display: flex; min-width: 0; flex-direction: column; gap: 7px; padding: 16px; border: 1px solid #ece9ef; border-radius: 16px; background: #f8f7fa; }
+  .case-metric strong { color: #402776; font-size: clamp(1.45rem, 2.3vw, 2rem); font-weight: 700; line-height: 1.1; overflow-wrap: anywhere; }
+  .case-metric span { color: #4b5563; font-size: 0.78rem; line-height: 1.4; overflow-wrap: anywhere; }
+  .case-info__note { margin: 18px 0 0; color: #4b5563; font-size: 0.78rem; line-height: 1.5; }
+  @media (max-width: 900px) { .case-panel { grid-template-columns: minmax(0, 1fr); } .case-visual { max-width: 700px; width: 100%; } }
+  @media (max-width: 480px) {
+    .cases-selector { gap: 7px; }
+    .cases-selector button { padding-inline: 12px; font-size: 0.8rem; }
+    .case-visual { gap: 12px; padding: 14px; }
+    .case-search { width: 100%; padding: 14px; }
+    .case-campaign { min-height: 190px; padding: 14px; }
+    .case-campaign__label { top: 10px; left: 10px; }
+    .case-campaign__symbol { top: 35px; right: 12px; font-size: 2rem; }
+    .case-phone { padding: 5px; }
+    .case-phone__screen { min-height: 190px; gap: 8px; padding: 8px; }
+    .case-phone__image { min-height: 55px; font-size: 1.8rem; }
+    .case-metric { padding: 13px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .cases-selector button { transition: none; } }
+</style>
