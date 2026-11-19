@@ -159,11 +159,11 @@ const testimonials = [
                     <p class="mt-1 text-sm font-normal text-[#6B7280]">{testimonial.role}</p>
                   </div>
 
-                  <span
-                    class="rounded-full border border-[#111827]/20 px-4 py-2 text-xs font-medium text-[#374151] sm:text-sm"
-                  >
-                    {testimonial.result}
-                  </span>
+                  <div class="w-full pl-[60px] sm:w-auto sm:pl-0">
+                    <span class="inline-flex rounded-full border border-[#111827]/20 px-4 py-2 text-xs font-medium text-[#374151] sm:text-sm">
+                      {testimonial.result}
+                    </span>
+                  </div>
                 </div>
               </article>
             ))
@@ -256,6 +256,10 @@ const testimonials = [
 </script>
 
 <style>
+  #who-we-are-title {
+    font-size: clamp(2.5rem, 5vw, 4.6rem);
+  }
+
   .testimonial-stack {
     min-height: 350px;
     perspective: 1200px;
@@ -339,7 +343,7 @@ const testimonials = [
 
   @media (max-width: 639px) {
     .testimonial-stack {
-      min-height: 430px;
+      min-height: 470px;
     }
 
     .testimonial-stack-card {

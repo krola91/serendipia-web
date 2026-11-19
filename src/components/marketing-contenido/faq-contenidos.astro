@@ -1,0 +1,173 @@
+---
+const faqs = [
+  {
+    "question": "¿Qué es el marketing de contenidos?",
+    "answer": "El marketing de contenidos es una estrategia que consiste es la creación de contenidos relevantes para tu página web que generen un alto interés en tu público objetivo y para posteriormente convertirlos en clientes potenciales."
+  },
+  {
+    "question": "¿Por qué debo tener Marketing de Contenidos?",
+    "answer": "Para atraer y retener a los usuarios con el fin de convertirlos en clientes. La creación de contenidos no se basa únicamente en atraer visitas. La estrategia de Serendipia de contenidos digitales va desde el aumento de tráfico de calidad hasta conseguir que un usuario se convierta en cliente. Una vez alcanzado este objetivo, el siguiente paso es construir una relación duradera con él."
+  },
+  {
+    "question": "¿Cuándo empezaré a ver resultados?",
+    "answer": "Debes tener claro desde el principio que los contenidos tardan en posicionarse, pero con un contenido y redacción de calidad se avanza más rápido. La redacción juega un papel importante ya que por medio de palabras claves se puede atacar más rápido a los competidores hasta convertirte relevante en tu sector."
+  },
+  {
+    "question": "¿Serendipia produce contenido para redes sociales?",
+    "answer": "Así es producimos contenido e integramos a las redes sociales como parte de la estrategia"
+  },
+  {
+    "question": "¿Qué tipo de contenido producimos?",
+    "answer": "Artículos para el blog, videos, artes gráficas."
+  }
+];
+---
+
+<section
+  class="home-section-space overflow-hidden bg-[#f3f3f2]"
+  aria-labelledby="faq-contenidos-title"
+>
+  <div
+    class="mx-auto grid max-w-[1400px] gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:gap-12 xl:gap-16"
+  >
+    <div class="flex flex-col lg:min-h-[620px]">
+      <div>
+        <div
+          class="mb-5 inline-flex items-center gap-2 rounded-full border border-[#C4C4C4] bg-white px-4 py-2 font-sans text-xs font-medium tracking-[0.01em] text-[#111827] shadow-[0_8px_30px_rgba(107,114,128,0.18)] max-sm:px-3 max-sm:py-1.5 max-sm:text-[0.68rem]"
+        >
+          <span
+            class="size-2 shrink-0 animate-pulse rounded-full bg-[#b87cbd]"
+            aria-hidden="true"
+          ></span>
+          <span>RESOLVEMOS TUS DUDAS</span>
+        </div>
+
+        <h2
+          id="faq-contenidos-title"
+          class="home-section-title max-w-lg font-sans font-semibold tracking-[-0.05em] text-[#f5b93f]"
+        >
+          ¿Aún tienes dudas?
+        </h2>
+      </div>
+
+      <div
+        class="mt-8 rounded-[24px] bg-gradient-to-br from-[#F7F1F8] via-[#F4F2F7] to-[#EEF0F5] p-5 text-[#111827] shadow-[0_18px_55px_rgba(17,24,39,0.07)] sm:p-6 lg:mt-10"
+      >
+        <h3 class="text-[clamp(1.5rem,2.2vw,2rem)] leading-[1.1] font-semibold tracking-[-0.035em]">
+          ¿Todavía lo estás pensando?
+        </h3>
+        <p class="mt-3 text-lg font-semibold text-[#b87cbd] sm:text-xl">
+          Da el primer paso sin compromiso
+        </p>
+        <p class="mt-3 max-w-xl text-[0.95rem] leading-[1.65] font-normal text-[#4B5563] sm:text-base">
+          Agenda una sesión estratégica gratuita de 30 minutos con nuestros especialistas.
+          Analizaremos tu presencia digital actual, resolveremos todas tus dudas y te mostraremos
+          la hoja de ruta exacta para escalar tus resultados estratégicamente.
+        </p>
+
+        <a
+          href="#contacto"
+          class="mt-5 inline-flex items-center gap-3 rounded-[8px] border border-white bg-[#402776] px-6 py-3.5 text-sm font-semibold tracking-[0.06em] text-white shadow-[0_12px_35px_rgba(64,39,118,0.32)] transition-[transform,box-shadow,background-color] duration-300 hover:-translate-y-0.5 hover:bg-[#51328a] hover:shadow-[0_16px_40px_rgba(64,39,118,0.42)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#111827] active:translate-y-0"
+        >
+          AGENDA TU CITA AHORA
+          <svg
+            class="size-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M5 12h14M13 6l6 6-6 6"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="space-y-3.5 py-6" data-faq-list>
+      {
+        faqs.map((faq, index) => (
+          <details
+            class="group rounded-[20px] bg-[#F4F4F7] p-4 text-[#111827] shadow-[0_8px_28px_rgba(17,24,39,0.045)] transition-colors duration-300 open:bg-[#F2EDF4] sm:p-5"
+            open={index === 0}
+            data-faq-item
+          >
+            <summary class="flex cursor-pointer list-none items-start justify-between gap-5 font-sans text-[clamp(1rem,1.4vw,1.2rem)] leading-[1.35] font-semibold marker:content-none [&::-webkit-details-marker]:hidden">
+              <span class="flex min-w-0 items-start gap-3 pt-2"><span class="shrink-0 text-[1.4em] leading-none font-extrabold text-[#402776]">{String(index + 1).padStart(2, "0")}</span> <span>{faq.question.replace(/^\d+\s+/, "")}</span></span>
+              <span
+                class="grid size-9 shrink-0 place-items-center rounded-[10px] bg-white text-[#b87cbd] shadow-[0_5px_18px_rgba(17,24,39,0.06)]"
+                aria-hidden="true"
+              >
+                <svg
+                  class="size-4 transition-transform duration-300 group-open:rotate-180"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m6 9 6 6 6-6"></path>
+                </svg>
+              </span>
+            </summary>
+
+            <p class="max-w-2xl pr-10 pt-3 text-[0.95rem] leading-[1.7] font-normal text-[#5B6472] sm:text-base">
+              {faq.answer}
+            </p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  const initializeFaq = () => {
+    document.querySelectorAll<HTMLElement>("[data-faq-list]").forEach((list) => {
+      if (list.dataset.ready === "true") return;
+      list.dataset.ready = "true";
+
+      const items = Array.from(list.querySelectorAll<HTMLDetailsElement>("[data-faq-item]"));
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      items.forEach((item, index) => {
+        item.addEventListener("toggle", () => {
+          if (!item.open) return;
+          items.forEach((otherItem) => {
+            if (otherItem !== item) otherItem.open = false;
+          });
+        });
+
+        if (!reduceMotion && "IntersectionObserver" in window) {
+          item.classList.add("faq-item-pending");
+          item.style.setProperty("--faq-item-delay", `${index * 120}ms`);
+        }
+      });
+
+      if (reduceMotion || !("IntersectionObserver" in window)) return;
+
+      const entranceObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+
+            items.forEach((item) => {
+              item.classList.remove("faq-item-pending");
+              item.classList.add("faq-item-bounce-in");
+            });
+            entranceObserver.disconnect();
+          });
+        },
+        { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },
+      );
+
+      entranceObserver.observe(list);
+    });
+  };
+
+  initializeFaq();
+  document.addEventListener("astro:page-load", initializeFaq);
+</script>

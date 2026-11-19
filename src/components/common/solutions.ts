@@ -4,7 +4,7 @@ export const solutionGroups = [
     title: "Estrategia",
     items: [
       { title: "Estudio de Mercado", description: "Datos para orientar tus decisiones.", href: "/estudio-de-mercado", icon: "M4 19h16M6 16v-4M11 16V8M16 16V5M21 16v-6" },
-      { title: "Marketing de Contenidos", description: "Historias con intención y personalidad.", href: servicesAnchor, icon: "M4 20h4l11-11-4-4L4 16v4zM13.5 6.5l4 4M4 12V5a1 1 0 0 1 1-1h7" },
+      { title: "Marketing de Contenidos", description: "Historias con intención y personalidad.", href: "/marketing-de-contenidos", icon: "M4 20h4l11-11-4-4L4 16v4zM13.5 6.5l4 4M4 12V5a1 1 0 0 1 1-1h7" },
       { title: "Growth Hacking", description: "Estrategias para impulsar tu crecimiento.", href: servicesAnchor, icon: "M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1M12 8l1.2 2.8L16 12l-2.8 1.2L12 16l-1.2-2.8L8 12l2.8-1.2z" },
     ],
   },
@@ -20,7 +20,7 @@ export const solutionGroups = [
     title: "Digital",
     items: [
       { title: "Diseño y Desarrollo Web", description: "Experiencias digitales intuitivas.", href: "/diseno-web", icon: "M4 5h16v14H4zM4 9h16M7 7h.01M10 7h.01M8 13h8M8 16h5" },
-      { title: "Tienda en línea", description: "Tu tienda disponible en internet.", href: servicesAnchor, icon: "M3 9h18l-1 11H4L3 9zM8 9V6a4 4 0 0 1 8 0v3" },
+      { title: "Tienda en línea", description: "Tu tienda disponible en internet.", href: "/tienda-en-linea", icon: "M3 9h18l-1 11H4L3 9zM8 9V6a4 4 0 0 1 8 0v3" },
       { title: "Analítica y dashboards", description: "Datos para decidir el siguiente paso.", href: servicesAnchor, icon: "M4 19h16M6 16v-4M11 16V7M16 16V4M21 16v-6" },
     ],
   },
